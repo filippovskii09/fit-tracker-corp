@@ -15,4 +15,5 @@ export const envSchema = Joi.object<ENVSchemaI>({
   DB_USER: Joi.string().required(),
   DB_PASSWORD: Joi.string().required(),
   DB_NAME: Joi.string().required(),
+  FRONTEND_URL: Joi.string().required(),
 });

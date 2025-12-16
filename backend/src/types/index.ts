@@ -1,6 +1,7 @@
 export interface ENVSchemaI {
   NODE_ENV: string;
   PORT: number;
+  FRONTEND_URL: string;
   // DB
   DB_HOST: string;
   DB_PORT: number;

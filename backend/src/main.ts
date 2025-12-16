@@ -6,20 +6,23 @@ import helmet from 'helmet';
 // import compression from 'compression';
 
 import { AppModule } from './app/app.module';
-import { PORT } from './config/constants';
+import { FRONTEND_URL, PORT } from './config/constants';
 import { DEFAULT_PORT } from './constants';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ['error', 'log', 'warn', 'debug', 'verbose'],
   });
+  const configService = app.get(ConfigService);
 
-  const globalPrefix = 'api';
+  const globalPrefix = 'api/v1';
   app.setGlobalPrefix(globalPrefix);
+
+  const origin = configService.get<string>(FRONTEND_URL);
 
   app.use(helmet());
   app.enableCors({
-    origin: '*',
+    origin,
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
@@ -34,7 +37,6 @@ async function bootstrap() {
     }),
   );
 
-  const configService = app.get(ConfigService);
   const port = configService.get<number>(PORT) || DEFAULT_PORT;
 
   await app.listen(port);
