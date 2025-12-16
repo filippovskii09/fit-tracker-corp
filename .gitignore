@@ -1,0 +1,57 @@
+# --- Dependencies ---
+node_modules/
+
+# --- Compiled Output ---
+dist/
+build/
+
+# --- Logs ---
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# --- OS ---
+.DS_Store
+
+# --- Tests ---
+coverage/
+.nyc_output/
+
+# --- IDEs and Editors ---
+.idea/
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# --- Environment Variables (CRITICAL) ---
+.env
+.env.*
+!.env.example
+
+# --- Temp & Runtime ---
+.temp/
+.tmp/
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# --- NestJS / Node Reports ---
+report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
+
+# --- Husky ---
+.husky/_
