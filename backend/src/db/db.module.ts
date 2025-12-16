@@ -1,7 +1,6 @@
 import { Logger, Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { DBService } from './db.service';
 import { TypeOrmConfigService } from './typeorm-config.service';
 
 @Module({
@@ -10,7 +9,7 @@ import { TypeOrmConfigService } from './typeorm-config.service';
       useClass: TypeOrmConfigService,
     }),
   ],
-  providers: [DBService, Logger, TypeOrmConfigService],
-  exports: [DBService],
+  providers: [Logger, TypeOrmConfigService],
+  exports: [],
 })
 export class DBModule {}
