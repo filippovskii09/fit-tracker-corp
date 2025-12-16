@@ -1,5 +1,6 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { InjectDataSource } from '@nestjs/typeorm';
+
 import { DataSource } from 'typeorm';
 
 @Injectable()
@@ -17,7 +18,9 @@ export class DBService implements OnModuleInit {
         this.logger.log('Database connection established successfully');
       }
     } catch (error) {
-      this.logger.error('Database connection failed:', error.message);
+      const message =
+        error instanceof Error ? error.message : 'Unknown database error';
+      this.logger.error('Database connection failed:', message);
       throw error;
     }
   }
