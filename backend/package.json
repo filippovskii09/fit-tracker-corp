@@ -76,7 +76,7 @@
     "transform": {
       "^.+\\.(t|j)s$": "ts-jest"
     },
-		"collectCoverageFrom": [
+    "collectCoverageFrom": [
       "**/*.(t|j)s",
       "!**/*.module.(t|j)s",
       "!**/main.(t|j)s",

@@ -3,7 +3,7 @@ import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 
 import helmet from 'helmet';
-// import compression from 'compression';
+import compression from 'compression';
 
 import { AppModule } from './app/app.module';
 import { FRONTEND_URL, PORT } from './config/constants';
@@ -27,7 +27,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  // app.use(compression());
+  app.use(compression());
 
   app.useGlobalPipes(
     new ValidationPipe({
