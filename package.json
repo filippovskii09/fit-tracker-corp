@@ -27,7 +27,7 @@
     "backend/src/**/*.{ts,js}": [
       "npm run lint --prefix backend",
       "npm run format --prefix backend",
-			"npm run test:cov --prefix backend"
+      "npm run test:cov --prefix backend"
     ]
   }
 }
