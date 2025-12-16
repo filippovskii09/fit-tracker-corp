@@ -1,0 +1,33 @@
+{
+  "name": "fit-tracker-corp",
+  "version": "1.0.0",
+  "description": "Fitness tracker for track your workout and check your progress and previous workouts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "husky"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/filippovskii09/fit-tracker-corp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/filippovskii09/fit-tracker-corp/issues"
+  },
+  "homepage": "https://github.com/filippovskii09/fit-tracker-corp#readme",
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.7"
+  },
+	"lint-staged": {
+    "backend/src/**/*.{ts,js}": [
+      "npm run lint --prefix backend",
+      "npm run format --prefix backend",
+			"npm run test:cov --prefix backend"
+    ]
+  }
+}
