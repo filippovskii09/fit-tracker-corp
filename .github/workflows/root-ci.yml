@@ -1,0 +1,29 @@
+name: 🏗️ Root CI
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - 'docker-compose.yml'
+      - 'makefile'
+      - 'package.json'
+      - '.github/workflows/root-ci.yml'
+  pull_request:
+    paths:
+      - 'docker-compose.yml'
+      - 'makefile'
+      - 'package.json'
+
+jobs:
+  infra-check:
+    name: 🐳 Validation
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Validate Docker Compose
+        run: docker compose config
+
+      - name: Check Makefile
+        run: make -n install
