@@ -40,9 +40,14 @@ async function bootstrap() {
   const port = configService.get<number>(PORT) || DEFAULT_PORT;
 
   await app.listen(port);
-  Logger.log(
-    `Application is running on: http://localhost:${port}/${globalPrefix}`,
-  );
+
+  if (process.env.NODE_ENV === 'production') {
+    Logger.log(`Application is running (Production)`);
+  } else {
+    Logger.log(
+      `Application is running on: http://localhost:${port}/${globalPrefix}`,
+    );
+  }
 }
 
 bootstrap();
