@@ -5,22 +5,7 @@ import { Repository } from 'typeorm';
 
 import { UsersService } from '../users.service';
 import { UserEntity } from '../entity';
-import { CreateUserDto } from '../dto';
-
-const mockCreateUserDto: CreateUserDto = {
-  email: 'test@example.com',
-  firstName: 'John',
-  password: 'securePassword1!',
-};
-
-const mockUserEntity = {
-  id: 'uuid-v7-generated',
-  email: mockCreateUserDto.email,
-  firstName: mockCreateUserDto.firstName,
-  passwordHash: mockCreateUserDto.password,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-} as UserEntity;
+import { createUserDtoStub, userStub } from './stubs/user.stub';
 
 const mockUserRepository = {
   save: jest.fn(),
@@ -30,6 +15,8 @@ const mockUserRepository = {
 describe('UsersService', () => {
   let service: UsersService;
   let repository: Repository<UserEntity>;
+  const dto = createUserDtoStub();
+  const user = userStub();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -54,27 +41,27 @@ describe('UsersService', () => {
 
   describe('create', () => {
     it('should generate UUID, map DTO and save user', async () => {
-      jest.spyOn(repository, 'save').mockResolvedValue(mockUserEntity);
-      const result = await service.create(mockCreateUserDto);
+      jest.spyOn(repository, 'save').mockResolvedValue(user);
+      const result = await service.create(dto);
 
-      expect(result).toEqual(mockUserEntity);
+      expect(result).toEqual(user);
 
       expect(repository.save).toHaveBeenCalledWith({
         id: expect.any(String),
-        email: mockCreateUserDto.email,
-        firstName: mockCreateUserDto.firstName,
-        passwordHash: mockCreateUserDto.password,
+        email: dto.email,
+        firstName: dto.firstName,
+        passwordHash: dto.password,
       });
     });
 
     it('should call findByEmail and return user', async () => {
-      jest.spyOn(repository, 'findOneBy').mockResolvedValue(mockUserEntity);
-      const result = await service.findByEmail(mockCreateUserDto.email);
+      jest.spyOn(repository, 'findOneBy').mockResolvedValue(user);
+      const result = await service.findByEmail(dto.email);
 
-      expect(result).toEqual(mockUserEntity);
+      expect(result).toEqual(user);
 
       expect(repository.findOneBy).toHaveBeenCalledWith({
-        email: mockUserEntity.email,
+        email: user.email,
       });
     });
 

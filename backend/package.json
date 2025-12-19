@@ -87,7 +87,7 @@
       "!**/index.(t|j)s",
       "!**/node_modules/**",
       "!**/dist/**",
-			"!**/common/**"
+      "!**/common/**"
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",

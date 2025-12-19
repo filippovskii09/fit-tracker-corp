@@ -13,34 +13,34 @@
     classDef db fill:#e2e3e5,stroke:#333,stroke-width:2px,stroke-dasharray: 5 5,color:black;
 
     %% Nodes
-    Client([👤 Client / Postman]):::client
+    Client([Client / Postman]):::client
     
-    Request[/"📩 HTTP POST /users <br/> Payload: { email, password, firstName }"/]
+    Request[/"HTTP POST /users <br/> Payload: { email, password, firstName }"/]
     
-    Validation{"🛡️ Validation Pipe <br/> (CreateUserDto) <br/> Checks: IsEmail, IsStrongPassword"}:::validator
+    Validation{"Validation Pipe <br/> (CreateUserDto) <br/> Checks: IsEmail, IsStrongPassword"}:::validator
     
-    Err400[/"❌ 400 Bad Request <br/> Body: { message: ['password is too weak'], ... }"/]:::error
+    Err400[/"400 Bad Request <br/> Body: { message: ['password is too weak'], ... }"/]:::error
     
-    Controller[🎮 UsersController <br/> Endpoint: @Post]
+    Controller[UsersController <br/> Endpoint: @Post]
     
-    Service[🧠 UsersService <br/> Method: create]:::logic
+    Service[UsersService <br/> Method: create]:::logic
     
-    BusinessLogic["⚙️ Business Logic: <br/> 1. Generate ID (UUIDv7) <br/> 2. Map DTO to UserEntity <br/> 3. Assign plain password to hash field (temporary)"]:::logic
+    BusinessLogic["Business Logic: <br/> 1. Generate ID (UUIDv7) <br/> 2. Map DTO to UserEntity <br/> 3. Assign plain password to hash field (temporary)"]:::logic
     
-    Repo[/"📦 TypeORM Repository <br/> Action: .save"/]:::db
+    Repo[/"TypeORM Repository <br/> Action: .save"/]:::db
     
-    DB[("🐘 Neon Database <br/> (Postgres)")]:::db
+    DB[("Neon Database <br/> (Postgres)")]:::db
     
-    Response[/"✅ 201 Created <br/> Body: UserEntity JSON"/]:::success
+    Response[/"201 Created <br/> Body: UserEntity JSON"/]:::success
 
     %% Connections
     Client -->|Sends Request| Request
     Request --> Validation
     
-    Validation -- "❌ Validation Failed" --> Err400
+    Validation -- "Validation Failed" --> Err400
     Err400 -.-> Client
     
-    Validation -- "✅ Valid Data" --> Controller
+    Validation -- "Valid Data" --> Controller
     Controller -->|"invokes"| Service
     
     Service --> BusinessLogic

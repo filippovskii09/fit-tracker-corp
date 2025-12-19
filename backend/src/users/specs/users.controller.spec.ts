@@ -1,24 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { CreateUserDto } from '../dto';
-import { UserEntity } from '../entity';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 import { ResponseMessages } from '@src/common/messages';
-
-const mockCreateUserDto: CreateUserDto = {
-  email: 'example@gmail.com',
-  firstName: 'test',
-  password: '3edc$RFV',
-};
-
-const mockUserEntity = {
-  id: 'uuui=v7',
-  ...mockCreateUserDto,
-  passwordHash: mockCreateUserDto.password,
-  createdAt: new Date(),
-  updatedAt: new Date(),
-} as UserEntity;
+import { createUserDtoStub, userStub } from './stubs/user.stub';
 
 const createMockUsersService = () => ({
   create: jest.fn(),
@@ -27,6 +12,8 @@ const createMockUsersService = () => ({
 describe('UsersController', () => {
   let controller: UsersController;
   let service: UsersService;
+  const dto = createUserDtoStub();
+  const user = userStub();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -51,12 +38,12 @@ describe('UsersController', () => {
 
   describe('create', () => {
     it('should call service.create with dto and return user', async () => {
-      jest.spyOn(service, 'create').mockResolvedValue(mockUserEntity);
+      jest.spyOn(service, 'create').mockResolvedValue(user);
 
-      const result = await controller.create(mockCreateUserDto);
+      const result = await controller.create(dto);
 
       expect(result).toEqual(ResponseMessages.User.SuccessRegistration);
-      expect(service.create).toHaveBeenCalledWith(mockCreateUserDto);
+      expect(service.create).toHaveBeenCalledWith(dto);
     });
   });
 });
