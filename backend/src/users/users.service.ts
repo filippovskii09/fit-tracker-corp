@@ -6,7 +6,6 @@ import { uuidv7 } from 'uuidv7';
 
 import { CreateUserDto } from './dto';
 import { UserEntity } from './entity';
-import { IUser } from './types';
 
 @Injectable()
 export class UsersService {
@@ -25,7 +24,7 @@ export class UsersService {
     return await this.userRepository.save(newUser);
   }
 
-  async findByEmail(email: string): Promise<IUser | null> {
+  async findByEmail(email: string): Promise<UserEntity | null> {
     return await this.userRepository.findOneBy({ email });
   }
 }
