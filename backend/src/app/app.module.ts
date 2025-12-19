@@ -5,6 +5,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 
 import { envSchema } from '@src/config/env.validation';
 import { DBModule } from '@src/db/db.module';
+import { UsersModule } from '@src/users/users.module';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { DBModule } from '@src/db/db.module';
         limit: 10,
       },
     ]),
+    UsersModule,
   ],
   controllers: [],
   providers: [
