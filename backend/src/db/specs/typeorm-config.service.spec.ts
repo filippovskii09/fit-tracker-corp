@@ -12,6 +12,7 @@ import {
   DB_USER,
   NODE_ENV,
 } from '@src/config/constants';
+import { PRODUCTION } from '@src/constants';
 
 describe('TypeOrmConfigService', () => {
   let service: TypeOrmConfigService;
@@ -67,7 +68,7 @@ describe('TypeOrmConfigService', () => {
 
   it('should enable SSL in production enviroment', () => {
     jest.spyOn(configService, 'get').mockImplementation((key: string) => {
-      if (key === NODE_ENV) return 'production';
+      if (key === NODE_ENV) return PRODUCTION;
       return 'some_value';
     });
 
