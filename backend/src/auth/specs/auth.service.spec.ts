@@ -3,8 +3,8 @@ import { BadRequestException } from '@nestjs/common';
 
 import { UsersService } from '@src/users/users.service';
 import { createUserDtoStub, userStub } from '@src/stubs/user.stub';
-import { ResponseMessages } from '@src/common/messages';
 import { AuthService } from '../auth.service';
+import { registerResponse } from '../constants';
 
 const mockUsersService = {
   findByEmail: jest.fn(),
@@ -14,6 +14,9 @@ const mockUsersService = {
 describe('AuthService', () => {
   let authService: AuthService;
   let usersService: UsersService;
+
+  const dto = createUserDtoStub();
+  const user = userStub();
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -37,9 +40,9 @@ describe('AuthService', () => {
 
   describe('register', () => {
     it('should call findByEmail and return error if user allready exist', async () => {
-      jest.spyOn(usersService, 'findByEmail').mockResolvedValue(userStub());
+      jest.spyOn(usersService, 'findByEmail').mockResolvedValue(user);
 
-      await expect(authService.register(createUserDtoStub())).rejects.toThrow(
+      await expect(authService.register(dto)).rejects.toThrow(
         BadRequestException,
       );
 
@@ -48,15 +51,13 @@ describe('AuthService', () => {
 
     it('should call create and return success message', async () => {
       jest.spyOn(usersService, 'findByEmail').mockResolvedValue(null);
-      jest.spyOn(usersService, 'create').mockResolvedValue(userStub());
+      jest.spyOn(usersService, 'create').mockResolvedValue(user);
 
-      const result = await authService.register(createUserDtoStub());
+      const result = await authService.register(dto);
 
-      expect(result).toEqual({
-        message: ResponseMessages.User.SuccessRegistration,
-      });
+      expect(result).toEqual(registerResponse);
 
-      expect(usersService.create).toHaveBeenCalledWith(createUserDtoStub());
+      expect(usersService.create).toHaveBeenCalledWith(dto);
     });
   });
 });

@@ -4,6 +4,7 @@ import { ResponseMessages } from '@src/common/messages';
 import { CreateUserDto } from '@src/users/dto';
 import { UsersService } from '@src/users/users.service';
 import { IAuthResponse } from './types';
+import { registerResponse } from './constants';
 
 @Injectable()
 export class AuthService {
@@ -17,8 +18,6 @@ export class AuthService {
 
     await this.usersService.create(dto);
 
-    return {
-      message: ResponseMessages.User.SuccessRegistration,
-    };
+    return registerResponse;
   }
 }

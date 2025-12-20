@@ -66,7 +66,7 @@ describe('TypeOrmConfigService', () => {
     });
   });
 
-  it('should enable SSL in production enviroment and disabled synchronize', () => {
+  it('should enable SSL in production environment and disabled synchronize', () => {
     jest.spyOn(configService, 'get').mockImplementation((key: string) => {
       if (key === NODE_ENV) return PRODUCTION;
       return 'some_value';
