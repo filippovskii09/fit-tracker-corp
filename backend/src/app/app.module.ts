@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { AuthModule } from '@src/auth/auth.module';
 
 import { envSchema } from '@src/config/env.validation';
 import { DBModule } from '@src/db/db.module';
@@ -22,6 +23,7 @@ import { UsersModule } from '@src/users/users.module';
       },
     ]),
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [

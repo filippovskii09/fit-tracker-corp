@@ -61,12 +61,12 @@ describe('TypeOrmConfigService', () => {
       username: 'db_user',
       password: 'db_password',
       database: 'db_name',
-      synchronize: false,
+      synchronize: true,
       ssl: false,
     });
   });
 
-  it('should enable SSL in production enviroment', () => {
+  it('should enable SSL in production enviroment and disabled synchronize', () => {
     jest.spyOn(configService, 'get').mockImplementation((key: string) => {
       if (key === NODE_ENV) return PRODUCTION;
       return 'some_value';
@@ -75,5 +75,6 @@ describe('TypeOrmConfigService', () => {
     const options = service.createTypeOrmOptions() as PostgresConnectionOptions;
 
     expect(options.ssl).toBe(true);
+    expect(options.synchronize).toBe(false);
   });
 });

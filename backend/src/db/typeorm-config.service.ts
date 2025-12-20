@@ -45,7 +45,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             }
           : undefined,
       autoLoadEntities: true,
-      synchronize: false,
+      synchronize: isProd ? false : true,
     };
   }
 }

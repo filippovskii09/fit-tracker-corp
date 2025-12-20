@@ -1,9 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
+import { ResponseMessages } from '@src/common/messages';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
-import { ResponseMessages } from '@src/common/messages';
-import { createUserDtoStub, userStub } from './stubs/user.stub';
+import { createUserDtoStub, userStub } from '../../stubs/user.stub';
 
 const createMockUsersService = () => ({
   create: jest.fn(),
