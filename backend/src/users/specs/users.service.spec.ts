@@ -5,16 +5,23 @@ import { Repository } from 'typeorm';
 
 import { UsersService } from '../users.service';
 import { UserEntity } from '../entity';
-import { createUserDtoStub, userStub } from './stubs/user.stub';
+import { createUserDtoStub, userStub } from '../../stubs/user.stub';
+import { EncryptionService } from '@src/encryption/encryption.service';
 
 const mockUserRepository = {
   save: jest.fn(),
   findOneBy: jest.fn(),
 };
 
+const mockEncryptionService = {
+  hashPassword: jest.fn(),
+};
+
 describe('UsersService', () => {
   let service: UsersService;
   let repository: Repository<UserEntity>;
+  let encryption: EncryptionService;
+
   const dto = createUserDtoStub();
   const user = userStub();
 
@@ -26,6 +33,10 @@ describe('UsersService', () => {
           provide: getRepositoryToken(UserEntity),
           useValue: mockUserRepository,
         },
+        {
+          provide: EncryptionService,
+          useValue: mockEncryptionService,
+        },
       ],
     }).compile();
 
@@ -33,6 +44,7 @@ describe('UsersService', () => {
     repository = module.get<Repository<UserEntity>>(
       getRepositoryToken(UserEntity),
     );
+    encryption = module.get<EncryptionService>(EncryptionService);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -41,16 +53,22 @@ describe('UsersService', () => {
 
   describe('create', () => {
     it('should generate UUID, map DTO and save user', async () => {
+      const hashedPassword = 'some_hashed_password';
+
+      jest.spyOn(encryption, 'hashPassword').mockResolvedValue(hashedPassword);
       jest.spyOn(repository, 'save').mockResolvedValue(user);
+
       const result = await service.create(dto);
 
       expect(result).toEqual(user);
+
+      expect(encryption.hashPassword).toHaveBeenCalledWith(dto.password);
 
       expect(repository.save).toHaveBeenCalledWith({
         id: expect.any(String),
         email: dto.email,
         firstName: dto.firstName,
-        passwordHash: dto.password,
+        passwordHash: hashedPassword,
       });
     });
 

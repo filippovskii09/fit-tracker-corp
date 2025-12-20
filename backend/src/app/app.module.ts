@@ -6,6 +6,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { envSchema } from '@src/config/env.validation';
 import { DBModule } from '@src/db/db.module';
 import { UsersModule } from '@src/users/users.module';
+import { AuthModule } from '@src/auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { UsersModule } from '@src/users/users.module';
       },
     ]),
     UsersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [
