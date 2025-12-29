@@ -14,4 +14,8 @@ export class EncryptionService {
   async hashPassword(password: string): Promise<string> {
     return argon2.hash(password, EncryptionService.ARGON_OPTIONS);
   }
+
+  async validatePassword(hash: string, password: string): Promise<boolean> {
+    return await argon2.verify(hash, password);
+  }
 }

@@ -4,6 +4,7 @@ import { ResponseMessages } from '@src/common/messages';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto';
 
+// TODO: Maybe make sence to remove Controller name(via 'users') to shared constant and them use it there
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

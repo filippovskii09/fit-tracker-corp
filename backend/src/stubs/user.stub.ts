@@ -14,4 +14,10 @@ export const userStub = (): UserEntity => ({
   passwordHash: 'hashed_password_example',
   createdAt: new Date('2024-01-01T00:00:00.000Z'),
   updatedAt: new Date('2024-01-01T00:00:00.000Z'),
+  hashedRefreshToken: 'JrPe7q/xW3r/PyNTM5BUsdhXKaltDGvRSBCq1SxR3jI=',
+});
+
+export const verifyUserDtoStub = () => ({
+  email: 'test2@example.com',
+  password: 'StrongPassword1!',
 });

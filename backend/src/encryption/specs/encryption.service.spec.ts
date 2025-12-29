@@ -23,4 +23,24 @@ describe('EncryptionService', () => {
     expect(hashedPass).toBeDefined();
     expect(hashedPass).not.toEqual(password);
   });
+
+  describe('validatePassword', () => {
+    it('should return true for valid password', async () => {
+      const password = 'mySuperPassword123';
+      const hash = await service.hashPassword(password);
+
+      const isValid = await service.validatePassword(hash, password);
+
+      expect(isValid).toBe(true);
+    });
+
+    it('should return false for invalid password', async () => {
+      const password = 'mySuperPassword123';
+      const hash = await service.hashPassword(password);
+
+      const isValid = await service.validatePassword(hash, 'wrongPassword');
+
+      expect(isValid).toBe(false);
+    });
+  });
 });

@@ -27,4 +27,7 @@ export class UserEntity implements IUserSecure {
 
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt!: Date;
+
+  @Column({ nullable: true, select: false })
+  hashedRefreshToken!: string | null;
 }
