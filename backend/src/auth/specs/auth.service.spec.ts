@@ -92,7 +92,7 @@ describe('AuthService', () => {
 
   describe('signin', () => {
     it('should throw BadRequest if user not found', async () => {
-      jest.spyOn(usersService, 'findByEmail').mockResolvedValue(null);
+      jest.spyOn(usersService, 'findByEmailForAuth').mockResolvedValue(null);
 
       await expect(authService.signIn(signInDto)).rejects.toThrow(
         new BadRequestException(ResponseMessages.Auth.WrongCreds),
@@ -100,7 +100,7 @@ describe('AuthService', () => {
     });
 
     it('should throw BadRequest if password is wrong', async () => {
-      jest.spyOn(usersService, 'findByEmail').mockResolvedValue(user);
+      jest.spyOn(usersService, 'findByEmailForAuth').mockResolvedValue(user);
       jest
         .spyOn(encryptionService, 'validatePassword')
         .mockResolvedValue(false);
@@ -111,7 +111,7 @@ describe('AuthService', () => {
     });
 
     it('should return tokens and save refresh token hash if creds are valid', async () => {
-      jest.spyOn(usersService, 'findByEmail').mockResolvedValue(user);
+      jest.spyOn(usersService, 'findByEmailForAuth').mockResolvedValue(user);
       jest.spyOn(encryptionService, 'validatePassword').mockResolvedValue(true);
       jest
         .spyOn(encryptionService, 'hashPassword')
@@ -124,6 +124,7 @@ describe('AuthService', () => {
 
       expect(result).toEqual({
         accessToken: tokensStub.accessToken,
+        refreshToken: tokensStub.refreshToken,
         message: ResponseMessages.User.SuccessAuthorization,
       });
 

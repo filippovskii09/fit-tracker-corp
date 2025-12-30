@@ -53,3 +53,13 @@
     Controller -->|"serializes JSON"| Response
     Response -.-> Client
 ```
+
+### Test user
+
+```
+{
+    "firstName": "TestUser",
+    "email": "test@example.com",
+    "password": "3edc$RFV"
+}
+```

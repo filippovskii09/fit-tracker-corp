@@ -1,5 +1,8 @@
+import { Response } from 'express';
+
 export const mockUsersService = {
   findByEmail: jest.fn(),
+  findByEmailForAuth: jest.fn(),
   create: jest.fn(),
   updateRefreshToken: jest.fn(),
   findByIdForAuth: jest.fn(),
@@ -30,3 +33,8 @@ export const mockJwtService = {
   signAsync: jest.fn(),
   verifyAsync: jest.fn(),
 };
+
+export const mockResponse = {
+  cookie: jest.fn(),
+  clearCookie: jest.fn(),
+} as unknown as Response;

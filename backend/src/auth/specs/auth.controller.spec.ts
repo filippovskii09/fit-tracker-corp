@@ -1,13 +1,14 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import { ConfigService } from '@nestjs/config';
 
 import { createUserDtoStub, verifyUserDtoStub } from '@src/stubs/user.stub';
 import { ResponseMessages } from '@src/common/messages';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
 import { registerResponse } from '../constants';
-import { mockAuthService } from './mocks';
-import { RefreshTokenDto } from '../dto';
+import { mockAuthService, mockConfigService, mockResponse } from './mocks';
 import { tokensStub } from './stubs';
+import { UnauthorizedException } from '@nestjs/common';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -24,6 +25,10 @@ describe('AuthController', () => {
         {
           provide: AuthService,
           useValue: mockAuthService,
+        },
+        {
+          provide: ConfigService,
+          useValue: mockConfigService,
         },
       ],
     }).compile();
@@ -54,31 +59,65 @@ describe('AuthController', () => {
     it('should call authService.signIn and return tokens', async () => {
       const response = {
         accessToken: tokensStub.accessToken,
+        refreshToken: tokensStub.refreshToken,
         message: ResponseMessages.User.SuccessAuthorization,
       };
       jest.spyOn(authService, 'signIn').mockResolvedValue(response);
 
-      const result = await authController.signIn(verifyDto);
+      const result = await authController.signIn(verifyDto, mockResponse);
 
-      expect(result).toEqual(response);
+      expect(result).toEqual({
+        accessToken: response.accessToken,
+        message: response.message,
+      });
+
+      expect(mockResponse.cookie).toHaveBeenCalledWith(
+        'refreshToken',
+        tokensStub.refreshToken,
+        expect.objectContaining({
+          httpOnly: true,
+        }),
+      );
+
       expect(authService.signIn).toHaveBeenCalledWith(verifyDto);
     });
   });
 
   describe('refresh', () => {
     it('should call authService.refreshTokens and return tokens', async () => {
-      const dto: RefreshTokenDto = { refreshToken: tokensStub.refreshToken };
-      const refresh = {
+      const refreshToken = tokensStub.refreshToken;
+      const refreshRes = {
         accessToken: tokensStub.accessToken,
         refreshToken: tokensStub.refreshToken,
       };
 
-      jest.spyOn(authService, 'refreshTokens').mockResolvedValue(refresh);
+      jest.spyOn(authService, 'refreshTokens').mockResolvedValue(refreshRes);
 
-      const result = await authController.refreshToken(dto);
+      const result = await authController.refreshToken(
+        refreshToken,
+        mockResponse,
+      );
 
-      expect(result).toEqual(refresh);
-      expect(authService.refreshTokens).toHaveBeenCalledWith(dto);
+      expect(result).toEqual({
+        accessToken: refreshRes.accessToken,
+      });
+      expect(authService.refreshTokens).toHaveBeenCalledWith({
+        refreshToken,
+      });
+
+      expect(mockResponse.cookie).toHaveBeenCalledWith(
+        'refreshToken',
+        refreshRes.refreshToken,
+        expect.objectContaining({ httpOnly: true }),
+      );
+    });
+
+    it('should throw UnauthorizedException if refresh token is missing', async () => {
+      await expect(
+        authController.refreshToken(null, mockResponse),
+      ).rejects.toThrow(UnauthorizedException);
+
+      expect(authService.refreshTokens).not.toHaveBeenCalled();
     });
   });
 });
