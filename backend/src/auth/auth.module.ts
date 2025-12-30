@@ -6,10 +6,11 @@ import { AuthController } from './auth.controller';
 import { UsersModule } from '@src/users/users.module';
 import { EncryptionModule } from '@src/encryption/encryption.module';
 import { TokenService } from './token.service';
+import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
   imports: [UsersModule, EncryptionModule, JwtModule.register({})],
-  providers: [AuthService, TokenService],
+  providers: [AuthService, TokenService, JwtStrategy],
   controllers: [AuthController],
   exports: [AuthService],
 })

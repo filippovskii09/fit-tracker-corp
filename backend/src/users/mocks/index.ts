@@ -8,3 +8,8 @@ export const mockUserRepository = {
 export const mockEncryptionService = {
   hashPassword: jest.fn(),
 };
+
+export const createMockUsersService = {
+  create: jest.fn(),
+  findById: jest.fn(),
+};

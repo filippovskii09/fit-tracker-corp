@@ -8,7 +8,7 @@ import { ResponseMessages } from '@src/common/messages';
 import { CreateUserDto, VerifyUserDto } from '@src/users/dto';
 import { UsersService } from '@src/users/users.service';
 import { EncryptionService } from '@src/encryption/encryption.service';
-import { IAuthResponse, ISigninResponse } from './types';
+import { IAuthResponse, IRefreshResponse, ISigninResponse } from './types';
 import { registerResponse } from './constants';
 import { TokenService } from './token.service';
 import { RefreshTokenDto } from './dto';
@@ -37,7 +37,7 @@ export class AuthService {
   }
 
   async signIn(dto: VerifyUserDto): Promise<ISigninResponse> {
-    const user = await this.usersService.findByEmail(dto.email);
+    const user = await this.usersService.findByEmailForAuth(dto.email);
     if (!user) {
       this.wrongCredentials();
     }
@@ -58,11 +58,12 @@ export class AuthService {
 
     return {
       accessToken,
+      refreshToken,
       message: ResponseMessages.User.SuccessAuthorization,
     };
   }
 
-  async refreshTokens(dto: RefreshTokenDto) {
+  async refreshTokens(dto: RefreshTokenDto): Promise<IRefreshResponse> {
     const { refreshToken } = dto;
     const userId = await this.tokenService.verifyRefreshToken(refreshToken);
 

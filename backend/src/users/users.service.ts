@@ -33,6 +33,13 @@ export class UsersService {
     return await this.userRepository.findOneBy({ email });
   }
 
+  async findByEmailForAuth(email: string): Promise<UserEntity | null> {
+    return this.userRepository.findOne({
+      where: { email },
+      select: ['id', 'email', 'passwordHash', 'firstName'],
+    });
+  }
+
   async updateRefreshToken(
     userId: string,
     refreshTokenHash: string,
@@ -48,5 +55,9 @@ export class UsersService {
       where: { id },
       select: ['id', 'email', 'hashedRefreshToken', 'firstName'],
     });
+  }
+
+  async findById(id: string): Promise<UserEntity | null> {
+    return this.userRepository.findOne({ where: { id } });
   }
 }

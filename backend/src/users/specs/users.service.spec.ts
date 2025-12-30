@@ -83,6 +83,26 @@ describe('UsersService', () => {
     });
   });
 
+  describe('findByEmailForAuth', () => {
+    it('should find user explicitly selecting passwordHash', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(user);
+
+      const result = await service.findByEmailForAuth(dto.email);
+
+      expect(result).toEqual(user);
+      expect(repository.findOne).toHaveBeenCalledWith({
+        where: { email: dto.email },
+        select: ['id', 'email', 'passwordHash', 'firstName'],
+      });
+    });
+
+    it('should return null if user not found', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+      const result = await service.findByEmailForAuth('unknown@mail.com');
+      expect(result).toBeNull();
+    });
+  });
+
   describe('updateRefreshToken', () => {
     it('should update user refresh token hash', async () => {
       const userId = 'some-uuid';
@@ -117,6 +137,25 @@ describe('UsersService', () => {
     it('should return null if user not found', async () => {
       jest.spyOn(repository, 'findOne').mockResolvedValue(null);
       const result = await service.findByIdForAuth('unknown-id');
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('findById', () => {
+    it('should find user by id', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(user);
+
+      const result = await service.findById(user.id);
+
+      expect(result).toEqual(user);
+      expect(repository.findOne).toHaveBeenCalledWith({
+        where: { id: user.id },
+      });
+    });
+
+    it('should return null if user not found', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+      const result = await service.findById('unknown-id');
       expect(result).toBeNull();
     });
   });

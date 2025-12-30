@@ -4,6 +4,7 @@ import { ConfigService } from '@nestjs/config';
 
 import helmet from 'helmet';
 import compression from 'compression';
+import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app/app.module';
 import { FRONTEND_URL, PORT } from './config/constants';
@@ -20,6 +21,7 @@ async function bootstrap() {
 
   const origin = configService.get<string>(FRONTEND_URL);
 
+  app.use(cookieParser());
   app.use(helmet());
   app.enableCors({
     origin,

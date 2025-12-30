@@ -4,10 +4,7 @@ import { ResponseMessages } from '@src/common/messages';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
 import { createUserDtoStub, userStub } from '../../stubs/user.stub';
-
-const createMockUsersService = () => ({
-  create: jest.fn(),
-});
+import { createMockUsersService } from '../mocks';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -21,7 +18,7 @@ describe('UsersController', () => {
       providers: [
         {
           provide: UsersService,
-          useValue: createMockUsersService(),
+          useValue: createMockUsersService,
         },
       ],
     }).compile();
@@ -44,6 +41,19 @@ describe('UsersController', () => {
 
       expect(result).toEqual(ResponseMessages.User.SuccessRegistration);
       expect(service.create).toHaveBeenCalledWith(dto);
+    });
+  });
+
+  describe('getMe', () => {
+    it('should call service.findById with userId and return user', async () => {
+      const userId = user.id;
+
+      jest.spyOn(service, 'findById').mockResolvedValue(user);
+
+      const result = await controller.getMe(userId);
+
+      expect(result).toEqual(user);
+      expect(service.findById).toHaveBeenCalledWith(userId);
     });
   });
 });
