@@ -32,4 +32,21 @@ export class UsersService {
   async findByEmail(email: string): Promise<UserEntity | null> {
     return await this.userRepository.findOneBy({ email });
   }
+
+  async updateRefreshToken(
+    userId: string,
+    refreshTokenHash: string,
+  ): Promise<void> {
+    await this.userRepository.update(
+      { id: userId },
+      { hashedRefreshToken: refreshTokenHash },
+    );
+  }
+
+  async findByIdForAuth(id: string): Promise<UserEntity | null> {
+    return this.userRepository.findOne({
+      where: { id },
+      select: ['id', 'email', 'hashedRefreshToken', 'firstName'],
+    });
+  }
 }

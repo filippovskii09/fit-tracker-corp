@@ -8,4 +8,5 @@ export interface IUser {
 
 export interface IUserSecure extends IUser {
   passwordHash: string;
+  hashedRefreshToken: string | null;
 }

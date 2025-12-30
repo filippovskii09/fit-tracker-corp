@@ -1,21 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 
-import { Repository } from 'typeorm';
+import { Repository, UpdateResult } from 'typeorm';
 
 import { UsersService } from '../users.service';
 import { UserEntity } from '../entity';
 import { createUserDtoStub, userStub } from '../../stubs/user.stub';
 import { EncryptionService } from '@src/encryption/encryption.service';
-
-const mockUserRepository = {
-  save: jest.fn(),
-  findOneBy: jest.fn(),
-};
-
-const mockEncryptionService = {
-  hashPassword: jest.fn(),
-};
+import { mockEncryptionService, mockUserRepository } from '../mocks';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -87,6 +79,44 @@ describe('UsersService', () => {
       jest.spyOn(repository, 'findOneBy').mockResolvedValue(null);
       const result = await service.findByEmail('notfound@mail.com');
 
+      expect(result).toBeNull();
+    });
+  });
+
+  describe('updateRefreshToken', () => {
+    it('should update user refresh token hash', async () => {
+      const userId = 'some-uuid';
+      const tokenHash = 'some-hash';
+
+      jest.spyOn(repository, 'update').mockResolvedValue({} as UpdateResult);
+
+      await service.updateRefreshToken(userId, tokenHash);
+
+      expect(repository.update).toHaveBeenCalledWith(
+        { id: userId },
+        { hashedRefreshToken: tokenHash },
+      );
+    });
+  });
+
+  describe('findByIdForAuth', () => {
+    it('should find user with specific select fields', async () => {
+      const userId = user.id;
+
+      jest.spyOn(repository, 'findOne').mockResolvedValue(user);
+
+      const result = await service.findByIdForAuth(userId);
+
+      expect(result).toEqual(user);
+      expect(repository.findOne).toHaveBeenCalledWith({
+        where: { id: userId },
+        select: ['id', 'email', 'hashedRefreshToken', 'firstName'],
+      });
+    });
+
+    it('should return null if user not found', async () => {
+      jest.spyOn(repository, 'findOne').mockResolvedValue(null);
+      const result = await service.findByIdForAuth('unknown-id');
       expect(result).toBeNull();
     });
   });
