@@ -31,6 +31,8 @@ describe('AuthService', () => {
 
   const user = userStub();
 
+  const hashedRefreshToken = tokensStub.hashedRefreshToken;
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -109,8 +111,6 @@ describe('AuthService', () => {
     });
 
     it('should return tokens and save refresh token hash if creds are valid', async () => {
-      const hashedRefreshToken = 'hash_refresh_token_example';
-
       jest.spyOn(usersService, 'findByEmail').mockResolvedValue(user);
       jest.spyOn(encryptionService, 'validatePassword').mockResolvedValue(true);
       jest
@@ -139,8 +139,6 @@ describe('AuthService', () => {
       refreshToken: 'refresh_token_example',
     };
 
-    const hashedRefreshToken = 'hash_refresh_token_example';
-
     it('should throw Forbidden if refresh token is invalid', async () => {
       jest
         .spyOn(tokenService, 'verifyRefreshToken')
@@ -167,8 +165,6 @@ describe('AuthService', () => {
     });
 
     it('should return new tokens and update refresh token hash', async () => {
-      const newToken = 'hash_refresh_token_example';
-
       jest.spyOn(tokenService, 'verifyRefreshToken').mockResolvedValue(user.id);
       jest.spyOn(usersService, 'findByIdForAuth').mockResolvedValue({
         ...user,
@@ -178,7 +174,9 @@ describe('AuthService', () => {
       jest
         .spyOn(tokenService, 'generateAuthTokens')
         .mockResolvedValue(tokensStub);
-      jest.spyOn(encryptionService, 'hashPassword').mockResolvedValue(newToken);
+      jest
+        .spyOn(encryptionService, 'hashPassword')
+        .mockResolvedValue(hashedRefreshToken);
 
       const result = await authService.refreshTokens(refreshDto);
 
@@ -186,7 +184,7 @@ describe('AuthService', () => {
 
       expect(usersService.updateRefreshToken).toHaveBeenCalledWith(
         user.id,
-        newToken,
+        hashedRefreshToken,
       );
     });
 

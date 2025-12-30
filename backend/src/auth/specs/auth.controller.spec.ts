@@ -1,12 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
 import { createUserDtoStub, verifyUserDtoStub } from '@src/stubs/user.stub';
+import { ResponseMessages } from '@src/common/messages';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
 import { registerResponse } from '../constants';
 import { mockAuthService } from './mocks';
-import { ResponseMessages } from '@src/common/messages';
 import { RefreshTokenDto } from '../dto';
+import { tokensStub } from './stubs';
 
 describe('AuthController', () => {
   let authController: AuthController;
@@ -52,7 +53,7 @@ describe('AuthController', () => {
   describe('signin', () => {
     it('should call authService.signIn and return tokens', async () => {
       const response = {
-        accessToken: 'example_token',
+        accessToken: tokensStub.accessToken,
         message: ResponseMessages.User.SuccessAuthorization,
       };
       jest.spyOn(authService, 'signIn').mockResolvedValue(response);
@@ -66,10 +67,10 @@ describe('AuthController', () => {
 
   describe('refresh', () => {
     it('should call authService.refreshTokens and return tokens', async () => {
-      const dto: RefreshTokenDto = { refreshToken: 'example_token' };
+      const dto: RefreshTokenDto = { refreshToken: tokensStub.refreshToken };
       const refresh = {
-        accessToken: 'new_access_token',
-        refreshToken: 'new_refresh_token',
+        accessToken: tokensStub.accessToken,
+        refreshToken: tokensStub.refreshToken,
       };
 
       jest.spyOn(authService, 'refreshTokens').mockResolvedValue(refresh);

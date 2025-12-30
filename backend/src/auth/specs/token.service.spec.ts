@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { ForbiddenException } from '@nestjs/common';
 
-import { TokenService } from '../token.service';
 import { IUser } from '@src/users/types';
 import {
   JWT_ACCESS_TOKEN_SECRET,
@@ -11,6 +10,7 @@ import {
   JWT_REFRESH_TOKEN_SECRET,
   JWT_REFRESH_TOKEN_EXPIRATION_TIME,
 } from '@src/config/constants';
+import { TokenService } from '../token.service';
 import { mockConfigService, mockJwtService } from './mocks';
 
 describe('TokenService', () => {
