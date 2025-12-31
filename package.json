@@ -29,9 +29,9 @@
       "npm run format --prefix backend",
       "npm run test:cov --prefix backend"
     ],
-		"frontend/src/**/*.{ts,js}": [
-			"npm run lint --prefix frontend",
-			"npm run format --prefix frontend"
-		]
+    "frontend/src/**/*.{ts,js}": [
+      "npm run lint --prefix frontend",
+      "npm run format --prefix frontend"
+    ]
   }
 }
