@@ -1,0 +1,45 @@
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+
+import { HomePage, RegisterPage, SigninPage } from '@pages';
+import { AuthLayout } from '@layouts';
+import { APP_ROUTES } from '@constants';
+import { GuestGuard, PrivateGuard } from './guards';
+
+export const router = createBrowserRouter([
+  // PUBLIC ROUTES
+  {
+    element: <GuestGuard />,
+    children: [
+      {
+        element: <AuthLayout />,
+        children: [
+          {
+            path: APP_ROUTES.AUTH.REGISTER,
+            element: <RegisterPage />,
+          },
+          {
+            path: APP_ROUTES.AUTH.SIGNIN,
+            element: <SigninPage />,
+          },
+        ],
+      },
+    ],
+  },
+
+  // PRIVATE ROUTES
+  {
+    element: <PrivateGuard />,
+    children: [
+      {
+        path: APP_ROUTES.ROOT,
+        element: <HomePage />,
+      },
+    ],
+  },
+
+  // FALLBACK
+  {
+    path: '*',
+    element: <Navigate to={APP_ROUTES.AUTH.SIGNIN} replace />,
+  },
+]);

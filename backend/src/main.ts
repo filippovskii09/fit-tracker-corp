@@ -19,12 +19,13 @@ async function bootstrap() {
   const globalPrefix = 'api/v1';
   app.setGlobalPrefix(globalPrefix);
 
-  const origin = configService.get<string>(FRONTEND_URL);
+  const origin = configService?.get<string>(FRONTEND_URL);
 
   app.use(cookieParser());
   app.use(helmet());
+  // TODO: we need to set frontend url and update it in railway
   app.enableCors({
-    origin,
+    origin: [origin || '*', 'http://localhost:3001', 'http://localhost:5173'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });

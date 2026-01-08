@@ -8,6 +8,9 @@
     "types": ["vite/client", "jest", "@testing-library/jest-dom"],
     "skipLibCheck": true,
 
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
@@ -20,12 +23,26 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
+    "erasableSyntaxOnly": false,
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
     "paths": {
-      "@config": ["./src/config"]
+      "@config": ["./src/config"],
+      "@api": ["./src/api"],
+      "@ui": ["./src/components/ui"],
+      "@utils": ["./src/utils"],
+      "@layouts": ["./src/layouts"],
+      "@router": ["./src/router"],
+      "@modules": ["./src/modules"],
+      "@theme": ["./src/theme"],
+      "@constants": ["./src/constants"],
+      "@locales": ["./src/locales"],
+      "@pages": ["./src/pages"],
+      "@services": ["./src/services"],
+      "@hooks": ["./src/hooks"],
+      "@types": ["./src/types"],
+      "@components": ["./src/components"]
     }
   },
   "include": ["src"]
