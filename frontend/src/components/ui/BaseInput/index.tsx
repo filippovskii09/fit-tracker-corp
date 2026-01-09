@@ -1,11 +1,14 @@
 import { TextField } from '@mui/material';
-import { useField } from 'formik';
 
 import type { BaseInputProps } from './types';
 
-export const BaseInput = ({ name, helperText, ...props }: BaseInputProps) => {
-  const [field, meta] = useField(name);
-  const hasError = meta.touched && Boolean(meta.error);
+export const BaseInput = ({
+  field,
+  meta,
+  helperText,
+  ...props
+}: BaseInputProps) => {
+  const hasError = meta ? meta.touched && Boolean(meta.error) : false;
 
   return (
     <TextField
@@ -15,7 +18,7 @@ export const BaseInput = ({ name, helperText, ...props }: BaseInputProps) => {
       variant="outlined"
       margin="normal"
       error={hasError}
-      helperText={hasError ? meta.error : helperText}
+      helperText={hasError ? meta?.error : helperText}
       sx={{ mb: 2 }}
     />
   );

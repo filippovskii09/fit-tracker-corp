@@ -1,7 +1,8 @@
 import type { TextFieldProps } from '@mui/material';
+import type { FieldInputProps, FieldMetaProps } from 'formik';
 
 export type BaseInputProps = TextFieldProps & {
-  name: string;
-  label: string;
+  field?: FieldInputProps<unknown>;
+  meta?: FieldMetaProps<unknown>;
   helperText?: string;
 };

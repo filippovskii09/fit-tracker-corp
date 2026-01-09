@@ -1,4 +1,4 @@
-import { Formik, Form } from 'formik';
+import { Formik, Form, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
@@ -41,25 +41,28 @@ export const RegisterForm = () => {
     >
       {({ isValid, dirty }) => (
         <Form>
-          <BaseInput
+          <Field
             name="firstName"
             label={f.firstName.label}
             placeholder={f.firstName.placeholder}
             InputLabelProps={{ shrink: true }}
+            component={BaseInput}
           />
-          <BaseInput
+          <Field
             name="email"
             label={f.email.label}
             placeholder={f.email.placeholder}
             type="email"
             InputLabelProps={{ shrink: true }}
+            component={BaseInput}
           />
-          <BaseInput
+          <Field
             name="password"
             label={f.password.label}
             placeholder={f.password.placeholder}
             type="password"
             InputLabelProps={{ shrink: true }}
+            component={BaseInput}
           />
 
           <BaseButton
