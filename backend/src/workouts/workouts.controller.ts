@@ -8,6 +8,7 @@ import {
   ParseUUIDPipe,
   Logger,
   UseGuards,
+  UnauthorizedException,
 } from '@nestjs/common';
 
 import { JwtAuthGuard } from '@src/auth/guards';
@@ -30,7 +31,7 @@ export class WorkoutsController {
   ) {
     if (!userId) {
       this.logger.error(ResponseMessages.User.IdNotFound, userId);
-      throw new Error(ResponseMessages.User.IdNotFound);
+      throw new UnauthorizedException(ResponseMessages.User.IdNotFound);
     }
     return await this.workoutsService.create(CreateWorkoutDto, userId);
   }
@@ -40,7 +41,7 @@ export class WorkoutsController {
   async findAll(@CurrentUser('id') userId: string) {
     if (!userId) {
       this.logger.error(ResponseMessages.User.IdNotFound, userId);
-      throw new Error(ResponseMessages.User.IdNotFound);
+      throw new UnauthorizedException(ResponseMessages.User.IdNotFound);
     }
     return await this.workoutsService.findAll(userId);
   }
