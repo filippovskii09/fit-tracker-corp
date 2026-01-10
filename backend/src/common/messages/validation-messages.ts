@@ -9,4 +9,7 @@ export const ValidationMessages = {
     PasswordWeak:
       'Password is too weak. It must have at least 8 characters, 1 uppercase, 1 lowercase, 1 number, and 1 symbol.',
   },
+  Exercise: {
+    AllReadyExist: 'Exercise with this name already exists',
+  },
 } as const;

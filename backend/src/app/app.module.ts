@@ -7,6 +7,8 @@ import { envSchema } from '@src/config/env.validation';
 import { DBModule } from '@src/db/db.module';
 import { UsersModule } from '@src/users/users.module';
 import { AuthModule } from '@src/auth/auth.module';
+import { ExercisesModule } from '@src/exercises/exercises.module';
+import { WorkoutsModule } from '@src/workouts/workouts.module';
 
 @Module({
   imports: [
@@ -24,6 +26,8 @@ import { AuthModule } from '@src/auth/auth.module';
     ]),
     UsersModule,
     AuthModule,
+    ExercisesModule,
+    WorkoutsModule,
   ],
   controllers: [],
   providers: [
