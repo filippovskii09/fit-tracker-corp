@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -9,15 +9,19 @@ import { JwtPayload } from '../types';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  private readonly logger = new Logger(JwtStrategy.name);
+
   constructor(private readonly configService: ConfigService) {
+    const secret = configService.getOrThrow<string>(JWT_ACCESS_TOKEN_SECRET);
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.getOrThrow<string>(JWT_ACCESS_TOKEN_SECRET),
+      secretOrKey: secret,
     });
   }
 
   async validate(payload: JwtPayload) {
+    this.logger.log(`Validating JWT token: ${JSON.stringify(payload)}`);
     return { id: payload.sub, email: payload.email };
   }
 }
