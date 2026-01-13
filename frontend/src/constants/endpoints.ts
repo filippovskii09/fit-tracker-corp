@@ -8,4 +8,7 @@ export const API_ENDPOINTS = {
   PROFILE: {
     ME: '/users/me',
   },
+  WORKOUTS: {
+    ROOT: '/workouts',
+  },
 } as const;

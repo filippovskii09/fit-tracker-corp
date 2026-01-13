@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-import { HomePage, RegisterPage, SigninPage } from '@pages';
+import { DashboardPage, RegisterPage, SigninPage } from '@pages';
 import { AuthLayout } from '@layouts';
 import { APP_ROUTES } from '@constants';
 import { GuestGuard, PrivateGuard } from './guards';
@@ -30,10 +30,10 @@ export const router = createBrowserRouter([
   {
     element: <PrivateGuard />,
     children: [
-      {
-        path: APP_ROUTES.ROOT,
-        element: <HomePage />,
-      },
+			{
+				path: APP_ROUTES.DASHBOARD,
+				element: <DashboardPage />
+			}
     ],
   },
 
