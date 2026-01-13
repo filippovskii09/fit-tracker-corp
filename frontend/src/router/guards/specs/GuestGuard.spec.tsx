@@ -38,7 +38,10 @@ describe('GuestGuard', () => {
           <Route path="" element={<div>Login Page</div>} />
         </Route>
         <Route path="*" element={null} />
-        <Route path={APP_ROUTES.DASHBOARD} element={<div>Dashboard Page</div>} />
+        <Route
+          path={APP_ROUTES.DASHBOARD}
+          element={<div>Dashboard Page</div>}
+        />
       </Routes>,
       { route: APP_ROUTES.AUTH.SIGNIN },
     );

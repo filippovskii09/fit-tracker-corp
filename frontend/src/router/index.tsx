@@ -30,10 +30,10 @@ export const router = createBrowserRouter([
   {
     element: <PrivateGuard />,
     children: [
-			{
-				path: APP_ROUTES.DASHBOARD,
-				element: <DashboardPage />
-			}
+      {
+        path: APP_ROUTES.DASHBOARD,
+        element: <DashboardPage />,
+      },
     ],
   },
 
