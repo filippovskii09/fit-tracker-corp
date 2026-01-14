@@ -11,5 +11,7 @@ export const useUser = () => {
     queryFn: () => profileService.getMe(),
     enabled: !!token,
     retry: false,
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
   });
 };

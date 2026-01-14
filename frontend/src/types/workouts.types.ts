@@ -1,4 +1,4 @@
-export interface WorkoutsResponse {
+export interface WorkoutPreview {
   id: string;
   name: string;
   date: string;
