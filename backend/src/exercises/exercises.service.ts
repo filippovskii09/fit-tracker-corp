@@ -32,6 +32,7 @@ export class ExercisesService {
   async findAll() {
     return this.exerciseRepository.find({
       order: { name: 'ASC' },
+      select: ['id', 'name', 'muscleGroup'],
     });
   }
 
