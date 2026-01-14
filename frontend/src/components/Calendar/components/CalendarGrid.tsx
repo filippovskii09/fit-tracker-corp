@@ -1,5 +1,6 @@
 import { WEEK_DAYS } from '../constants';
 import type { ICalendarGridProps } from '../types';
+import { CalendarDayCell } from './CalendarDayCell';
 
 export const CalendarGrid = ({
   arrayByDaysInMonth,
@@ -13,38 +14,23 @@ export const CalendarGrid = ({
         {WEEK_DAYS.map((day) => (
           <div
             key={day}
-            className="flex justify-center font-medium text-xs text-[#9C9D9F]"
+            className="flex justify-center font-medium text-xs text-muted"
           >
             {day.slice(0, 3)}
           </div>
         ))}
       </div>
       <div className="grid grid-cols-7 gap-y-8 gap-x-2.5">
-        {arrayByDaysInMonth?.map((day) => {
-          const currentDayStyle =
-            currentDay === day ? 'bg-[#8CEF0D] text-[#0C110F] font-bold' : '';
-          const hasWorkout = checkWorkoutInThisDay(day);
-          return (
-            <div
-              key={day}
-              className={`h-10 w-10 flex relative items-center justify-center font-medium text-xs rounded-xl ${currentDayStyle}`}
-              style={
-                day === 1
-                  ? { gridColumnStart: `${indexOfFirstDayInMonth}` }
-                  : {}
-              }
-            >
-              {day}
-              {hasWorkout ? (
-                <span
-                  className={`w-2 h-2 ${currentDayStyle ? 'bg-[#0C110F]' : 'bg-[#8CEF0D]'} rounded-full absolute left-1/2 -translate-x-1/2 bottom-0.5`}
-                ></span>
-              ) : (
-                ''
-              )}
-            </div>
-          );
-        })}
+        {arrayByDaysInMonth?.map((day) => (
+          <CalendarDayCell
+            key={day}
+            day={day}
+            isCurrent={currentDay === day}
+            hasWorkout={checkWorkoutInThisDay(day)}
+            colStart={indexOfFirstDayInMonth}
+            isFirstDay={day === 1}
+          />
+        ))}
       </div>
     </div>
   );

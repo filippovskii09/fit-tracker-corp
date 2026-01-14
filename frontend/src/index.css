@@ -1,5 +1,12 @@
 @import 'tailwindcss';
 
+@theme {
+  --color-main: #0c110f;
+  --color-surface: #181d1b;
+  --color-primary: #8cef0d;
+  --color-muted: #9c9d9f;
+}
+
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;

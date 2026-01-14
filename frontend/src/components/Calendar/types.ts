@@ -21,3 +21,15 @@ export interface ICalendarGridProps {
 export interface ICalendarActionsProps {
   backToday: () => void;
 }
+
+export interface ICalendarDayCellProps {
+  day: number;
+  isCurrent: boolean;
+  hasWorkout: boolean;
+  colStart: number;
+  isFirstDay: boolean;
+}
+
+export interface ICalendarDayCellPointProps {
+  pointClasses: string;
+}

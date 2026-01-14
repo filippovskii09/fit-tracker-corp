@@ -1,4 +1,4 @@
-import { CalendarActions, CalendarGrid, MounthSwitcher } from './components';
+import { CalendarActions, CalendarGrid, MonthSwitcher } from './components';
 import { useCalendar } from './hooks';
 import type { ICalendarProps } from './types';
 
@@ -17,7 +17,7 @@ export const Calendar = ({ workouts }: ICalendarProps) => {
 
   return (
     <div className="flex flex-col gap-20 w-[384px] p-6">
-      <MounthSwitcher
+      <MonthSwitcher
         prevMonth={prevMonth}
         nextMonth={nextMonth}
         month={month}
