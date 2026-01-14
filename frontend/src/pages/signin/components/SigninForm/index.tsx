@@ -25,7 +25,7 @@ export const SigninForm = () => {
       onSuccess: (data) => {
         localStorage.setItem('accessToken', data.accessToken);
         toast.success(t.success);
-        navigate(APP_ROUTES.ROOT);
+        navigate(APP_ROUTES.DASHBOARD);
       },
       onError: (error) => {
         toast.error(getErrorMessage(error));
