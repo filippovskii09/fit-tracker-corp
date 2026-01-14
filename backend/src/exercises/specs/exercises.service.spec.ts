@@ -62,7 +62,9 @@ describe('ExercisesService', () => {
 
   describe('findAll', () => {
     it('should return an array of exercises', async () => {
-      const exercises = [{ name: 'Push up' }];
+      const exercises = [
+        { id: 'asd', name: 'Push up', muscleGroup: MuscleGroup.CHEST },
+      ];
       mockExerciseRepository.find.mockResolvedValue(exercises);
 
       const result = await service.findAll();
