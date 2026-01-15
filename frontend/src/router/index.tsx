@@ -1,6 +1,11 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
 
-import { DashboardPage, RegisterPage, SigninPage } from '@pages';
+import {
+  CreateWorkoutPage,
+  DashboardPage,
+  RegisterPage,
+  SigninPage,
+} from '@pages';
 import { AuthLayout } from '@layouts';
 import { APP_ROUTES } from '@constants';
 import { GuestGuard, PrivateGuard } from './guards';
@@ -33,6 +38,10 @@ export const router = createBrowserRouter([
       {
         path: APP_ROUTES.DASHBOARD,
         element: <DashboardPage />,
+      },
+      {
+        path: APP_ROUTES.WORKOUTS.CREATE,
+        element: <CreateWorkoutPage />,
       },
     ],
   },

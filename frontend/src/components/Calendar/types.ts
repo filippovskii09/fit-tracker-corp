@@ -2,6 +2,7 @@ import type { WorkoutPreview } from '@types';
 
 export interface ICalendarProps {
   workouts: WorkoutPreview[];
+  openModalByClickOnDayCell: () => void;
 }
 
 export interface IMounthSwitcherProps {
@@ -16,6 +17,8 @@ export interface ICalendarGridProps {
   indexOfFirstDayInMonth: number;
   currentDay: number;
   checkWorkoutInThisDay: (day: number) => boolean;
+  openModalByClickOnDayCell: () => void;
+  getWorkoutByDay: (day: number) => WorkoutPreview | undefined;
 }
 
 export interface ICalendarActionsProps {
@@ -28,6 +31,8 @@ export interface ICalendarDayCellProps {
   hasWorkout: boolean;
   colStart: number;
   isFirstDay: boolean;
+  openModalByClickOnDayCell: () => void;
+  initialWorkoutId?: string;
 }
 
 export interface ICalendarDayCellPointProps {

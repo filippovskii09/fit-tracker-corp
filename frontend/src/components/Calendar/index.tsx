@@ -2,7 +2,10 @@ import { CalendarActions, CalendarGrid, MonthSwitcher } from './components';
 import { useCalendar } from './hooks';
 import type { ICalendarProps } from './types';
 
-export const Calendar = ({ workouts }: ICalendarProps) => {
+export const Calendar = ({
+  workouts,
+  openModalByClickOnDayCell,
+}: ICalendarProps) => {
   const {
     month,
     year,
@@ -13,6 +16,7 @@ export const Calendar = ({ workouts }: ICalendarProps) => {
     currentDay,
     backToday,
     checkWorkoutInThisDay,
+    getWorkoutByDay,
   } = useCalendar(workouts);
 
   return (
@@ -28,6 +32,8 @@ export const Calendar = ({ workouts }: ICalendarProps) => {
         indexOfFirstDayInMonth={indexOfFirstDayInMonth}
         currentDay={currentDay}
         checkWorkoutInThisDay={checkWorkoutInThisDay}
+        getWorkoutByDay={getWorkoutByDay}
+        openModalByClickOnDayCell={openModalByClickOnDayCell}
       />
       <CalendarActions backToday={backToday} />
     </div>

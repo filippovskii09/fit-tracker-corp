@@ -55,6 +55,17 @@ export const useCalendar = (workouts: WorkoutPreview[]) => {
     });
   };
 
+  const getWorkoutByDay = (day: number): WorkoutPreview | undefined => {
+    return workouts.find((workout) => {
+      const wDate = new Date(workout.date);
+      return (
+        wDate.getFullYear() === year &&
+        wDate.getMonth() === currentMonthIndex &&
+        wDate.getDate() === day
+      );
+    });
+  };
+
   return {
     month,
     year,
@@ -65,5 +76,6 @@ export const useCalendar = (workouts: WorkoutPreview[]) => {
     currentDay,
     backToday,
     checkWorkoutInThisDay,
+    getWorkoutByDay,
   };
 };
