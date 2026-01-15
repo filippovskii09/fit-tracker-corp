@@ -7,7 +7,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app/app.module';
-import { FRONTEND_URL, PORT } from './config/constants';
+import { PORT } from './config/constants';
 import { DEFAULT_PORT } from './constants';
 
 async function bootstrap() {
@@ -19,13 +19,34 @@ async function bootstrap() {
   const globalPrefix = 'api/v1';
   app.setGlobalPrefix(globalPrefix);
 
-  const origin = configService?.get<string>(FRONTEND_URL);
-
   app.use(cookieParser());
   app.use(helmet());
-  // TODO: we need to set frontend url and update it in railway
   app.enableCors({
-    origin: [origin || '*', 'http://localhost:3001', 'http://localhost:5173'],
+    origin: (origin, callback) => {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      const allowedOrigins = [
+        'http://localhost:5173',
+        'http://localhost:3001',
+        'https://fit-tracker-corp.netlify.app',
+      ];
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      const isNetlifyPreview =
+        /^https:\/\/deploy-preview-\d+--fit-tracker-corp\.netlify\.app$/.test(
+          origin,
+        );
+
+      if (isNetlifyPreview) {
+        return callback(null, true);
+      }
+      callback(new Error('Not allowed by CORS'));
+    },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
   });
