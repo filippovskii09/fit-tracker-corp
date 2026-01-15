@@ -7,6 +7,8 @@ export const CalendarGrid = ({
   indexOfFirstDayInMonth,
   currentDay,
   checkWorkoutInThisDay,
+  openModalByClickOnDayCell,
+  getWorkoutByDay,
 }: ICalendarGridProps) => {
   return (
     <div className="flex flex-col gap-4 border-b-2 border-white pb-7">
@@ -26,9 +28,11 @@ export const CalendarGrid = ({
             key={day}
             day={day}
             isCurrent={currentDay === day}
+            initialWorkoutId={getWorkoutByDay(day)?.id || ''}
             hasWorkout={checkWorkoutInThisDay(day)}
             colStart={indexOfFirstDayInMonth}
             isFirstDay={day === 1}
+            openModalByClickOnDayCell={openModalByClickOnDayCell}
           />
         ))}
       </div>

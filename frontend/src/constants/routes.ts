@@ -4,4 +4,7 @@ export const APP_ROUTES = {
     SIGNIN: '/signin',
     REGISTER: '/register',
   },
+  WORKOUTS: {
+    CREATE: '/workouts/create',
+  },
 } as const;

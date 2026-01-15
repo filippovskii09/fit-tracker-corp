@@ -15,21 +15,25 @@ export const CalendarDayCell = ({
   hasWorkout,
   colStart,
   isFirstDay,
+  openModalByClickOnDayCell,
 }: ICalendarDayCellProps) => {
   const baseClasses =
     'h-10 w-10 flex relative items-center justify-center font-medium text-xs rounded-xl transition-colors';
   const activeClasses = isCurrent ? 'bg-primary text-main font-bold' : '';
   const pointClasses = isCurrent ? 'bg-main' : 'bg-primary';
 
+  const handleClick = () => (hasWorkout ? null : openModalByClickOnDayCell());
+
   return (
-    <div
+    <button
       key={day}
       className={`${baseClasses} ${activeClasses}`}
       style={isFirstDay ? { gridColumnStart: `${colStart}` } : {}}
+      onClick={handleClick}
     >
       {day}
 
       {hasWorkout && <CalendarDayCellPoint pointClasses={pointClasses} />}
-    </div>
+    </button>
   );
 };

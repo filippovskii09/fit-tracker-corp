@@ -11,4 +11,7 @@ export const API_ENDPOINTS = {
   WORKOUTS: {
     ROOT: '/workouts',
   },
+  EXERCISES: {
+    ROOT: '/exercises',
+  },
 } as const;
