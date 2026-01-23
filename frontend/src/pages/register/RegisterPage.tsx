@@ -3,7 +3,7 @@ import { APP_ROUTES } from '@constants';
 import { AuthPageHeader } from '@components';
 import { RegisterForm } from './components';
 
-export const RegisterPage = () => {
+const RegisterPage = () => {
   const t = DICTIONARY.auth.register;
 
   return (
@@ -18,3 +18,5 @@ export const RegisterPage = () => {
     </>
   );
 };
+
+export default RegisterPage;

@@ -2,7 +2,7 @@ import { Calendar } from '@components';
 import { BaseModal } from '@ui';
 import { useDashboardPage } from './hooks';
 
-export const DashboardPage = () => {
+const DashboardPage = () => {
   const {
     isCreateWorkoutModalOpen,
     closeCreateWorkoutModalOpenModal,
@@ -30,3 +30,5 @@ export const DashboardPage = () => {
     </div>
   );
 };
+
+export default DashboardPage;

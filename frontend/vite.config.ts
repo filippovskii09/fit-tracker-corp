@@ -7,6 +7,26 @@ import { visualizer } from 'rollup-plugin-visualizer';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss(), visualizer()],
+  build: {
+    rolldownOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            if (id.includes('@mui')) {
+              return 'vendor-mui';
+            }
+            if (id.includes('react-dom')) {
+              return 'vendor-react-dom';
+            }
+            if (id.includes('react-icons')) {
+              return 'vendor-icons';
+            }
+            return 'vendor-utils';
+          }
+        },
+      },
+    },
+  },
   resolve: {
     alias: {
       '@config': path.resolve(__dirname, './src/config'),

@@ -1,15 +1,20 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { lazy } from 'react';
 
-import {
-  CreateWorkoutPage,
-  DashboardPage,
-  RegisterPage,
-  SigninPage,
-  ViewWorkoutPage,
-} from '@pages';
 import { AuthLayout } from '@layouts';
 import { APP_ROUTES } from '@constants';
 import { GuestGuard, PrivateGuard } from './guards';
+import { LazyRoute } from './LazyRoute';
+
+const DashboardPage = lazy(() => import('../pages/dashboard/DashboardPage'));
+const CreateWorkoutPage = lazy(
+  () => import('../pages/workout/create/CreateWorkoutPage'),
+);
+const RegisterPage = lazy(() => import('../pages/register/RegisterPage'));
+const SigninPage = lazy(() => import('../pages/signin/SigninPage'));
+const ViewWorkoutPage = lazy(
+  () => import('../pages/workout/view/ViewWorkoutPage'),
+);
 
 export const router = createBrowserRouter([
   // PUBLIC ROUTES
@@ -21,11 +26,11 @@ export const router = createBrowserRouter([
         children: [
           {
             path: APP_ROUTES.AUTH.REGISTER,
-            element: <RegisterPage />,
+            element: <LazyRoute component={RegisterPage} />,
           },
           {
             path: APP_ROUTES.AUTH.SIGNIN,
-            element: <SigninPage />,
+            element: <LazyRoute component={SigninPage} />,
           },
         ],
       },
@@ -38,15 +43,15 @@ export const router = createBrowserRouter([
     children: [
       {
         path: APP_ROUTES.DASHBOARD,
-        element: <DashboardPage />,
+        element: <LazyRoute component={DashboardPage} />,
       },
       {
         path: APP_ROUTES.WORKOUTS.CREATE,
-        element: <CreateWorkoutPage />,
+        element: <LazyRoute component={CreateWorkoutPage} />,
       },
       {
         path: `${APP_ROUTES.WORKOUTS.ROOT}/:id`,
-        element: <ViewWorkoutPage />,
+        element: <LazyRoute component={ViewWorkoutPage} />,
       },
     ],
   },
