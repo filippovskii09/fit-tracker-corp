@@ -10,6 +10,7 @@ const config: Config = {
     '^@api(.*)$': '<rootDir>/src/api$1',
     '^@ui(.*)$': '<rootDir>/src/components/ui$1',
     '^@utils(.*)$': '<rootDir>/src/utils$1',
+    '^@testUtils(.*)$': '<rootDir>/src/utils/testUtils$1',
     '^@layouts(.*)$': '<rootDir>/src/layouts$1',
     '^@router(.*)$': '<rootDir>/src/router$1',
     '^@modules(.*)$': '<rootDir>/src/modules$1',

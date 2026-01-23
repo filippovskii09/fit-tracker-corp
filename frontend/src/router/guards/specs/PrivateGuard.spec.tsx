@@ -1,6 +1,6 @@
 import { Route, Routes } from 'react-router-dom';
 
-import { render, screen } from '@utils';
+import { render, screen } from '@testUtils';
 import { APP_ROUTES } from '@constants';
 import { useUser } from '@hooks';
 import { PrivateGuard } from '../PrivateGuard';

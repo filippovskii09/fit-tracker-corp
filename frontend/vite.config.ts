@@ -2,16 +2,18 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import tailwindcss from '@tailwindcss/vite';
+import { visualizer } from 'rollup-plugin-visualizer';
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), visualizer()],
   resolve: {
     alias: {
       '@config': path.resolve(__dirname, './src/config'),
       '@api': path.resolve(__dirname, './src/api'),
       '@ui': path.resolve(__dirname, './src/components/ui'),
       '@utils': path.resolve(__dirname, './src/utils'),
+      '@testUtils': path.resolve(__dirname, './src/utils/testUtils'),
       '@layouts': path.resolve(__dirname, './src/layouts'),
       '@router': path.resolve(__dirname, './src/router'),
       '@modules': path.resolve(__dirname, './src/modules'),

@@ -1,7 +1,5 @@
-import { waitFor } from '@testing-library/react';
-
 import { profileService } from '@services';
-import { renderHook } from '@utils';
+import { renderHook, waitFor } from '@testUtils';
 import { useUser } from '../useUser';
 
 jest.mock('@services', () => ({
