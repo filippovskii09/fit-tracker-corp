@@ -1,6 +1,6 @@
-import type { ExercisesResponse } from '@types';
+import type { ExerciseInfoResponse } from '@types';
 
 export interface IExerciseSelectProps {
-  onSelect: (exercise: ExercisesResponse) => void;
+  onSelect: (exercise: ExerciseInfoResponse) => void;
   disabled?: boolean;
 }

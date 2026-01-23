@@ -5,6 +5,7 @@ export const APP_ROUTES = {
     REGISTER: '/register',
   },
   WORKOUTS: {
+    ROOT: '/workouts',
     CREATE: '/workouts/create',
   },
 } as const;

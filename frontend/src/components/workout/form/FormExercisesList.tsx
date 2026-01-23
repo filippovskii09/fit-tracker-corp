@@ -1,12 +1,12 @@
-import { FieldArray } from 'formik';
+import { FieldArray, useFormikContext } from 'formik';
 
 import { ExerciseSelect } from '@components';
-import type { IExercise } from '@types';
 import { DICTIONARY } from '@locales';
-import type { IExericesBlockProps } from '../types';
-import { ExerciseCard } from './ExerciseCard';
+import type { CreateWorkoutFormValues, IExercise } from '@types';
+import { FormExerciseCard } from './FormExerciseCard';
 
-export const ExericesBlock = ({ exercises }: IExericesBlockProps) => {
+export const FormExercisesList = () => {
+  const { values } = useFormikContext<CreateWorkoutFormValues>();
   const { create } = DICTIONARY.workout;
 
   return (
@@ -14,9 +14,10 @@ export const ExericesBlock = ({ exercises }: IExericesBlockProps) => {
       <FieldArray name="exercises">
         {({ push, remove }) => (
           <>
+            {/* Exercises list view */}
             <div>
-              {exercises.map((_: IExercise, index: number) => (
-                <ExerciseCard
+              {values.exercises.map((_: IExercise, index: number) => (
+                <FormExerciseCard
                   key={index}
                   exerciseIndex={index}
                   onRemove={() => remove(index)}
@@ -24,6 +25,7 @@ export const ExericesBlock = ({ exercises }: IExericesBlockProps) => {
               ))}
             </div>
 
+            {/* Adding new exercise from **ExerciseSelect** component */}
             <div className="mt-8">
               <p className="text-sm text-zinc-500 mb-3 font-medium uppercase tracking-wider pl-1">
                 {create.addExercise}

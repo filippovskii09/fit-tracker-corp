@@ -8,6 +8,10 @@ export const workoutLocales = {
     submitButton: 'Finish Workout',
     addSet: 'Add another Set',
   },
+  view: {
+    idAllowed: 'ID undefined',
+    notFound: 'Workout not found',
+  },
   weight: 'Weight',
   reps: 'Reps',
   kg: 'kg',

@@ -4,26 +4,35 @@ import type { IExercise } from '@types';
 
 export interface IExerciseCardProps {
   exerciseIndex: number;
-  onRemove: () => void;
+  onRemove?: () => void;
+}
+
+export interface IViewExerciseCardProps {
+  exercise: IExercise;
 }
 
 export interface IStickyHeaderProps {
   name: string;
   date: string;
-  handleChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
+  readOnly?: boolean;
 }
 
 export interface IExericesBlockProps {
   exercises: IExercise[];
+  isView?: boolean;
 }
 
 export interface ISubmitButtonBlockProps {
   isSubmitting: boolean;
-  noOneExercises: boolean;
+  isValid: boolean;
 }
 
-export interface CreateWorkoutFormValues {
-  name: string;
-  date: string;
+export interface IViewExercisesListProps {
   exercises: IExercise[];
+}
+
+export interface IFormExerciseCardProps {
+  exerciseIndex: number;
+  onRemove: () => void;
 }

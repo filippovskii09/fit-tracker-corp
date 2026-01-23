@@ -12,3 +12,18 @@ export interface WorkoutPreview {
   date: string;
   status: string;
 }
+
+export interface IWorkout {
+  id: string;
+  name: string;
+  date: string;
+  userId: string;
+  status: string;
+  exercises: IExercise[];
+}
+
+export interface CreateWorkoutFormValues {
+  name: string;
+  date: string;
+  exercises: IExercise[];
+}

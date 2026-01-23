@@ -1,13 +1,14 @@
 import { IoMdArrowBack } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 
-import type { IStickyHeaderProps } from '../types';
 import { DICTIONARY } from '@locales';
+import type { IStickyHeaderProps } from '../types';
 
 export const StickyHeader = ({
   name,
   date,
   handleChange,
+  readOnly = false,
 }: IStickyHeaderProps) => {
   const navigate = useNavigate();
   const { create } = DICTIONARY.workout;
@@ -27,9 +28,11 @@ export const StickyHeader = ({
           value={name}
           onChange={handleChange}
           placeholder={create.titlePlaceholder}
+          readOnly={readOnly}
           className="bg-transparent text-xl font-bold w-full focus:outline-none placeholder-zinc-600"
           autoComplete="off"
         />
+
         <div className="text-xs text-primary font-mono mt-0.5">
           {new Date(date).toDateString()}
         </div>

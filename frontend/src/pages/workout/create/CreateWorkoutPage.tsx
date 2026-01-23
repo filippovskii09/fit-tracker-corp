@@ -1,9 +1,13 @@
 import { Formik, Form } from 'formik';
 
-import { ExericesBlock, StickyHeader, SubmitButtonBlock } from './components';
 import { createWorkoutInitialValues, createWorkoutSchema } from './schemas';
-import type { CreateWorkoutFormValues } from './types';
 import { useCreateWorkout } from './hooks';
+import type { CreateWorkoutFormValues } from '@types';
+import {
+  FormExercisesList,
+  StickyHeader,
+  SubmitButtonBlock,
+} from '@components';
 
 export const CreateWorkoutPage = () => {
   const handleSubmit = useCreateWorkout();
@@ -22,11 +26,11 @@ export const CreateWorkoutPage = () => {
             handleChange={handleChange}
           />
 
-          <ExericesBlock exercises={values.exercises} />
+          <FormExercisesList />
 
           <SubmitButtonBlock
             isSubmitting={isSubmitting}
-            noOneExercises={values.exercises.length === 0}
+            isValid={values.exercises.length > 0}
           />
         </Form>
       )}

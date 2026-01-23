@@ -1,7 +1,9 @@
+import { useNavigate } from 'react-router-dom';
 import type {
   ICalendarDayCellPointProps,
   ICalendarDayCellProps,
 } from '../types';
+import { APP_ROUTES } from '@constants';
 
 const CalendarDayCellPoint = ({ pointClasses }: ICalendarDayCellPointProps) => (
   <span
@@ -16,13 +18,21 @@ export const CalendarDayCell = ({
   colStart,
   isFirstDay,
   openModalByClickOnDayCell,
+  initialWorkoutId,
 }: ICalendarDayCellProps) => {
+  const navigate = useNavigate();
   const baseClasses =
     'h-10 w-10 flex relative items-center justify-center font-medium text-xs rounded-xl transition-colors';
   const activeClasses = isCurrent ? 'bg-primary text-main font-bold' : '';
   const pointClasses = isCurrent ? 'bg-main' : 'bg-primary';
 
-  const handleClick = () => (hasWorkout ? null : openModalByClickOnDayCell());
+  const handleClick = () => {
+    if (hasWorkout) {
+      navigate(`${APP_ROUTES.WORKOUTS.ROOT}/${initialWorkoutId}`);
+    } else {
+      openModalByClickOnDayCell();
+    }
+  };
 
   return (
     <button

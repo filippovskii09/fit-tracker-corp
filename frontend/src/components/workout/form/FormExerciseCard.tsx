@@ -1,21 +1,20 @@
 import { FieldArray, useFormikContext } from 'formik';
-import { IoMdClose, IoMdAdd } from 'react-icons/io';
 import { IconButton } from '@mui/material';
+import { IoMdClose, IoMdAdd } from 'react-icons/io';
 
+import type { CreateWorkoutFormValues, ISet } from '@types';
 import { DICTIONARY } from '@locales';
-import type { ISet } from '@types';
-import type { CreateWorkoutFormValues, IExerciseCardProps } from '../types';
+import type { IFormExerciseCardProps } from '../types';
 
-export const ExerciseCard = ({
+export const FormExerciseCard = ({
   exerciseIndex,
   onRemove,
-}: IExerciseCardProps) => {
+}: IFormExerciseCardProps) => {
   const { values, handleChange, handleBlur } =
     useFormikContext<CreateWorkoutFormValues>();
 
   const exercise = values.exercises[exerciseIndex];
   const sets = exercise.sets;
-
   const workoutLocales = DICTIONARY.workout;
 
   return (
@@ -24,7 +23,7 @@ export const ExerciseCard = ({
         <div>
           <h3 className="text-white text-lg font-bold">{exercise.name}</h3>
           <span className="text-xs text-zinc-500">
-            {exercise.sets.length} {workoutLocales.sets}
+            {sets?.length} {workoutLocales.sets}
           </span>
         </div>
         <IconButton onClick={onRemove} size="small" sx={{ color: '#666' }}>
@@ -46,6 +45,7 @@ export const ExerciseCard = ({
                       {setIndex + 1}
                     </div>
 
+                    {/* Weight Input */}
                     <div className="flex-1 relative bg-black/40 rounded-xl overflow-hidden border border-zinc-700 focus-within:border-primary transition-colors">
                       <label className="absolute top-2 left-3 text-[10px] text-zinc-500 uppercase font-bold tracking-wider">
                         {workoutLocales.weight}
@@ -64,6 +64,7 @@ export const ExerciseCard = ({
                       </span>
                     </div>
 
+                    {/* Reps Input */}
                     <div className="flex-1 relative bg-black/40 rounded-xl overflow-hidden border border-zinc-700 focus-within:border-primary transition-colors">
                       <label className="absolute top-2 left-3 text-[10px] text-zinc-500 uppercase font-bold tracking-wider">
                         {workoutLocales.reps}
@@ -79,6 +80,7 @@ export const ExerciseCard = ({
                       />
                     </div>
 
+                    {/* Delete Set */}
                     {sets.length > 1 && (
                       <button
                         type="button"
@@ -93,6 +95,7 @@ export const ExerciseCard = ({
               })}
             </div>
 
+            {/* Add Set Button */}
             <button
               type="button"
               onClick={() => {

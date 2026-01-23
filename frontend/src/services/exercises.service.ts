@@ -1,10 +1,10 @@
 import { api } from '@api';
 import { API_ENDPOINTS } from '@constants';
-import type { ExercisesResponse } from '@types';
+import type { ExerciseInfoResponse } from '@types';
 
 class ExercisesService {
   async getAllExercises() {
-    const { data } = await api.get<ExercisesResponse[]>(
+    const { data } = await api.get<ExerciseInfoResponse[]>(
       API_ENDPOINTS.EXERCISES.ROOT,
     );
     return data;

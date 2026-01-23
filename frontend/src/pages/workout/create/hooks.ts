@@ -6,8 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { APP_ROUTES } from '@constants';
 import { DICTIONARY } from '@locales';
 import { workoutService } from '@services';
-import type { IExercise, ISet } from '@types';
-import type { CreateWorkoutFormValues } from './types';
+import type { CreateWorkoutFormValues, IExercise, ISet } from '@types';
 
 export const useCreateWorkout = () => {
   const navigate = useNavigate();
