@@ -7,7 +7,7 @@ export const SubmitButtonBlock = ({
 }: ISubmitButtonBlockProps) => {
   const { create } = DICTIONARY.workout;
   return (
-    <div className="fixed bottom-0 left-0 right-0 p-4 bg-linear-to-t from-main via-surface to-transparent z-10">
+    <div className="fixed bottom-0 contain-layout left-0 right-0 p-4 bg-linear-to-t from-main via-surface to-transparent z-10">
       <button
         type="submit"
         disabled={isSubmitting || !isValid}

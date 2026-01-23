@@ -1,13 +1,31 @@
 import { FieldArray, useFormikContext } from 'formik';
+import { useCallback } from 'react';
 
 import { ExerciseSelect } from '@components';
 import { DICTIONARY } from '@locales';
-import type { CreateWorkoutFormValues, IExercise } from '@types';
+import type {
+  CreateWorkoutFormValues,
+  ExerciseInfoResponse,
+  IExercise,
+} from '@types';
 import { FormExerciseCard } from './FormExerciseCard';
 
 export const FormExercisesList = () => {
   const { values } = useFormikContext<CreateWorkoutFormValues>();
   const { create } = DICTIONARY.workout;
+
+  // remove creating anonim function from return block
+  const handleSelect = useCallback(
+    (exercise: ExerciseInfoResponse, push: (exercise: IExercise) => void) => {
+      push({
+        exerciseId: exercise.id,
+        name: exercise.name,
+        muscleGroup: exercise.muscleGroup,
+        sets: [{ weight: 0, reps: 0, order: 1, isCompleted: false }],
+      });
+    },
+    [],
+  );
 
   return (
     <div className="px-4 py-6 max-w-md mx-auto">
@@ -32,14 +50,7 @@ export const FormExercisesList = () => {
               </p>
 
               <ExerciseSelect
-                onSelect={(exercise) => {
-                  push({
-                    exerciseId: exercise.id,
-                    name: exercise.name,
-                    muscleGroup: exercise.muscleGroup,
-                    sets: [{ weight: 0, reps: 0 }],
-                  });
-                }}
+                onSelect={(exercise) => handleSelect(exercise, push)}
               />
             </div>
           </>

@@ -20,8 +20,9 @@ export interface IExercise {
   id?: string;
   exerciseId: string;
   name?: string;
-  order: number;
+  order?: number;
   sets: ISet[];
+  muscleGroup?: MuscleGroup;
   exercise?: ExerciseInfoResponse;
 }
 
