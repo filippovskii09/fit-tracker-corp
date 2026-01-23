@@ -5,6 +5,7 @@ import { RouterProvider } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material';
 import { Toaster } from 'react-hot-toast';
 
+import { QUERY_STALE_TIME, QUERY_GC_TIME } from '@constants';
 import { router } from '@router';
 import { appTheme } from '@theme';
 
@@ -13,8 +14,8 @@ import './index.css';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 15 * 60 * 1000,
-      gcTime: 30 * 60 * 1000,
+      staleTime: QUERY_STALE_TIME,
+      gcTime: QUERY_GC_TIME,
       refetchOnWindowFocus: false,
       refetchOnMount: false,
       refetchOnReconnect: false,

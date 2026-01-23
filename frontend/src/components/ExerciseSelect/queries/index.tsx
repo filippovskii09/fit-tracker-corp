@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { QUERY_KEYS } from '@constants';
+import { QUERY_KEYS, QUERY_STALE_TIME_DAY } from '@constants';
 import { exercisesService } from '@services';
 import type { ExerciseInfoResponse } from '@types';
 
@@ -9,6 +9,11 @@ export const useGetAllExercises = () => {
     queryKey: [QUERY_KEYS.EXERCISES],
     queryFn: () => exercisesService.getAllExercises(),
     retry: false,
-    staleTime: 1000 * 60 * 60,
+    // Exercises are not changing, so we can set staleTime to Infinity
+    staleTime: Infinity,
+    gcTime: QUERY_STALE_TIME_DAY,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+    refetchOnReconnect: false,
   });
 };
