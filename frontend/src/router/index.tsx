@@ -5,6 +5,7 @@ import {
   DashboardPage,
   RegisterPage,
   SigninPage,
+  ViewWorkoutPage,
 } from '@pages';
 import { AuthLayout } from '@layouts';
 import { APP_ROUTES } from '@constants';
@@ -42,6 +43,10 @@ export const router = createBrowserRouter([
       {
         path: APP_ROUTES.WORKOUTS.CREATE,
         element: <CreateWorkoutPage />,
+      },
+      {
+        path: `${APP_ROUTES.WORKOUTS.ROOT}/:id`,
+        element: <ViewWorkoutPage />,
       },
     ],
   },

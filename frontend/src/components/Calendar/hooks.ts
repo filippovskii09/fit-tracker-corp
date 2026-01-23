@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 
 import type { WorkoutPreview } from '@types';
 import { MONTH_NAMES } from './constants';
@@ -44,6 +44,15 @@ export const useCalendar = (workouts: WorkoutPreview[]) => {
       ? now.getDate()
       : NaN;
 
+  const workoutsMap = useMemo(() => {
+    const map = new Map();
+    workouts.forEach((workout) => {
+      const day = new Date(workout.date).getDate();
+      map.set(day, workout);
+    });
+    return map;
+  }, [workouts]);
+
   const checkWorkoutInThisDay = (day: number) => {
     return workouts.some((workout) => {
       const workoutDate = new Date(workout.date);
@@ -55,16 +64,10 @@ export const useCalendar = (workouts: WorkoutPreview[]) => {
     });
   };
 
-  const getWorkoutByDay = (day: number): WorkoutPreview | undefined => {
-    return workouts.find((workout) => {
-      const wDate = new Date(workout.date);
-      return (
-        wDate.getFullYear() === year &&
-        wDate.getMonth() === currentMonthIndex &&
-        wDate.getDate() === day
-      );
-    });
-  };
+  const getWorkoutByDay = useCallback(
+    (day: number) => workoutsMap.get(day),
+    [workoutsMap],
+  );
 
   return {
     month,

@@ -10,20 +10,24 @@ enum MuscleGroup {
   FULL_BODY = 'Full Body',
 }
 
-export interface ExercisesResponse {
+export interface ExerciseInfoResponse {
   id: string;
   name: string;
   muscleGroup: MuscleGroup;
 }
 
 export interface IExercise {
+  id?: string;
   exerciseId: string;
   name?: string;
-  order: number;
+  order?: number;
   sets: ISet[];
+  muscleGroup?: MuscleGroup;
+  exercise?: ExerciseInfoResponse;
 }
 
 export interface ISet {
+  id?: string;
   weight: number;
   reps: number;
   order: number;
