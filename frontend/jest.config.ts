@@ -6,7 +6,7 @@ const config: Config = {
   setupFilesAfterEnv: ['<rootDir>/src/setupTest.ts'],
 
   moduleNameMapper: {
-    '^@config$': '<rootDir>/src/config',
+    '^@config$': '<rootDir>/src/__mocks__/config',
     '^@api(.*)$': '<rootDir>/src/api$1',
     '^@ui(.*)$': '<rootDir>/src/components/ui$1',
     '^@utils(.*)$': '<rootDir>/src/utils$1',
@@ -21,6 +21,7 @@ const config: Config = {
     '^@services(.*)$': '<rootDir>/src/services$1',
     '^@hooks(.*)$': '<rootDir>/src/hooks$1',
     '^@types(.*)$': '<rootDir>/src/types$1',
+    '^@components(.*)$': '<rootDir>/src/components$1',
 
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|webp|svg)$':
