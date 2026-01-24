@@ -1,11 +1,21 @@
 import { useNavigate } from 'react-router-dom';
+import { memo } from 'react';
 
 import type {
   ICalendarDayCellPointProps,
   ICalendarDayCellProps,
 } from '../types';
 import { APP_ROUTES } from '@constants';
-import { memo } from 'react';
+
+const colStartClasses: Record<number, string> = {
+  1: 'col-start-1',
+  2: 'col-start-2',
+  3: 'col-start-3',
+  4: 'col-start-4',
+  5: 'col-start-5',
+  6: 'col-start-6',
+  7: 'col-start-7',
+};
 
 const CalendarDayCellPoint = ({ pointClasses }: ICalendarDayCellPointProps) => (
   <span
@@ -28,7 +38,7 @@ export const CalendarDayCell = memo(
       'h-10 w-10 flex relative items-center justify-center font-medium text-xs rounded-xl transition-colors';
     const activeClasses = isCurrent ? 'bg-primary text-main font-bold' : '';
     const pointClasses = isCurrent ? 'bg-main' : 'bg-primary';
-
+    const gridStyle = isFirstDay ? colStartClasses[colStart] : '';
     const handleClick = () => {
       if (hasWorkout) {
         navigate(`${APP_ROUTES.WORKOUTS.ROOT}/${initialWorkoutId}`);
@@ -40,8 +50,7 @@ export const CalendarDayCell = memo(
     return (
       <button
         key={day}
-        className={`${baseClasses} ${activeClasses}`}
-        style={isFirstDay ? { gridColumnStart: `${colStart}` } : {}}
+        className={`${baseClasses} ${activeClasses} ${gridStyle}`}
         onClick={handleClick}
       >
         {day}

@@ -22,7 +22,7 @@ export const CalendarGrid = ({
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-y-8 gap-x-2.5">
+      <div className="grid grid-cols-7 gap-y-8 gap-x-2.5 contain-layout">
         {arrayByDaysInMonth?.map((day) => (
           <CalendarDayCell
             key={day}

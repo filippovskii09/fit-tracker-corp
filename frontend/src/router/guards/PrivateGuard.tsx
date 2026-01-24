@@ -1,8 +1,8 @@
-import { Box, CircularProgress } from '@mui/material';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import { APP_ROUTES } from '@constants';
 import { useUser } from '@hooks';
+import { Loader } from '@components';
 
 export const PrivateGuard = () => {
   const { data: user, isLoading, isError } = useUser();
@@ -13,19 +13,7 @@ export const PrivateGuard = () => {
   }
 
   if (isLoading) {
-    return (
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          height: '100vh',
-          bgcolor: 'background.default',
-        }}
-      >
-        <CircularProgress color="primary" />
-      </Box>
-    );
+    return <Loader />;
   }
 
   if (isError || !user) {

@@ -9,7 +9,7 @@ import {
   SubmitButtonBlock,
 } from '@components';
 
-export const CreateWorkoutPage = () => {
+const CreateWorkoutPage = () => {
   const handleSubmit = useCreateWorkout();
 
   return (
@@ -37,3 +37,5 @@ export const CreateWorkoutPage = () => {
     </Formik>
   );
 };
+
+export default CreateWorkoutPage;

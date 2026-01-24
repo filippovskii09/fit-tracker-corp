@@ -3,7 +3,7 @@ import { APP_ROUTES } from '@constants';
 import { AuthPageHeader } from '@components';
 import { SigninForm } from './components';
 
-export const SigninPage = () => {
+const SigninPage = () => {
   const t = DICTIONARY.auth.login;
 
   return (
@@ -18,3 +18,5 @@ export const SigninPage = () => {
     </>
   );
 };
+
+export default SigninPage;

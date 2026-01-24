@@ -4,7 +4,7 @@ import { DICTIONARY } from '@locales';
 import { StickyHeader, ViewExercisesList } from '@components';
 import { useGetWorkoutById } from '../queries';
 
-export const ViewWorkoutPage = () => {
+const ViewWorkoutPage = () => {
   const { id } = useParams();
   const infoStyles =
     'w-full h-screen flex items-center justify-center text-center text-xl';
@@ -21,3 +21,5 @@ export const ViewWorkoutPage = () => {
     </>
   );
 };
+
+export default ViewWorkoutPage;

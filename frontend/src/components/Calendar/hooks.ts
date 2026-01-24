@@ -4,7 +4,7 @@ import type { WorkoutPreview } from '@types';
 import { MONTH_NAMES } from './constants';
 
 export const useCalendar = (workouts: WorkoutPreview[]) => {
-  const now = new Date();
+  const now = useMemo(() => new Date(), []);
   const [viewDate, setViewDate] = useState(now);
 
   const year = viewDate.getFullYear();
@@ -25,44 +25,50 @@ export const useCalendar = (workouts: WorkoutPreview[]) => {
     );
   };
 
-  const daysInMonth = new Date(year, currentMonthIndex + 1, 0).getDate();
-
-  const arrayByDaysInMonth = Array.from(
-    { length: daysInMonth },
-    (_, index) => index + 1,
+  const daysInMonth = useMemo(
+    () => new Date(year, currentMonthIndex + 1, 0).getDate(),
+    [year, currentMonthIndex],
   );
 
-  const indexOfFirstDayInMonth =
-    new Date(year, currentMonthIndex, 1).getDay() + 1;
+  const arrayByDaysInMonth = useMemo(
+    () => Array.from({ length: daysInMonth }, (_, index) => index + 1),
+    [daysInMonth],
+  );
+
+  const indexOfFirstDayInMonth = useMemo(
+    () => new Date(year, currentMonthIndex, 1).getDay() + 1,
+    [year, currentMonthIndex],
+  );
 
   const backToday = () => {
     setViewDate(now);
   };
 
-  const currentDay =
-    now.getFullYear() === year && now.getMonth() === currentMonthIndex
-      ? now.getDate()
-      : NaN;
+  const currentDay = useMemo(
+    () =>
+      now.getFullYear() === year && now.getMonth() === currentMonthIndex
+        ? now.getDate()
+        : NaN,
+    [year, currentMonthIndex, now],
+  );
 
   const workoutsMap = useMemo(() => {
     const map = new Map();
     workouts.forEach((workout) => {
-      const day = new Date(workout.date).getDate();
-      map.set(day, workout);
+      const day = new Date(workout.date);
+      if (day.getFullYear() === year && day.getMonth() === currentMonthIndex) {
+        map.set(day.getDate(), workout);
+      }
     });
     return map;
-  }, [workouts]);
+  }, [workouts, year, currentMonthIndex]);
 
-  const checkWorkoutInThisDay = (day: number) => {
-    return workouts.some((workout) => {
-      const workoutDate = new Date(workout.date);
-      return (
-        workoutDate.getFullYear() === year &&
-        workoutDate.getMonth() === currentMonthIndex &&
-        workoutDate.getDate() === day
-      );
-    });
-  };
+  const checkWorkoutInThisDay = useCallback(
+    (day: number) => {
+      return workoutsMap.has(day);
+    },
+    [workoutsMap],
+  );
 
   const getWorkoutByDay = useCallback(
     (day: number) => workoutsMap.get(day),
