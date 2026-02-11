@@ -61,7 +61,7 @@ describe('TypeOrmConfigService', () => {
       username: 'db_user',
       password: 'db_password',
       database: 'db_name',
-      synchronize: true,
+      synchronize: false,
       ssl: false,
     });
   });
