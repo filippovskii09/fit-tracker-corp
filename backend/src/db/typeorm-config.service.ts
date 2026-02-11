@@ -33,7 +33,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       database: this.configService.get<string>(DB_NAME),
       entities: [join(__dirname, '/../**/*.entity{.ts,.js}')],
       migrationsTableName: 'migration',
-      migrations: [join(__dirname, '/../migration/*.js')],
+      migrations: [join(__dirname, '/../migrations/*{.ts,.js}')],
 
       ssl: isProd || isNeon,
       extra:
@@ -45,7 +45,7 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
             }
           : undefined,
       autoLoadEntities: true,
-      synchronize: isProd ? false : true,
+      synchronize: false,
     };
   }
 }
