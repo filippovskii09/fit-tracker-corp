@@ -11,18 +11,18 @@ export const CalendarGrid = ({
   getWorkoutByDay,
 }: ICalendarGridProps) => {
   return (
-    <div className="flex flex-col gap-4 border-b-2 border-white pb-7">
-      <div className="grid grid-cols-7 gap-y-8 space-b gap-2.5">
+    <div className="flex flex-col gap-[clamp(12px,3vw,18px)] border-b-2 border-white pb-[clamp(16px,4vw,28px)]">
+      <div className="grid grid-cols-7 gap-x-[clamp(8px,2.2vw,12px)] gap-y-[clamp(16px,4.2vw,28px)]">
         {WEEK_DAYS.map((day) => (
           <div
             key={day}
-            className="flex justify-center font-medium text-xs text-muted"
+            className="flex justify-center text-[clamp(11px,2.6vw,12px)] font-medium text-muted"
           >
             {day.slice(0, 3)}
           </div>
         ))}
       </div>
-      <div className="grid grid-cols-7 gap-y-8 gap-x-2.5 contain-layout">
+      <div className="grid grid-cols-7 gap-x-[clamp(8px,2.2vw,12px)] gap-y-[clamp(16px,4.2vw,28px)] contain-layout">
         {arrayByDaysInMonth?.map((day) => (
           <CalendarDayCell
             key={day}

@@ -20,7 +20,7 @@ export const Calendar = ({
   } = useCalendar(workouts);
 
   return (
-    <div className="flex flex-col gap-20 w-[384px] p-6">
+    <div className="flex w-full max-w-105 flex-col gap-10 p-[clamp(16px,4vw,24px)]">
       <MonthSwitcher
         prevMonth={prevMonth}
         nextMonth={nextMonth}

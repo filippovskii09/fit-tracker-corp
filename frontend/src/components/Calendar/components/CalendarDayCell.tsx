@@ -35,7 +35,7 @@ export const CalendarDayCell = memo(
   }: ICalendarDayCellProps) => {
     const navigate = useNavigate();
     const baseClasses =
-      'h-10 w-10 flex relative items-center justify-center font-medium text-xs rounded-xl transition-colors';
+      'flex h-[clamp(36px,9vw,44px)] w-[clamp(36px,9vw,44px)] items-center justify-center rounded-[clamp(10px,2.5vw,14px)] text-[clamp(12px,3vw,14px)] font-medium transition-colors relative';
     const activeClasses = isCurrent ? 'bg-primary text-main font-bold' : '';
     const pointClasses = isCurrent ? 'bg-main' : 'bg-primary';
     const gridStyle = isFirstDay ? colStartClasses[colStart] : '';
