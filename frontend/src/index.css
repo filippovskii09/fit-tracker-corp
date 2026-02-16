@@ -21,11 +21,13 @@ body {
   display: flex;
   place-items: center;
   min-width: 320px;
-  min-height: 100vh;
+  min-height: 100dvh;
   background-color: #0c110f;
+  overscroll-behavior: none;
 }
 
 #root {
   width: 100%;
-  height: 100vh;
+  height: 100dvh;
+  overscroll-behavior: none;
 }
