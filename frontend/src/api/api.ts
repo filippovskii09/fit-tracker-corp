@@ -51,6 +51,18 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    const isRefreshRequest = originalReq.url?.includes(
+      API_ENDPOINTS.AUTH.REFRESH,
+    );
+
+    if (isRefreshRequest) {
+      processQueue(error as Error, null);
+      isRefreshing = false;
+      localStorage.removeItem('accessToken');
+      redirectTo(APP_ROUTES.AUTH.SIGNIN);
+      return Promise.reject(error);
+    }
+
     if (originalReq._retry) {
       return Promise.reject(error);
     }

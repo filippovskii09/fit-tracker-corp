@@ -11,10 +11,11 @@ jest.mock('@utils', () => ({
   redirectTo: jest.fn(),
 }));
 
+import type { InternalAxiosRequestConfig } from 'axios';
+
 import { redirectTo } from '@utils';
 import { API_ENDPOINTS, APP_ROUTES } from '@constants';
 import { api } from '../api';
-import type { InternalAxiosRequestConfig } from 'axios';
 
 const mockedApi = api as unknown as jest.MockedFunction<
   (config: InternalAxiosRequestConfig) => Promise<unknown>
@@ -97,6 +98,21 @@ describe('Axios Interceptors', () => {
           `Bearer ${newToken}`,
         );
         expect(mockedApi).toHaveBeenCalledWith(originalRequest);
+      });
+
+      it('should logout and redirect if refresh request itself fails with 401', async () => {
+        localStorage.setItem('accessToken', 'old-token');
+
+        const error = {
+          response: { status: 401 },
+          config: { _retry: false, url: API_ENDPOINTS.AUTH.REFRESH },
+        };
+
+        await expect(errorInterceptor(error)).rejects.toEqual(error);
+
+        expect(mockedApi.post).not.toHaveBeenCalled();
+        expect(localStorage.getItem('accessToken')).toBeNull();
+        expect(redirectTo).toHaveBeenCalledWith(APP_ROUTES.AUTH.SIGNIN);
       });
 
       it('should logout and redirect if refresh fails', async () => {
