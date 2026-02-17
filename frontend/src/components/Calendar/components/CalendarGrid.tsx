@@ -9,6 +9,9 @@ export const CalendarGrid = ({
   checkWorkoutInThisDay,
   openModalByClickOnDayCell,
   getWorkoutByDay,
+  onSelectDate,
+  year,
+  monthIndex,
 }: ICalendarGridProps) => {
   return (
     <div className="flex flex-col gap-[clamp(12px,3vw,18px)] border-b-2 border-white pb-[clamp(16px,4vw,28px)]">
@@ -27,12 +30,15 @@ export const CalendarGrid = ({
           <CalendarDayCell
             key={day}
             day={day}
+            year={year}
+            monthIndex={monthIndex}
             isCurrent={currentDay === day}
             initialWorkoutId={getWorkoutByDay(day)?.id || ''}
             hasWorkout={checkWorkoutInThisDay(day)}
             colStart={indexOfFirstDayInMonth}
             isFirstDay={day === 1}
             openModalByClickOnDayCell={openModalByClickOnDayCell}
+            onSelectDate={onSelectDate}
           />
         ))}
       </div>

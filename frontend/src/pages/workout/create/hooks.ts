@@ -5,12 +5,14 @@ import { useNavigate } from 'react-router-dom';
 
 import { APP_ROUTES } from '@constants';
 import { DICTIONARY } from '@locales';
-import { workoutService } from '@services';
 import type { CreateWorkoutFormValues, IExercise, ISet } from '@types';
+import { useCreateWorkoutQ } from '../queries';
 
 export const useCreateWorkout = () => {
   const navigate = useNavigate();
   const { create } = DICTIONARY.workout;
+
+  const mutate = useCreateWorkoutQ();
 
   const handleSubmit = async (
     values: CreateWorkoutFormValues,
@@ -32,7 +34,7 @@ export const useCreateWorkout = () => {
         })),
       };
 
-      await workoutService.create(payload);
+      await mutate.mutateAsync(payload);
       toast.success(create.success);
       navigate(APP_ROUTES.DASHBOARD);
     } catch (error: unknown) {

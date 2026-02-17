@@ -5,6 +5,7 @@ import type { ICalendarProps } from './types';
 export const Calendar = ({
   workouts,
   openModalByClickOnDayCell,
+  onSelectDate,
 }: ICalendarProps) => {
   const {
     month,
@@ -17,6 +18,7 @@ export const Calendar = ({
     backToday,
     checkWorkoutInThisDay,
     getWorkoutByDay,
+    monthIndex,
   } = useCalendar(workouts);
 
   return (
@@ -34,6 +36,9 @@ export const Calendar = ({
         checkWorkoutInThisDay={checkWorkoutInThisDay}
         getWorkoutByDay={getWorkoutByDay}
         openModalByClickOnDayCell={openModalByClickOnDayCell}
+        onSelectDate={onSelectDate}
+        year={year}
+        monthIndex={monthIndex}
       />
       <CalendarActions backToday={backToday} />
     </div>

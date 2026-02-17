@@ -86,5 +86,6 @@ export const useCalendar = (workouts: WorkoutPreview[]) => {
     backToday,
     checkWorkoutInThisDay,
     getWorkoutByDay,
+    monthIndex: currentMonthIndex,
   };
 };

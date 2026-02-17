@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
 
-export const createWorkoutInitialValues = {
+export const createWorkoutInitialValues = (date?: string) => ({
   name: '',
-  date: new Date().toISOString().split('T')[0],
+  date: date ?? new Date().toISOString().split('T')[0],
   exercises: [],
-};
+});
 
 export const createWorkoutSchema = Yup.object().shape({
   name: Yup.string().required('Name is required'),

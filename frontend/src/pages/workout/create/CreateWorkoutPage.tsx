@@ -1,4 +1,5 @@
 import { Formik, Form } from 'formik';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { createWorkoutInitialValues, createWorkoutSchema } from './schemas';
 import { useCreateWorkout } from './hooks';
@@ -8,13 +9,23 @@ import {
   StickyHeader,
   SubmitButtonBlock,
 } from '@components';
+import { APP_ROUTES } from '@constants';
 
 const CreateWorkoutPage = () => {
   const handleSubmit = useCreateWorkout();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const date = searchParams.get('date');
 
+  if (!date) {
+    navigate(APP_ROUTES.DASHBOARD);
+    return;
+  }
+
+  const initialValues = createWorkoutInitialValues(date);
   return (
     <Formik<CreateWorkoutFormValues>
-      initialValues={createWorkoutInitialValues}
+      initialValues={initialValues}
       validationSchema={createWorkoutSchema}
       onSubmit={handleSubmit}
     >
@@ -22,7 +33,7 @@ const CreateWorkoutPage = () => {
         <Form className="min-h-screen bg-main text-white pb-32">
           <StickyHeader
             name={values.name}
-            date={values.date}
+            date={date}
             handleChange={handleChange}
           />
 

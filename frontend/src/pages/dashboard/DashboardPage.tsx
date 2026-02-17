@@ -10,6 +10,7 @@ const DashboardPage = () => {
     openModalByClickOnDayCell,
     data,
     WORKOUT_CREATE,
+    onSelectDate,
   } = useDashboardPage();
 
   return (
@@ -17,6 +18,7 @@ const DashboardPage = () => {
       <Calendar
         workouts={data || []}
         openModalByClickOnDayCell={openModalByClickOnDayCell}
+        onSelectDate={onSelectDate}
       />
       <BaseModal
         open={isCreateWorkoutModalOpen}

@@ -26,12 +26,15 @@ const CalendarDayCellPoint = ({ pointClasses }: ICalendarDayCellPointProps) => (
 export const CalendarDayCell = memo(
   ({
     day,
+    year,
+    monthIndex,
     isCurrent,
     hasWorkout,
     colStart,
     isFirstDay,
     openModalByClickOnDayCell,
     initialWorkoutId,
+    onSelectDate,
   }: ICalendarDayCellProps) => {
     const navigate = useNavigate();
     const baseClasses =
@@ -39,10 +42,12 @@ export const CalendarDayCell = memo(
     const activeClasses = isCurrent ? 'bg-primary text-main font-bold' : '';
     const pointClasses = isCurrent ? 'bg-main' : 'bg-primary';
     const gridStyle = isFirstDay ? colStartClasses[colStart] : '';
+
     const handleClick = () => {
       if (hasWorkout) {
         navigate(`${APP_ROUTES.WORKOUTS.ROOT}/${initialWorkoutId}`);
       } else {
+        onSelectDate({ year, monthIndex, day });
         openModalByClickOnDayCell();
       }
     };

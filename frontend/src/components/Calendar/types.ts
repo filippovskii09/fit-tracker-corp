@@ -1,8 +1,9 @@
-import type { WorkoutPreview } from '@types';
+import type { SelectDate, WorkoutPreview } from '@types';
 
 export interface ICalendarProps {
   workouts: WorkoutPreview[];
   openModalByClickOnDayCell: () => void;
+  onSelectDate: ({ year, monthIndex, day }: SelectDate) => void;
 }
 
 export interface IMounthSwitcherProps {
@@ -19,6 +20,9 @@ export interface ICalendarGridProps {
   checkWorkoutInThisDay: (day: number) => boolean;
   openModalByClickOnDayCell: () => void;
   getWorkoutByDay: (day: number) => WorkoutPreview | undefined;
+  onSelectDate: ({ year, monthIndex, day }: SelectDate) => void;
+  year: number;
+  monthIndex: number;
 }
 
 export interface ICalendarActionsProps {
@@ -27,12 +31,15 @@ export interface ICalendarActionsProps {
 
 export interface ICalendarDayCellProps {
   day: number;
+  year: number;
+  monthIndex: number;
   isCurrent: boolean;
   hasWorkout: boolean;
   colStart: number;
   isFirstDay: boolean;
   openModalByClickOnDayCell: () => void;
   initialWorkoutId?: string;
+  onSelectDate: ({ year, monthIndex, day }: SelectDate) => void;
 }
 
 export interface ICalendarDayCellPointProps {
