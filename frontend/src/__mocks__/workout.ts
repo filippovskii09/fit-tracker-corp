@@ -4,5 +4,7 @@ export const mockWorkoutResponse = [
     name: 'Chest',
     date: 'date-example',
     status: 'COMPLETED',
+    userId: 'user-123',
+    exercises: [],
   },
 ];
