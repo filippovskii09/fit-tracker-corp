@@ -1,5 +1,6 @@
 import { API_ENDPOINTS } from '@constants';
 import { api } from '@api';
+import { mockAuthResponse, mockRegisterDto, mockSigninDto } from '@mocks';
 import { authService } from '../auth.service';
 
 jest.mock('@api', () => ({
@@ -11,6 +12,7 @@ jest.mock('@api', () => ({
 
 describe('AuthService', () => {
   const mockedApi = api as jest.Mocked<typeof api>;
+  const mockedPost = mockedApi.post as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -18,51 +20,30 @@ describe('AuthService', () => {
 
   describe('register', () => {
     it('should call api.post with correct URL and DTO, then return data', async () => {
-      const mockDto = {
-        email: 'test@example.com',
-        password: 'password123',
-        firstName: 'John',
-      };
+      mockedPost.mockResolvedValue({ data: mockAuthResponse });
 
-      const mockResponse = {
-        accessToken: 'fake-token',
-        user: { id: 1, email: 'test@example.com' },
-      };
+      const result = await authService.register(mockRegisterDto);
 
-      (mockedApi.post as jest.Mock).mockResolvedValue({ data: mockResponse });
-
-      const result = await authService.register(mockDto);
-
-      expect(mockedApi.post).toHaveBeenCalledWith(
+      expect(mockedPost).toHaveBeenCalledWith(
         API_ENDPOINTS.AUTH.REGISTER,
-        mockDto,
+        mockRegisterDto,
       );
 
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual(mockAuthResponse);
     });
   });
 
   describe('signin', () => {
     it('should call api.post with correct URL and DTO', async () => {
-      const mockDto = {
-        email: 'user@example.com',
-        password: 'secretPassword',
-      };
+      mockedPost.mockResolvedValue({ data: mockAuthResponse });
 
-      const mockResponse = {
-        accessToken: 'login-token',
-        user: { id: 2, email: 'user@example.com' },
-      };
+      const result = await authService.signin(mockSigninDto);
 
-      (mockedApi.post as jest.Mock).mockResolvedValue({ data: mockResponse });
-
-      const result = await authService.signin(mockDto);
-
-      expect(mockedApi.post).toHaveBeenCalledWith(
+      expect(mockedPost).toHaveBeenCalledWith(
         API_ENDPOINTS.AUTH.SIGNIN,
-        mockDto,
+        mockSigninDto,
       );
-      expect(result).toEqual(mockResponse);
+      expect(result).toEqual(mockAuthResponse);
     });
   });
 });

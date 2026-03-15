@@ -43,7 +43,8 @@
       "@services": ["./src/services"],
       "@hooks": ["./src/hooks"],
       "@types": ["./src/types"],
-      "@components": ["./src/components"]
+      "@components": ["./src/components"],
+      "@mocks": ["./src/__mocks__"]
     }
   },
   "include": ["src"]
