@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
+import { UnauthorizedException } from '@nestjs/common';
 
 import { createUserDtoStub, verifyUserDtoStub } from '@src/stubs/user.stub';
 import { ResponseMessages } from '@src/common/messages';
@@ -8,7 +9,6 @@ import { AuthService } from '../auth.service';
 import { registerResponse } from '../constants';
 import { mockAuthService, mockConfigService, mockResponse } from './mocks';
 import { tokensStub } from './stubs';
-import { UnauthorizedException } from '@nestjs/common';
 
 describe('AuthController', () => {
   let authController: AuthController;

@@ -1,444 +1,558 @@
 import { MuscleGroup } from '../enums';
 
 export const CHEST_EXERCISES = [
-  // --- Barbell ---
+  // --- Штанга ---
   {
-    name: 'Barbell Bench Press',
+    name: 'Жим штанги лежачи',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Incline Barbell Bench Press',
+    name: 'Жим штанги на похилій лаві',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Decline Barbell Bench Press',
+    name: 'Жим штанги на лаві з негативним нахилом',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Guillotine Press',
+    name: 'Гільйотинний жим',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Reverse Grip Bench Press',
+    name: 'Жим штанги лежачи зворотним хватом',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Floor Press (Barbell)',
-    muscleGroup: MuscleGroup.CHEST,
-  },
-
-  // --- Dumbbell ---
-  {
-    name: 'Dumbbell Bench Press',
-    muscleGroup: MuscleGroup.CHEST,
-  },
-  {
-    name: 'Incline Dumbbell Bench Press',
-    muscleGroup: MuscleGroup.CHEST,
-  },
-  {
-    name: 'Decline Dumbbell Bench Press',
-    muscleGroup: MuscleGroup.CHEST,
-  },
-  {
-    name: 'Dumbbell Flys',
-    muscleGroup: MuscleGroup.CHEST,
-  },
-  {
-    name: 'Incline Dumbbell Flys',
-    muscleGroup: MuscleGroup.CHEST,
-  },
-  {
-    name: 'Dumbbell Pullover',
-    muscleGroup: MuscleGroup.CHEST,
-  },
-  {
-    name: 'Svend Press',
-    muscleGroup: MuscleGroup.CHEST,
-  },
-  {
-    name: 'Hex Press (Squeeze Press)',
+    name: 'Жим штанги з підлоги',
     muscleGroup: MuscleGroup.CHEST,
   },
 
-  // --- Machines & Cables ---
+  // --- Гантелі ---
   {
-    name: 'Cable Crossover (High to Low)',
+    name: 'Жим гантелей лежачи',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Cable Crossover (Low to High)',
+    name: 'Жим гантелей на похилій лаві',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Standard Cable Flys (Middle)',
+    name: 'Жим гантелей на лаві з негативним нахилом',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Pec Deck Machine (Butterfly)',
+    name: 'Розведення гантелей лежачи',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Machine Chest Press (Seated)',
+    name: 'Розведення гантелей на похилій лаві',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Hammer Strength Chest Press',
+    name: 'Пуловер з гантеллю',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Smith Machine Bench Press',
+    name: 'Жим Свенда',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Smith Machine Incline Press',
+    name: 'Жим гантелей разом',
     muscleGroup: MuscleGroup.CHEST,
   },
 
-  // --- Bodyweight ---
+  // --- Тренажери та блоки ---
   {
-    name: 'Push-Ups (Standard)',
+    name: 'Кросовер у блоці зверху вниз',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Wide Grip Push-Ups',
+    name: 'Кросовер у блоці знизу вгору',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Incline Push-Ups',
+    name: 'Розведення рук у кросовері на рівні грудей',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Decline Push-Ups',
+    name: 'Зведення рук у тренажері Батерфляй',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Dips (Chest Version)',
+    name: 'Жим від грудей у тренажері сидячи',
     muscleGroup: MuscleGroup.CHEST,
   },
   {
-    name: 'Plyometric Push-Ups',
+    name: 'Жим від грудей у тренажері Hammer Strength',
+    muscleGroup: MuscleGroup.CHEST,
+  },
+  {
+    name: 'Жим лежачи у тренажері Сміта',
+    muscleGroup: MuscleGroup.CHEST,
+  },
+  {
+    name: 'Похилий жим у тренажері Сміта',
+    muscleGroup: MuscleGroup.CHEST,
+  },
+
+  // --- Власна вага ---
+  {
+    name: 'Віджимання класичні',
+    muscleGroup: MuscleGroup.CHEST,
+  },
+  {
+    name: 'Віджимання широким хватом',
+    muscleGroup: MuscleGroup.CHEST,
+  },
+  {
+    name: 'Віджимання з руками на підвищенні',
+    muscleGroup: MuscleGroup.CHEST,
+  },
+  {
+    name: 'Віджимання з ногами на підвищенні',
+    muscleGroup: MuscleGroup.CHEST,
+  },
+  {
+    name: 'Віджимання на брусах з акцентом на груди',
+    muscleGroup: MuscleGroup.CHEST,
+  },
+  {
+    name: 'Пліометричні віджимання',
     muscleGroup: MuscleGroup.CHEST,
   },
 ];
 
 export const BACK_EXERCISES = [
-  // --- Vertical Pulls ---
-  { name: 'Pull-Up (Wide Grip)', muscleGroup: MuscleGroup.BACK },
-  { name: 'Chin-Up', muscleGroup: MuscleGroup.BACK },
-  { name: 'Neutral Grip Pull-Up', muscleGroup: MuscleGroup.BACK },
-  { name: 'Lat Pulldown (Wide Grip)', muscleGroup: MuscleGroup.BACK },
-  { name: 'Lat Pulldown (Close Grip V-Bar)', muscleGroup: MuscleGroup.BACK },
-  { name: 'Lat Pulldown (Reverse Grip)', muscleGroup: MuscleGroup.BACK },
-  { name: 'Single-Arm Lat Pulldown', muscleGroup: MuscleGroup.BACK },
-  { name: 'Straight-Arm Cable Pulldown', muscleGroup: MuscleGroup.BACK },
-  { name: 'Assisted Pull-Up Machine', muscleGroup: MuscleGroup.BACK },
+  // --- Вертикальні тяги ---
+  { name: 'Підтягування широким хватом', muscleGroup: MuscleGroup.BACK },
+  { name: 'Підтягування зворотним хватом', muscleGroup: MuscleGroup.BACK },
+  { name: 'Підтягування нейтральним хватом', muscleGroup: MuscleGroup.BACK },
+  {
+    name: 'Тяга верхнього блока широким хватом',
+    muscleGroup: MuscleGroup.BACK,
+  },
+  {
+    name: 'Тяга верхнього блока вузьким хватом з V-рукояткою',
+    muscleGroup: MuscleGroup.BACK,
+  },
+  {
+    name: 'Тяга верхнього блока зворотним хватом',
+    muscleGroup: MuscleGroup.BACK,
+  },
+  { name: 'Тяга верхнього блока однією рукою', muscleGroup: MuscleGroup.BACK },
+  {
+    name: 'Тяга верхнього блока прямими руками',
+    muscleGroup: MuscleGroup.BACK,
+  },
+  {
+    name: 'Підтягування в тренажері з допомогою',
+    muscleGroup: MuscleGroup.BACK,
+  },
 
-  // --- Horizontal Pulls / Rows ---
-  { name: 'Bent Over Barbell Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'Pendlay Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'Yates Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'T-Bar Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'Landmine Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'One-Arm Dumbbell Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'Chest-Supported Dumbbell Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'Kroc Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'Seated Cable Row (Close Grip)', muscleGroup: MuscleGroup.BACK },
-  { name: 'Seated Cable Row (Wide Grip)', muscleGroup: MuscleGroup.BACK },
-  { name: 'Machine Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'Inverted Row (Bodyweight)', muscleGroup: MuscleGroup.BACK },
-  { name: 'Meadows Row', muscleGroup: MuscleGroup.BACK },
-  { name: 'Renegade Row', muscleGroup: MuscleGroup.BACK },
+  // --- Горизонтальні тяги ---
+  { name: 'Тяга штанги в нахилі', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга Пендлея', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга Єйтса', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга Т-грифа', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга landmine', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга гантелі однією рукою', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга гантелей з опорою грудьми', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга Крока', muscleGroup: MuscleGroup.BACK },
+  {
+    name: 'Горизонтальна тяга блока вузьким хватом',
+    muscleGroup: MuscleGroup.BACK,
+  },
+  {
+    name: 'Горизонтальна тяга блока широким хватом',
+    muscleGroup: MuscleGroup.BACK,
+  },
+  { name: 'Тяга в тренажері', muscleGroup: MuscleGroup.BACK },
+  { name: 'Австралійські підтягування', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга Медоуза', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга Ренегата', muscleGroup: MuscleGroup.BACK },
 
-  // --- Lower Back & Compound ---
-  { name: 'Deadlift (Conventional)', muscleGroup: MuscleGroup.BACK },
-  { name: 'Rack Pull', muscleGroup: MuscleGroup.BACK },
-  { name: 'Hyperextension (Back Extension)', muscleGroup: MuscleGroup.BACK },
-  { name: 'Superman', muscleGroup: MuscleGroup.BACK },
+  // --- Поперек і базові вправи ---
+  { name: 'Класична станова тяга', muscleGroup: MuscleGroup.BACK },
+  { name: 'Тяга з рами', muscleGroup: MuscleGroup.BACK },
+  { name: 'Гіперекстензія', muscleGroup: MuscleGroup.BACK },
+  { name: 'Супермен', muscleGroup: MuscleGroup.BACK },
 
-  // --- Traps & Rear Delts focus ---
-  { name: 'Barbell Shrug', muscleGroup: MuscleGroup.BACK },
-  { name: 'Dumbbell Shrug', muscleGroup: MuscleGroup.BACK },
+  // --- Трапеції та задні дельти ---
+  { name: 'Шраги зі штангою', muscleGroup: MuscleGroup.BACK },
+  { name: 'Шраги з гантелями', muscleGroup: MuscleGroup.BACK },
 ];
 
 export const LEGS_EXERCISES = [
-  // --- Quads ---
-  { name: 'Barbell Back Squat', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Front Squat', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Leg Press', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Hack Squat', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Leg Extension', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Bulgarian Split Squat', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Goblet Squat', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Walking Lunge', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Reverse Lunge', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Step-Up', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Sissy Squat', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Pistol Squat', muscleGroup: MuscleGroup.LEGS },
+  // --- Квадрицепси ---
+  { name: 'Присідання зі штангою на спині', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Фронтальні присідання', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Жим ногами', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Гак-присідання', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Розгинання ніг у тренажері', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Болгарські спліт-присідання', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Гоблет-присідання', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Випади в ходьбі', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Зворотні випади', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Зашагування на платформу', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Сіссі-присідання', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Присідання Пістолет', muscleGroup: MuscleGroup.LEGS },
 
-  // --- Hamstrings ---
-  { name: 'Romanian Deadlift (Barbell)', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Romanian Deadlift (Dumbbell)', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Stiff-Leg Deadlift', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Lying Leg Curl', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Seated Leg Curl', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Nordic Hamstring Curl', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Glute-Ham Raise', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Good Morning', muscleGroup: MuscleGroup.LEGS },
+  // --- Біцепси стегна ---
+  { name: 'Румунська тяга зі штангою', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Румунська тяга з гантелями', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Станова тяга на прямих ногах', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Згинання ніг лежачи', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Згинання ніг сидячи', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Нордичне згинання ніг', muscleGroup: MuscleGroup.LEGS },
+  {
+    name: 'Підйом корпусу для сідниць і біцепса стегна',
+    muscleGroup: MuscleGroup.LEGS,
+  },
+  { name: 'Нахили зі штангою Good Morning', muscleGroup: MuscleGroup.LEGS },
 
-  // --- Glutes ---
-  { name: 'Barbell Hip Thrust', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Glute Bridge', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Cable Pull-Through', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Hip Abduction Machine', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Sumo Deadlift', muscleGroup: MuscleGroup.LEGS },
+  // --- Сідниці ---
+  { name: 'Хіп-траст зі штангою', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Сідничний місток', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Протяжка між ногами в кросовері', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Відведення стегон у тренажері', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Станова тяга сумо', muscleGroup: MuscleGroup.LEGS },
 
-  // --- Calves ---
-  { name: 'Standing Calf Raise', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Seated Calf Raise', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Donkey Calf Raise', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Leg Press Calf Raise', muscleGroup: MuscleGroup.LEGS },
+  // --- Литки ---
+  { name: 'Підйоми на носки стоячи', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Підйоми на носки сидячи', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Підйоми на носки в нахилі', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Підйоми на носки в жимі ногами', muscleGroup: MuscleGroup.LEGS },
 
-  // --- Adductors ---
-  { name: 'Hip Adduction Machine', muscleGroup: MuscleGroup.LEGS },
-  { name: 'Copenhagen Plank', muscleGroup: MuscleGroup.LEGS },
+  // --- Привідні м’язи ---
+  { name: 'Зведення стегон у тренажері', muscleGroup: MuscleGroup.LEGS },
+  { name: 'Копенгагенська планка', muscleGroup: MuscleGroup.LEGS },
 ];
 
 export const SHOULDERS_EXERCISES = [
-  // --- Overhead Presses ---
+  // --- Жими над головою ---
   {
-    name: 'Overhead Barbell Press (Military Press)',
+    name: 'Жим штанги над головою',
     muscleGroup: MuscleGroup.SHOULDERS,
   },
-  { name: 'Seated Barbell Press', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Seated Dumbbell Press', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Arnold Press', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Push Press', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Behind the Neck Press', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Machine Shoulder Press', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Landmine Press', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Handstand Push-Ups', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Жим штанги сидячи', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Жим гантелей сидячи', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Жим Арнольда', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Поштовховий жим', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Жим штанги з-за голови', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Жим на плечі в тренажері', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Жим landmine', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Віджимання в стійці на руках', muscleGroup: MuscleGroup.SHOULDERS },
 
-  // --- Side Delts ---
-  { name: 'Dumbbell Lateral Raise', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Cable Lateral Raise', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Seated Lateral Raise', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Machine Lateral Raise', muscleGroup: MuscleGroup.SHOULDERS },
+  // --- Середні дельти ---
+  { name: 'Махи гантелями в сторони', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Махи в сторони в кросовері', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Махи в сторони сидячи', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Махи в сторони в тренажері', muscleGroup: MuscleGroup.SHOULDERS },
   {
-    name: 'Egyptian Lateral Raise (Cable)',
+    name: 'Єгипетські махи в сторони в кросовері',
     muscleGroup: MuscleGroup.SHOULDERS,
   },
-  { name: 'Upright Row (Barbell)', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Upright Row (Cable)', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Тяга штанги до підборіддя', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Тяга блока до підборіддя', muscleGroup: MuscleGroup.SHOULDERS },
 
-  // --- Front Delts ---
-  { name: 'Dumbbell Front Raise', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Barbell Front Raise', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Plate Front Raise', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Cable Front Raise', muscleGroup: MuscleGroup.SHOULDERS },
+  // --- Передні дельти ---
+  { name: 'Підйом гантелей перед собою', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Підйом штанги перед собою', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Підйом диска перед собою', muscleGroup: MuscleGroup.SHOULDERS },
+  {
+    name: 'Підйом руки перед собою в кросовері',
+    muscleGroup: MuscleGroup.SHOULDERS,
+  },
 
-  // --- Rear Delts ---
+  // --- Задні дельти ---
   {
-    name: 'Bent-Over Dumbbell Reverse Fly',
+    name: 'Розведення гантелей у нахилі на задні дельти',
     muscleGroup: MuscleGroup.SHOULDERS,
   },
   {
-    name: 'Reverse Pec Deck (Machine Fly)',
+    name: 'Зворотний батерфляй у тренажері',
     muscleGroup: MuscleGroup.SHOULDERS,
   },
-  { name: 'Cable Rear Delt Fly', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Face Pull', muscleGroup: MuscleGroup.SHOULDERS },
-  { name: 'Lying Face Pull', muscleGroup: MuscleGroup.SHOULDERS },
+  {
+    name: 'Розведення рук у кросовері на задні дельти',
+    muscleGroup: MuscleGroup.SHOULDERS,
+  },
+  { name: 'Тяга каната до обличчя', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Тяга каната до обличчя лежачи', muscleGroup: MuscleGroup.SHOULDERS },
 
-  // --- Rotator Cuff ---
+  // --- Ротаторна манжета ---
   {
-    name: 'External Rotation (Cable/Dumbbell)',
+    name: 'Зовнішня ротація плеча з блоком або гантеллю',
     muscleGroup: MuscleGroup.SHOULDERS,
   },
   {
-    name: 'Internal Rotation (Cable/Dumbbell)',
+    name: 'Внутрішня ротація плеча з блоком або гантеллю',
     muscleGroup: MuscleGroup.SHOULDERS,
   },
-  { name: 'Cuban Press', muscleGroup: MuscleGroup.SHOULDERS },
+  { name: 'Кубинський жим', muscleGroup: MuscleGroup.SHOULDERS },
 ];
 
 export const BICEPS_EXERCISES = [
-  // --- Barbell & EZ Bar ---
-  { name: 'Barbell Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'EZ Bar Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Reverse Grip Barbell Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Drag Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: '21s (Barbell/EZ Bar)', muscleGroup: MuscleGroup.BICEPS },
-
-  // --- Dumbbell ---
-  { name: 'Standing Dumbbell Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Seated Dumbbell Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Hammer Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Incline Dumbbell Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Concentration Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Zottman Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Alternating Dumbbell Curl', muscleGroup: MuscleGroup.BICEPS },
-
-  // --- Preacher & Support ---
-  { name: 'Preacher Curl (Barbell/EZ Bar)', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'One-Arm Dumbbell Preacher Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Spider Curl', muscleGroup: MuscleGroup.BICEPS },
-
-  // --- Cable & Machines ---
-  { name: 'Cable Bicep Curl (Straight Bar)', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Rope Hammer Curl', muscleGroup: MuscleGroup.BICEPS },
+  // --- Штанга та EZ-гриф ---
+  { name: 'Згинання рук зі штангою', muscleGroup: MuscleGroup.BICEPS },
+  { name: 'Згинання рук з EZ-грифом', muscleGroup: MuscleGroup.BICEPS },
   {
-    name: 'Bayesian Curl (Behind-the-back Cable Curl)',
+    name: 'Згинання рук зі штангою зворотним хватом',
     muscleGroup: MuscleGroup.BICEPS,
   },
-  { name: 'High Cable Curl (Crucifix Curl)', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Single Arm Cable Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Machine Bicep Curl', muscleGroup: MuscleGroup.BICEPS },
-  { name: 'Preacher Curl Machine', muscleGroup: MuscleGroup.BICEPS },
+  {
+    name: 'Згинання рук зі штангою вздовж корпусу',
+    muscleGroup: MuscleGroup.BICEPS,
+  },
+  {
+    name: 'Згинання 21 зі штангою або EZ-грифом',
+    muscleGroup: MuscleGroup.BICEPS,
+  },
+
+  // --- Гантелі ---
+  { name: 'Згинання рук з гантелями стоячи', muscleGroup: MuscleGroup.BICEPS },
+  { name: 'Згинання рук з гантелями сидячи', muscleGroup: MuscleGroup.BICEPS },
+  { name: 'Молоткові згинання', muscleGroup: MuscleGroup.BICEPS },
+  {
+    name: 'Згинання рук з гантелями на похилій лаві',
+    muscleGroup: MuscleGroup.BICEPS,
+  },
+  { name: 'Концентроване згинання руки', muscleGroup: MuscleGroup.BICEPS },
+  { name: 'Згинання Зоттмана', muscleGroup: MuscleGroup.BICEPS },
+  {
+    name: 'Почергове згинання рук з гантелями',
+    muscleGroup: MuscleGroup.BICEPS,
+  },
+
+  // --- Лава Скотта та вправи з опорою ---
+  {
+    name: 'Згинання рук на лаві Скотта зі штангою або EZ-грифом',
+    muscleGroup: MuscleGroup.BICEPS,
+  },
+  {
+    name: 'Згинання однієї руки з гантеллю на лаві Скотта',
+    muscleGroup: MuscleGroup.BICEPS,
+  },
+  { name: 'Павукові згинання', muscleGroup: MuscleGroup.BICEPS },
+
+  // --- Блоки та тренажери ---
+  {
+    name: 'Згинання рук у кросовері з прямою рукояткою',
+    muscleGroup: MuscleGroup.BICEPS,
+  },
+  { name: 'Молоткові згинання з канатом', muscleGroup: MuscleGroup.BICEPS },
+  {
+    name: 'Байєсівське згинання руки в кросовері за спиною',
+    muscleGroup: MuscleGroup.BICEPS,
+  },
+  { name: 'Згинання рук у верхніх блоках', muscleGroup: MuscleGroup.BICEPS },
+  { name: 'Згинання однієї руки в кросовері', muscleGroup: MuscleGroup.BICEPS },
+  {
+    name: 'Згинання рук у тренажері на біцепс',
+    muscleGroup: MuscleGroup.BICEPS,
+  },
+  { name: 'Згинання рук у тренажері Скотта', muscleGroup: MuscleGroup.BICEPS },
 ];
 
 export const TRICEPS_EXERCISES = [
-  // --- Compound Presses ---
-  { name: 'Close-Grip Barbell Bench Press', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Dips (Triceps Focus)', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Weighted Bench Dip', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'JM Press', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Floor Press (Close Grip)', muscleGroup: MuscleGroup.TRICEPS },
-
-  // --- Lying Extensions ---
-  { name: 'Skullcrushers (EZ Bar)', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Skullcrushers (Dumbbell)', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Dumbbell Rollback Extension', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Tate Press', muscleGroup: MuscleGroup.TRICEPS },
-
-  // --- Overhead Extensions ---
+  // --- Базові жими ---
   {
-    name: 'Overhead Dumbbell Extension (Seated)',
+    name: 'Жим штанги лежачи вузьким хватом',
     muscleGroup: MuscleGroup.TRICEPS,
   },
   {
-    name: 'Overhead Dumbbell Extension (Standing)',
+    name: 'Віджимання на брусах з акцентом на трицепс',
     muscleGroup: MuscleGroup.TRICEPS,
   },
-  { name: 'Overhead Cable Extension (Rope)', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'French Press (Standing EZ Bar)', muscleGroup: MuscleGroup.TRICEPS },
-
-  // --- Pushdowns & Cables ---
-  { name: 'Triceps Cable Pushdown (Rope)', muscleGroup: MuscleGroup.TRICEPS },
   {
-    name: 'Triceps Cable Pushdown (Straight Bar)',
+    name: 'Зворотні віджимання від лави з вагою',
     muscleGroup: MuscleGroup.TRICEPS,
   },
-  { name: 'Triceps Cable Pushdown (V-Bar)', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Reverse Grip Cable Pushdown', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Single-Arm Cable Pushdown', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Cross-Body Cable Extension', muscleGroup: MuscleGroup.TRICEPS },
+  { name: 'JM-жим', muscleGroup: MuscleGroup.TRICEPS },
+  { name: 'Жим з підлоги вузьким хватом', muscleGroup: MuscleGroup.TRICEPS },
 
-  // --- Dumbbell Kickbacks ---
-  { name: 'Dumbbell Kickback', muscleGroup: MuscleGroup.TRICEPS },
-  { name: 'Cable Kickback', muscleGroup: MuscleGroup.TRICEPS },
+  // --- Розгинання лежачи ---
+  {
+    name: 'Французький жим лежачи з EZ-грифом',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Французький жим лежачи з гантелями',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Розгинання гантелей лежачи з відведенням назад',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  { name: 'Жим Тейта', muscleGroup: MuscleGroup.TRICEPS },
+
+  // --- Розгинання над головою ---
+  {
+    name: 'Розгинання руки з гантеллю над головою сидячи',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Розгинання руки з гантеллю над головою стоячи',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Розгинання рук над головою в кросовері з канатом',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Французький жим стоячи з EZ-грифом',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+
+  // --- Розгинання на блоці ---
+  {
+    name: 'Розгинання рук на трицепс у кросовері з канатом',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Розгинання рук на трицепс у кросовері з прямою рукояткою',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Розгинання рук на трицепс у кросовері з V-рукояткою',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Розгинання рук у кросовері зворотним хватом',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Розгинання однієї руки в кросовері',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Розгинання руки в кросовері через корпус',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+
+  // --- Відведення назад ---
+  {
+    name: 'Відведення руки з гантеллю назад на трицепс',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
+  {
+    name: 'Відведення руки назад у кросовері на трицепс',
+    muscleGroup: MuscleGroup.TRICEPS,
+  },
 ];
 
 export const ABS_EXERCISES = [
-  // --- Upper Abs & General ---
-  { name: 'Crunch', muscleGroup: MuscleGroup.ABS },
-  { name: 'Decline Bench Crunch', muscleGroup: MuscleGroup.ABS },
-  { name: 'Cable Crunch (Kneeling)', muscleGroup: MuscleGroup.ABS },
-  { name: 'Machine Ab Crunch', muscleGroup: MuscleGroup.ABS },
-  { name: 'GHD Sit-Up', muscleGroup: MuscleGroup.ABS },
-  { name: 'V-Up', muscleGroup: MuscleGroup.ABS },
-  { name: 'Sit-Up', muscleGroup: MuscleGroup.ABS },
+  // --- Верхній прес і базові вправи ---
+  { name: 'Скручування', muscleGroup: MuscleGroup.ABS },
+  { name: 'Скручування на похилій лаві', muscleGroup: MuscleGroup.ABS },
+  {
+    name: 'Скручування в кросовері стоячи на колінах',
+    muscleGroup: MuscleGroup.ABS,
+  },
+  { name: 'Скручування в тренажері на прес', muscleGroup: MuscleGroup.ABS },
+  { name: 'Підйом корпусу на GHD', muscleGroup: MuscleGroup.ABS },
+  { name: 'V-підйом', muscleGroup: MuscleGroup.ABS },
+  { name: 'Підйом корпусу', muscleGroup: MuscleGroup.ABS },
 
-  // --- Lower Abs ---
-  { name: 'Hanging Leg Raise', muscleGroup: MuscleGroup.ABS },
-  { name: "Captain's Chair Leg Raise", muscleGroup: MuscleGroup.ABS },
-  { name: 'Lying Leg Raise', muscleGroup: MuscleGroup.ABS },
-  { name: 'Reverse Crunch', muscleGroup: MuscleGroup.ABS },
-  { name: 'Dragon Flag', muscleGroup: MuscleGroup.ABS },
-  { name: 'Flutter Kicks', muscleGroup: MuscleGroup.ABS },
-  { name: 'Scissors', muscleGroup: MuscleGroup.ABS },
+  // --- Нижній прес ---
+  { name: 'Підйом ніг у висі', muscleGroup: MuscleGroup.ABS },
+  { name: 'Підйом ніг у капітанському кріслі', muscleGroup: MuscleGroup.ABS },
+  { name: 'Підйом ніг лежачи', muscleGroup: MuscleGroup.ABS },
+  { name: 'Зворотні скручування', muscleGroup: MuscleGroup.ABS },
+  { name: 'Прапор дракона', muscleGroup: MuscleGroup.ABS },
+  { name: 'Флатер-кіки', muscleGroup: MuscleGroup.ABS },
+  { name: 'Ножиці', muscleGroup: MuscleGroup.ABS },
 
-  // --- Obliques ---
-  { name: 'Russian Twist', muscleGroup: MuscleGroup.ABS },
-  { name: 'Cable Woodchopper', muscleGroup: MuscleGroup.ABS },
-  { name: 'Side Plank', muscleGroup: MuscleGroup.ABS },
-  { name: 'Bicycle Crunch', muscleGroup: MuscleGroup.ABS },
-  { name: 'Side Bend (Dumbbell/Cable)', muscleGroup: MuscleGroup.ABS },
-  { name: 'Heel Touch', muscleGroup: MuscleGroup.ABS },
+  // --- Косі м’язи живота ---
+  { name: 'Російські скручування', muscleGroup: MuscleGroup.ABS },
+  { name: 'Дроворуб у кросовері', muscleGroup: MuscleGroup.ABS },
+  { name: 'Бічна планка', muscleGroup: MuscleGroup.ABS },
+  { name: 'Велосипедні скручування', muscleGroup: MuscleGroup.ABS },
+  { name: 'Бічні нахили з гантеллю або блоком', muscleGroup: MuscleGroup.ABS },
+  { name: 'Дотики до п’ят', muscleGroup: MuscleGroup.ABS },
 
-  // --- Core Stability ---
-  { name: 'Plank', muscleGroup: MuscleGroup.ABS },
-  { name: 'Ab Wheel Rollout', muscleGroup: MuscleGroup.ABS },
-  { name: 'Hollow Body Hold', muscleGroup: MuscleGroup.ABS },
-  { name: 'Mountain Climber', muscleGroup: MuscleGroup.ABS },
-  { name: 'Vacuum', muscleGroup: MuscleGroup.ABS },
+  // --- Стабілізація кора ---
+  { name: 'Планка', muscleGroup: MuscleGroup.ABS },
+  { name: 'Ролик для преса', muscleGroup: MuscleGroup.ABS },
+  { name: 'Утримання hollow body', muscleGroup: MuscleGroup.ABS },
+  { name: 'Альпініст', muscleGroup: MuscleGroup.ABS },
+  { name: 'Вакуум', muscleGroup: MuscleGroup.ABS },
 ];
 
 export const CARDIO_EXERCISES = [
-  // --- Machines ---
-  { name: 'Treadmill Run', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Treadmill Incline Walk', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Elliptical Trainer', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Stationary Bike (Spinning)', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Recumbent Bike', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Rowing Machine', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Stair Climber (StairMaster)', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Assault Bike (Air Bike)', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'SkiErg', muscleGroup: MuscleGroup.CARDIO },
-  { name: "Jacob's Ladder", muscleGroup: MuscleGroup.CARDIO },
+  // --- Тренажери ---
+  { name: 'Біг на біговій доріжці', muscleGroup: MuscleGroup.CARDIO },
+  {
+    name: 'Ходьба на біговій доріжці з нахилом',
+    muscleGroup: MuscleGroup.CARDIO,
+  },
+  { name: 'Еліптичний тренажер', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Велотренажер', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Горизонтальний велотренажер', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Гребний тренажер', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Сходовий тренажер', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Ейрбайк', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Лижний ергометр SkiErg', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Тренажер Jacob’s Ladder', muscleGroup: MuscleGroup.CARDIO },
 
-  // --- Bodyweight & HIIT ---
-  { name: 'Jump Rope', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Double Unders (Jump Rope)', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Burpees', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Jumping Jacks', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'High Knees', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Box Jumps', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Mountain Climbers', muscleGroup: MuscleGroup.CARDIO },
+  // --- Власна вага та HIIT ---
+  { name: 'Стрибки зі скакалкою', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Подвійні стрибки зі скакалкою', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Берпі', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Джампінг-джек', muscleGroup: MuscleGroup.CARDIO },
+  {
+    name: 'Біг на місці з високим підніманням колін',
+    muscleGroup: MuscleGroup.CARDIO,
+  },
+  { name: 'Стрибки на тумбу', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Альпіністи', muscleGroup: MuscleGroup.CARDIO },
 
-  // --- Outdoor & Functional ---
-  { name: 'Running (Outdoor)', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Sprinting', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Battle Ropes', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Sled Push (Prowler)', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Heavy Bag Workout', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Shadow Boxing', muscleGroup: MuscleGroup.CARDIO },
-  { name: 'Bear Crawl', muscleGroup: MuscleGroup.CARDIO },
+  // --- Вулиця та функціональні вправи ---
+  { name: 'Біг на вулиці', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Спринт', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Бойові канати', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Штовхання саней', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Робота на важкому мішку', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Бій з тінню', muscleGroup: MuscleGroup.CARDIO },
+  { name: 'Ведмежа хода', muscleGroup: MuscleGroup.CARDIO },
 ];
 
 export const FULL_BODY_EXERCISES = [
-  // --- Olympic Weightlifting ---
-  { name: 'Clean and Jerk', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Snatch', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Power Clean', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Hang Clean', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Clean High Pull', muscleGroup: MuscleGroup.FULL_BODY },
+  // --- Олімпійська важка атлетика ---
+  { name: 'Поштовх штанги', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Ривок штанги', muscleGroup: MuscleGroup.FULL_BODY },
+  {
+    name: 'Підйом штанги на груди в силовому стилі',
+    muscleGroup: MuscleGroup.FULL_BODY,
+  },
+  { name: 'Підйом штанги на груди з вису', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Висока тяга штанги на груди', muscleGroup: MuscleGroup.FULL_BODY },
 
-  // --- Kettlebell ---
-  { name: 'Kettlebell Swing (Russian)', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Kettlebell Swing (American)', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Turkish Get-Up', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Kettlebell Snatch', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Kettlebell Clean & Press', muscleGroup: MuscleGroup.FULL_BODY },
+  // --- Гиря ---
+  { name: 'Махи гирею до рівня плечей', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Махи гирею над головою', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Турецький підйом', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Ривок гирі', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Підйом гирі на груди та жим', muscleGroup: MuscleGroup.FULL_BODY },
 
-  // --- CrossFit & Functional ---
-  { name: 'Thruster (Barbell)', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Thruster (Dumbbell)', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Devil Press', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Man Maker', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Wall Ball', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Cluster', muscleGroup: MuscleGroup.FULL_BODY },
+  // --- CrossFit та функціональні вправи ---
+  { name: 'Трастер зі штангою', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Трастер з гантелями', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Девіл-прес', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Мен-мейкер', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Кидки медбола в стіну', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Кластер зі штангою', muscleGroup: MuscleGroup.FULL_BODY },
 
-  // --- Strongman & Carries ---
-  { name: "Farmer's Walk", muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Yoke Walk', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Tire Flip', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Sled Pull', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Atlas Stone Lift', muscleGroup: MuscleGroup.FULL_BODY },
+  // --- Strongman та перенесення ваги ---
+  { name: 'Фермерська хода', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Хода з коромислом', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Перекидання шини', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Тяга саней', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Підйом каменя Атласа', muscleGroup: MuscleGroup.FULL_BODY },
 
-  // --- Calisthenics ---
-  { name: 'Muscle-Up (Bar)', muscleGroup: MuscleGroup.FULL_BODY },
-  { name: 'Muscle-Up (Rings)', muscleGroup: MuscleGroup.FULL_BODY },
+  // --- Калістеніка ---
+  { name: 'Вихід силою на перекладині', muscleGroup: MuscleGroup.FULL_BODY },
+  { name: 'Вихід силою на кільцях', muscleGroup: MuscleGroup.FULL_BODY },
 ];
 
 export const INITIAL_EXERCISES = [
