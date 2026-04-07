@@ -25,7 +25,7 @@ describe('CreateWorkoutPage', () => {
 
   const mockDate = '2023-10-27';
   const basePath = '/workout/create';
-  
+
   beforeEach(() => {
     jest.clearAllMocks();
     mockedNavigate.mockReturnValue(mockNavigate);
@@ -41,10 +41,14 @@ describe('CreateWorkoutPage', () => {
   });
 
   it('should render Formik and submit correctly when button clicked', async () => {
-    mockedUseSearchParams.mockReturnValue([new URLSearchParams(`?date=${mockDate}`)]);
+    mockedUseSearchParams.mockReturnValue([
+      new URLSearchParams(`?date=${mockDate}`),
+    ]);
 
     render(<CreateWorkoutPage />, { route: `${basePath}?date=${mockDate}` });
 
-    expect(screen.getByRole('button', { name: /Finish Workout/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /Finish Workout/i }),
+    ).toBeInTheDocument();
   });
 });

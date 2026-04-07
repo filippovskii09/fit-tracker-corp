@@ -30,7 +30,9 @@ describe('ViewWorkoutPage', () => {
 
     render(<ViewWorkoutPage />, { route: `/workout/${mockId}` });
 
-    expect(screen.getByText(DICTIONARY.workout.view.notFound)).toBeInTheDocument();
+    expect(
+      screen.getByText(DICTIONARY.workout.view.notFound),
+    ).toBeInTheDocument();
   });
 
   it('should render header with workout name if data loaded', () => {

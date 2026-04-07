@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import type { FormikHelpers } from 'formik';
 
 import { APP_ROUTES } from '@constants';
 import { DICTIONARY } from '@locales';
 import { renderHook } from '@testUtils';
+import type { CreateWorkoutFormValues } from '@types';
 import { useCreateWorkout } from '../create/hooks';
 import { useCreateWorkoutQ } from '../queries';
 
@@ -37,30 +39,29 @@ describe('useCreateWorkout', () => {
     });
   });
 
-  const mockFormValues = {
+  const mockFormValues: CreateWorkoutFormValues = {
     name: 'Push Day',
     date: '2023-10-27T00:00:00.000Z',
     exercises: [
       {
         exerciseId: 'ex-1',
         sets: [
-          { weight: '40', reps: '10' },
-          { weight: '45', reps: '8' },
+          { weight: 40, reps: 10, order: 0, isCompleted: false },
+          { weight: 45, reps: 8, order: 1, isCompleted: false },
         ],
       },
     ],
   };
+  const formikHelpers = {
+    setSubmitting: mockSetSubmitting,
+  } as unknown as FormikHelpers<CreateWorkoutFormValues>;
 
   it('should call mutateAsync with correctly formatted payload and navigate on success', async () => {
     mockMutateAsync.mockResolvedValue({});
 
     const { result } = renderHook(() => useCreateWorkout());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await result.current(
-      mockFormValues as any,
-      { setSubmitting: mockSetSubmitting } as any,
-    );
+    await result.current(mockFormValues, formikHelpers);
 
     expect(mockMutateAsync).toHaveBeenCalledWith({
       name: mockFormValues.name,
@@ -101,11 +102,7 @@ describe('useCreateWorkout', () => {
 
     const { result } = renderHook(() => useCreateWorkout());
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    await result.current(
-      mockFormValues as any,
-      { setSubmitting: mockSetSubmitting } as any,
-    );
+    await result.current(mockFormValues, formikHelpers);
 
     expect(toast.error).toHaveBeenCalledWith(errorData);
     expect(mockSetSubmitting).toHaveBeenCalledWith(false);

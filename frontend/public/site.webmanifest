@@ -1,0 +1,18 @@
+{
+  "name": "Fit Tracker Corp",
+  "short_name": "Fit Tracker",
+  "description": "Log workouts, plan training days, and review exercise history in one focused fitness dashboard.",
+  "start_url": "/signin",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c110f",
+  "theme_color": "#0c110f",
+  "icons": [
+    {
+      "src": "/app-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

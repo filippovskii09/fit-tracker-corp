@@ -5,6 +5,7 @@ import { AuthLayout } from '@layouts';
 import { APP_ROUTES } from '@constants';
 import { GuestGuard, PrivateGuard } from './guards';
 import { LazyRoute } from './LazyRoute';
+import { SEO } from './constant';
 
 const DashboardPage = lazy(() => import('../pages/dashboard/DashboardPage'));
 const CreateWorkoutPage = lazy(
@@ -26,11 +27,23 @@ export const router = createBrowserRouter([
         children: [
           {
             path: APP_ROUTES.AUTH.REGISTER,
-            element: <LazyRoute component={RegisterPage} />,
+            element: (
+              <LazyRoute
+                component={RegisterPage}
+                path={APP_ROUTES.AUTH.REGISTER}
+                {...SEO.register}
+              />
+            ),
           },
           {
             path: APP_ROUTES.AUTH.SIGNIN,
-            element: <LazyRoute component={SigninPage} />,
+            element: (
+              <LazyRoute
+                component={SigninPage}
+                path={APP_ROUTES.AUTH.SIGNIN}
+                {...SEO.signin}
+              />
+            ),
           },
         ],
       },
@@ -43,15 +56,31 @@ export const router = createBrowserRouter([
     children: [
       {
         path: APP_ROUTES.DASHBOARD,
-        element: <LazyRoute component={DashboardPage} />,
+        element: (
+          <LazyRoute
+            component={DashboardPage}
+            path={APP_ROUTES.DASHBOARD}
+            noIndex
+            {...SEO.dashboard}
+          />
+        ),
       },
       {
         path: APP_ROUTES.WORKOUTS.CREATE,
-        element: <LazyRoute component={CreateWorkoutPage} />,
+        element: (
+          <LazyRoute
+            component={CreateWorkoutPage}
+            path={APP_ROUTES.WORKOUTS.CREATE}
+            noIndex
+            {...SEO.createWorkout}
+          />
+        ),
       },
       {
         path: `${APP_ROUTES.WORKOUTS.ROOT}/:id`,
-        element: <LazyRoute component={ViewWorkoutPage} />,
+        element: (
+          <LazyRoute component={ViewWorkoutPage} noIndex {...SEO.viewWorkout} />
+        ),
       },
     ],
   },

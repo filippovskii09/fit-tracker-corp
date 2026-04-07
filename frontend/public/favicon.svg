@@ -1,0 +1,17 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 64 64"
+  role="img"
+  aria-label="Fit Tracker Corp"
+>
+  <rect width="64" height="64" rx="16" fill="#0c110f" />
+  <path
+    d="M14 36h8l5-14 9 26 6-18h8"
+    fill="none"
+    stroke="#8cef0d"
+    stroke-width="6"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  />
+  <circle cx="50" cy="30" r="4" fill="#ffffff" />
+</svg>
