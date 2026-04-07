@@ -5,7 +5,7 @@ export class AddUsersTable1761130000000 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "users" (
+      `CREATE TABLE IF NOT EXISTS "users" (
         "id" character varying NOT NULL,
         "firstName" character varying NOT NULL,
         "email" character varying NOT NULL,
@@ -20,6 +20,6 @@ export class AddUsersTable1761130000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.query(`DROP TABLE "users"`);
+    await queryRunner.query(`DROP TABLE IF EXISTS "users"`);
   }
 }
