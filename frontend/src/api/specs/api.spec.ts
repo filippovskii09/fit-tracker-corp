@@ -188,7 +188,8 @@ describe('Axios Interceptors', () => {
     });
 
     describe('Edge Cases', () => {
-      it('should reject if request was already retried (_retry: true)', async () => {
+      it('should clear session and reject if request was already retried', async () => {
+        localStorage.setItem('accessToken', 'old-token');
         const error = {
           response: { status: 401 },
           config: { _retry: true },
@@ -197,6 +198,8 @@ describe('Axios Interceptors', () => {
         await expect(errorInterceptor(error)).rejects.toEqual(error);
 
         expect(mockedApi.post).not.toHaveBeenCalled();
+        expect(localStorage.getItem('accessToken')).toBeNull();
+        expect(redirectTo).toHaveBeenCalledWith(APP_ROUTES.AUTH.SIGNIN);
       });
 
       it('should reject if error has no config or response', async () => {

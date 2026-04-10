@@ -11,7 +11,10 @@ import { Response } from 'express';
 
 import { CreateUserDto, VerifyUserDto } from '@src/users/dto';
 import { Cookies } from '@src/common/decorators';
-import { NODE_ENV } from '@src/config/constants';
+import {
+  JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+  NODE_ENV,
+} from '@src/config/constants';
 import { PRODUCTION } from '@src/constants';
 import { AuthService } from './auth.service';
 import { IAuthResponse, IRefreshResponse, ISigninResponse } from './types';
@@ -25,11 +28,15 @@ export class AuthController {
   ) {}
 
   private setRefreshTokenCookie(res: Response, token: string) {
+    const refreshTokenTtlSeconds = this.configService.getOrThrow<number>(
+      JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+    );
+
     res.cookie('refreshToken', token, {
       httpOnly: true,
       secure: this.configService.get<string>(NODE_ENV) === PRODUCTION,
       sameSite: 'lax',
-      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      expires: new Date(Date.now() + refreshTokenTtlSeconds * 1000),
     });
   }
 
