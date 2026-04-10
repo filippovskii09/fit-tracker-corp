@@ -46,6 +46,7 @@ export default defineConfig({
       '@types': path.resolve(__dirname, './src/types'),
       '@components': path.resolve(__dirname, './src/components'),
       '@mocks': path.resolve(__dirname, './src/__mocks__'),
+      '@tokens': path.resolve(__dirname, './tokens'),
     },
   },
 });

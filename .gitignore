@@ -4,6 +4,7 @@ node_modules/
 # --- Compiled Output ---
 dist/
 build/
+frontend/src/styles/tokens.css
 
 # --- Logs ---
 logs
@@ -58,3 +59,9 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # --- AI tools ---
 .agents/
+!.agents/
+.agents/*
+!.agents/skills/
+.agents/skills/*
+!.agents/skills/tailwind-rules/
+!.agents/skills/tailwind-rules/**

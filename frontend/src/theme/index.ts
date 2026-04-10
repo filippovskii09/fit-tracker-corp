@@ -1,13 +1,6 @@
 import { createTheme } from '@mui/material';
 
-const PALETTE = {
-  acidGreen: '#8CEF0D',
-  darkBg: '#0C110F',
-  surface: '#181D1B',
-  textPrimary: '#FFFFFF',
-  textSecondary: '#9C9D9F',
-  error: '#FF453A',
-};
+import { PALETTE } from './constants';
 
 export const appTheme = createTheme({
   palette: {
@@ -18,11 +11,19 @@ export const appTheme = createTheme({
     },
     primary: {
       main: PALETTE.acidGreen,
-      contrastText: '#0C110F',
+      contrastText: PALETTE.darkBg,
     },
     text: {
       primary: PALETTE.textPrimary,
       secondary: PALETTE.textSecondary,
+    },
+    divider: PALETTE.borderSubtle,
+    action: {
+      disabled: PALETTE.disabled,
+      disabledBackground: PALETTE.borderSubtle,
+      focus: PALETTE.accentSoft,
+      hover: PALETTE.accentSoft,
+      selected: PALETTE.accentSoft,
     },
   },
   typography: {
@@ -33,18 +34,24 @@ export const appTheme = createTheme({
     },
     body1: {
       color: PALETTE.textSecondary,
+      fontSize: '1rem',
+      lineHeight: 1.55,
+    },
+    body2: {
+      fontSize: '0.9375rem',
+      lineHeight: 1.5,
     },
     button: {
       fontWeight: 600,
       textTransform: 'none',
-      fontSize: '0.95rem',
+      fontSize: '1rem',
     },
   },
   components: {
     MuiBackdrop: {
       styleOverrides: {
         root: {
-          backgroundColor: 'rgba(8, 12, 10, 0.72)',
+          backgroundColor: PALETTE.backdrop,
           backdropFilter: 'blur(10px)',
         },
       },
@@ -54,10 +61,10 @@ export const appTheme = createTheme({
         paper: ({ theme }) => ({
           backgroundColor: PALETTE.surface,
           backgroundImage: 'none',
-          boxShadow: '0 24px 60px rgba(0, 0, 0, 0.5)',
+          boxShadow: PALETTE.dialogShadow,
           borderRadius: '20px',
           padding: '14px 16px 10px',
-          border: '1px solid rgba(255, 255, 255, 0.06)',
+          border: `1px solid ${PALETTE.dialogBorder}`,
           margin: '16px',
           width: 'calc(100% - 32px)',
           maxWidth: 420,
@@ -114,23 +121,49 @@ export const appTheme = createTheme({
       styleOverrides: {
         root: {
           borderRadius: '14px',
-          padding: '10px 20px',
+          padding: '12px 22px',
           minWidth: '100px',
+          minHeight: '48px',
+          '&.Mui-focusVisible': {
+            outline: `2px solid ${PALETTE.focusRing}`,
+            outlineOffset: '2px',
+          },
         },
         containedPrimary: {
           backgroundColor: PALETTE.acidGreen,
-          color: '#0C110F',
-          boxShadow: '0 6px 16px rgba(140, 239, 13, 0.18)',
+          color: PALETTE.darkBg,
+          boxShadow: PALETTE.primarySoftShadow,
           '&:hover': {
-            backgroundColor: '#7BCF0B',
-            boxShadow: '0 8px 20px rgba(140, 239, 13, 0.3)',
+            backgroundColor: PALETTE.acidGreenHover,
+            boxShadow: PALETTE.primaryHoverShadow,
           },
         },
         textPrimary: {
           color: PALETTE.textSecondary,
           '&:hover': {
-            color: '#FFFFFF',
-            backgroundColor: 'rgba(255, 255, 255, 0.05)',
+            color: PALETTE.textPrimary,
+            backgroundColor: PALETTE.textHoverSurface,
+          },
+        },
+      },
+    },
+    MuiTextField: {
+      styleOverrides: {
+        root: {
+          '& .MuiInputBase-root': {
+            minHeight: '56px',
+            borderRadius: '16px',
+            fontSize: '1rem',
+          },
+          '& .MuiInputBase-input': {
+            paddingTop: '16px',
+            paddingBottom: '16px',
+          },
+          '& .MuiInputLabel-root': {
+            fontSize: '0.9375rem',
+          },
+          '& .MuiFormHelperText-root': {
+            fontSize: '0.875rem',
           },
         },
       },

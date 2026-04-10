@@ -28,7 +28,7 @@ export const ExerciseSelect = ({
           <li
             key={key}
             {...otherProps}
-            style={{ borderBottom: '1px solid #ffffff10' }}
+            style={{ borderBottom: '1px solid var(--app-dialog-border)' }}
           >
             <Box
               display="flex"
@@ -43,8 +43,8 @@ export const ExerciseSelect = ({
                 label={option.muscleGroup}
                 size="small"
                 sx={{
-                  backgroundColor: '#8CEF0D20',
-                  color: '#8CEF0D',
+                  backgroundColor: 'var(--color-accent-soft)',
+                  color: 'var(--color-primary)',
                   fontSize: '10px',
                   height: '20px',
                 }}

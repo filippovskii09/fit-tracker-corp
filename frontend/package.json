@@ -4,14 +4,16 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "tokens": "node scripts/generate-design-tokens.mjs",
+    "tokens:check": "node scripts/generate-design-tokens.mjs --check",
+    "dev": "npm run tokens && vite",
+    "build": "npm run tokens && tsc -b && vite build",
+    "lint": "npm run tokens && eslint .",
     "format": "prettier --write .",
     "preview": "vite preview",
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:cov": "jest --coverage"
+    "test": "npm run tokens && jest",
+    "test:watch": "npm run tokens && jest --watch",
+    "test:cov": "npm run tokens && jest --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

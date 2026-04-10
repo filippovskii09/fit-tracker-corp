@@ -14,6 +14,7 @@
     /* Bundler mode */
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
     "verbatimModuleSyntax": true,
     "moduleDetection": "force",
     "noEmit": true,
@@ -44,8 +45,9 @@
       "@hooks": ["./src/hooks"],
       "@types": ["./src/types"],
       "@components": ["./src/components"],
-      "@mocks": ["./src/__mocks__"]
+      "@mocks": ["./src/__mocks__"],
+      "@tokens": ["./tokens"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "tokens/**/*.json"]
 }

@@ -20,4 +20,22 @@ export default defineConfig([
       globals: globals.browser,
     },
   },
+  {
+    files: ['src/theme/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/var\\(--/]',
+          message:
+            'Do not use CSS custom properties in MUI theme files. MUI may parse palette values at runtime, so use concrete color values here and keep CSS vars in component styles.',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/var\\(--/]',
+          message:
+            'Do not use CSS custom properties in MUI theme files. MUI may parse palette values at runtime, so use concrete color values here and keep CSS vars in component styles.',
+        },
+      ],
+    },
+  },
 ]);

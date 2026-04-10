@@ -23,6 +23,7 @@ const config: Config = {
     '^@types(.*)$': '<rootDir>/src/types$1',
     '^@components(.*)$': '<rootDir>/src/components$1',
     '^@mocks(.*)$': '<rootDir>/src/__mocks__$1',
+    '^@tokens(.*)$': '<rootDir>/tokens$1',
 
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
     '\\.(jpg|jpeg|png|gif|webp|svg)$':

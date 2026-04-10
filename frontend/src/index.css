@@ -1,12 +1,5 @@
 @import 'tailwindcss';
-
-@theme {
-  --color-main: #0c110f;
-  --color-surface: #181d1b;
-  --color-primary: #8cef0d;
-  --color-muted: #9c9d9f;
-  --color-secondary: #1c1c1e;
-}
+@import './styles/tokens.css';
 
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
@@ -22,7 +15,7 @@ body {
   place-items: center;
   min-width: 320px;
   min-height: 100dvh;
-  background-color: #0c110f;
+  background-color: var(--color-main);
   overscroll-behavior: none;
 }
 
