@@ -9,6 +9,7 @@ export const StickyHeader = ({
   date,
   handleChange,
   readOnly = false,
+  nameError,
 }: IStickyHeaderProps) => {
   const navigate = useNavigate();
   const { create } = DICTIONARY.workout;
@@ -36,6 +37,9 @@ export const StickyHeader = ({
         <div className="text-xs text-primary font-mono mt-0.5">
           {new Date(date).toDateString()}
         </div>
+        {nameError ? (
+          <div className="mt-1 text-xs text-red-400">{nameError}</div>
+        ) : null}
       </div>
     </div>
   );

@@ -102,7 +102,7 @@ export const FormExerciseCard = ({
                 const lastSet = sets[sets.length - 1];
                 push({
                   weight: lastSet ? lastSet.weight : 0,
-                  reps: lastSet ? lastSet.reps : 0,
+                  reps: lastSet ? lastSet.reps : 1,
                   isCompleted: false,
                 });
               }}

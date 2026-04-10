@@ -16,6 +16,7 @@ export interface IStickyHeaderProps {
   date: string;
   handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   readOnly?: boolean;
+  nameError?: string;
 }
 
 export interface IExericesBlockProps {

@@ -28,20 +28,22 @@ const CreateWorkoutPage = () => {
       initialValues={initialValues}
       validationSchema={createWorkoutSchema}
       onSubmit={handleSubmit}
+      validateOnMount
     >
-      {({ values, handleChange, isSubmitting }) => (
+      {({ values, handleChange, isSubmitting, isValid, errors, submitCount }) => (
         <Form className="min-h-screen bg-main text-white pb-32">
           <StickyHeader
             name={values.name}
             date={date}
             handleChange={handleChange}
+            nameError={submitCount > 0 ? errors.name : undefined}
           />
 
           <FormExercisesList />
 
           <SubmitButtonBlock
             isSubmitting={isSubmitting}
-            isValid={values.exercises.length > 0}
+            isValid={isValid && values.exercises.length > 0}
           />
         </Form>
       )}

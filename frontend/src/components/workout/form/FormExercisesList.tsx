@@ -21,7 +21,7 @@ export const FormExercisesList = () => {
         exerciseId: exercise.id,
         name: exercise.name,
         muscleGroup: exercise.muscleGroup,
-        sets: [{ weight: 0, reps: 0, order: 1, isCompleted: false }],
+        sets: [{ weight: 0, reps: 1, order: 1, isCompleted: false }],
       });
     },
     [],
