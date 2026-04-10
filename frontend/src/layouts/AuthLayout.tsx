@@ -12,10 +12,10 @@ export const AuthLayout = () => {
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: theme.palette.background.default,
-        padding: 2,
+        padding: { xs: 3, sm: 2 },
       }}
     >
-      <Container maxWidth="xs">
+      <Container maxWidth="xs" disableGutters>
         <Outlet />
       </Container>
     </Box>

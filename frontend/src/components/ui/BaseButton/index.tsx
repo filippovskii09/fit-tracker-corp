@@ -16,7 +16,7 @@ export const BaseButton = ({
       disabled={disabled || isLoading}
       sx={{
         mt: 2,
-        height: '56px',
+        height: 'var(--spacing-control-lg)',
       }}
     >
       {isLoading ? <CircularProgress size={24} color="inherit" /> : children}

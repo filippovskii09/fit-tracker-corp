@@ -6,45 +6,45 @@ export const ViewExerciseCard = ({ exercise }: IViewExerciseCardProps) => {
   const workoutLocales = DICTIONARY.workout;
   const exerciseName = exercise.exercise?.name || exercise.name;
   return (
-    <div className="bg-secondary p-4 rounded-2xl mb-4 border border-white/5">
+    <div className="mb-5 rounded-3xl border border-white/5 bg-secondary p-5">
       {/* Exercise name */}
-      <div className="flex justify-between items-center mb-4">
+      <div className="mb-5 flex items-center justify-between">
         <div>
-          <h3 className="text-white text-lg font-bold">{exerciseName}</h3>
-          <span className="text-xs text-zinc-500">
+          <h3 className="text-xl font-bold text-white">{exerciseName}</h3>
+          <span className="text-sm text-text-soft">
             {exercise.sets.length || 0} {workoutLocales.sets}
           </span>
         </div>
       </div>
 
       {/* Exercise sets */}
-      <div className="space-y-3">
+      <div className="space-y-4">
         {exercise?.sets &&
           exercise.sets?.map((set: ISet, index: number) => (
-            <div key={index} className="flex gap-3 items-center">
-              <div className="w-6 text-zinc-500 text-xs font-mono border-l-2 border-transparent pl-2">
+            <div key={index} className="flex items-center gap-3">
+              <div className="w-7 border-l-2 border-transparent pl-2 font-mono text-sm text-text-soft">
                 {index + 1}
               </div>
 
               {/* Weight block in set */}
-              <div className="flex-1 relative bg-black/20 rounded-xl overflow-hidden border border-zinc-800">
-                <span className="absolute top-2 left-3 text-[10px] text-zinc-500 uppercase font-bold tracking-wider">
+              <div className="relative min-h-15.5 flex-1 overflow-hidden rounded-2xl border border-border-subtle bg-main">
+                <span className="absolute left-4 top-2 text-xs font-bold uppercase tracking-wider text-text-soft">
                   {workoutLocales.weight}
                 </span>
-                <p className="w-full text-white font-bold pt-6 pb-2 px-3 opacity-90">
+                <p className="w-full px-4 pb-2 pt-7 text-lg font-bold text-white opacity-90">
                   {set.weight}
                 </p>
-                <span className="absolute right-3 bottom-2 text-zinc-500 text-xs">
+                <span className="absolute bottom-2 right-4 text-sm text-text-soft">
                   {workoutLocales.kg}
                 </span>
               </div>
 
               {/* Weight block in set */}
-              <div className="flex-1 relative bg-black/20 rounded-xl overflow-hidden border border-zinc-800">
-                <span className="absolute top-2 left-3 text-[10px] text-zinc-500 uppercase font-bold tracking-wider">
+              <div className="relative min-h-15.5 flex-1 overflow-hidden rounded-2xl border border-border-subtle bg-main">
+                <span className="absolute left-4 top-2 text-xs font-bold uppercase tracking-wider text-text-soft">
                   {workoutLocales.reps}
                 </span>
-                <p className="w-full text-white font-bold pt-6 pb-2 px-3 opacity-90">
+                <p className="w-full px-4 pb-2 pt-7 text-lg font-bold text-white opacity-90">
                   {set.reps}
                 </p>
               </div>

@@ -11,11 +11,16 @@ export const AuthPageHeader = ({
   linkActionText,
 }: AuthPageHeaderProps) => {
   return (
-    <Box sx={{ mb: 4, textAlign: 'center' }}>
+    <Box sx={{ mb: { xs: 4.5, sm: 4 }, textAlign: 'center' }}>
       <Typography
         variant="h4"
         gutterBottom
-        sx={{ color: 'white', fontWeight: 'bold' }}
+        sx={{
+          color: 'white',
+          fontWeight: 'bold',
+          fontSize: { xs: '2rem', sm: '2.125rem' },
+          lineHeight: 1.12,
+        }}
       >
         {title}
       </Typography>
@@ -27,7 +32,7 @@ export const AuthPageHeader = ({
       )}
 
       {linkTo && linkText && (
-        <Typography variant="body2" color="text.secondary">
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
           {linkText}{' '}
           <Link
             component={RouterLink}

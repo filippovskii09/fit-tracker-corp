@@ -18,15 +18,19 @@ export const FormExerciseCard = ({
   const workoutLocales = DICTIONARY.workout;
 
   return (
-    <div className="bg-secondary p-4 rounded-2xl mb-4 border border-white/5">
-      <div className="flex justify-between items-center mb-4">
+    <div className="mb-5 rounded-3xl border border-white/5 bg-secondary p-5">
+      <div className="mb-5 flex items-center justify-between">
         <div>
-          <h3 className="text-white text-lg font-bold">{exercise.name}</h3>
-          <span className="text-xs text-zinc-500">
+          <h3 className="text-xl font-bold text-white">{exercise.name}</h3>
+          <span className="text-sm text-text-soft">
             {sets?.length} {workoutLocales.sets}
           </span>
         </div>
-        <IconButton onClick={onRemove} size="small" sx={{ color: '#666' }}>
+        <IconButton
+          onClick={onRemove}
+          size="medium"
+          sx={{ color: 'text.secondary' }}
+        >
           <IoMdClose />
         </IconButton>
       </div>
@@ -34,20 +38,20 @@ export const FormExerciseCard = ({
       <FieldArray name={`exercises.${exerciseIndex}.sets`}>
         {({ push, remove }) => (
           <div>
-            <div className="space-y-3">
+            <div className="space-y-4">
               {sets.map((set: ISet, setIndex: number) => {
                 const weightName = `exercises.${exerciseIndex}.sets.${setIndex}.weight`;
                 const repsName = `exercises.${exerciseIndex}.sets.${setIndex}.reps`;
 
                 return (
-                  <div key={setIndex} className="flex gap-3 items-center group">
-                    <div className="w-6 text-zinc-500 text-xs font-mono border-l-2 border-transparent group-hover:border-primary pl-2 transition-colors">
+                  <div key={setIndex} className="group flex items-center gap-3">
+                    <div className="w-7 border-l-2 border-transparent pl-2 font-mono text-sm text-text-soft transition-colors group-hover:border-primary">
                       {setIndex + 1}
                     </div>
 
                     {/* Weight Input */}
-                    <div className="flex-1 relative bg-black/40 rounded-xl overflow-hidden border border-zinc-700 focus-within:border-primary transition-colors">
-                      <label className="absolute top-2 left-3 text-[10px] text-zinc-500 uppercase font-bold tracking-wider">
+                    <div className="relative min-h-15.5 flex-1 overflow-hidden rounded-2xl border border-border-subtle bg-main transition-colors focus-within:border-primary">
+                      <label className="absolute left-4 top-2 text-xs font-bold uppercase tracking-wider text-text-soft">
                         {workoutLocales.weight}
                       </label>
                       <input
@@ -57,16 +61,16 @@ export const FormExerciseCard = ({
                         onBlur={handleBlur}
                         type="number"
                         placeholder="0"
-                        className="w-full bg-transparent text-white font-bold pt-6 pb-2 px-3 outline-none"
+                        className="w-full bg-transparent px-4 pb-2 pt-7 text-lg font-bold text-white outline-none"
                       />
-                      <span className="absolute right-3 bottom-2 text-zinc-500 text-xs">
+                      <span className="absolute bottom-2 right-4 text-sm text-text-soft">
                         {workoutLocales.kg}
                       </span>
                     </div>
 
                     {/* Reps Input */}
-                    <div className="flex-1 relative bg-black/40 rounded-xl overflow-hidden border border-zinc-700 focus-within:border-primary transition-colors">
-                      <label className="absolute top-2 left-3 text-[10px] text-zinc-500 uppercase font-bold tracking-wider">
+                    <div className="relative min-h-15.5 flex-1 overflow-hidden rounded-2xl border border-border-subtle bg-main transition-colors focus-within:border-primary">
+                      <label className="absolute left-4 top-2 text-xs font-bold uppercase tracking-wider text-text-soft">
                         {workoutLocales.reps}
                       </label>
                       <input
@@ -76,7 +80,7 @@ export const FormExerciseCard = ({
                         onBlur={handleBlur}
                         type="number"
                         placeholder="0"
-                        className="w-full bg-transparent text-white font-bold pt-6 pb-2 px-3 outline-none"
+                        className="w-full bg-transparent px-4 pb-2 pt-7 text-lg font-bold text-white outline-none"
                       />
                     </div>
 
@@ -85,7 +89,7 @@ export const FormExerciseCard = ({
                       <button
                         type="button"
                         onClick={() => remove(setIndex)}
-                        className="text-zinc-700 hover:text-red-500 transition-colors p-2"
+                        className="flex h-10 w-10 items-center justify-center rounded-xl p-2 text-disabled transition-colors hover:text-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-main"
                       >
                         <IoMdClose size={18} />
                       </button>
@@ -106,9 +110,9 @@ export const FormExerciseCard = ({
                   isCompleted: false,
                 });
               }}
-              className="mt-4 flex items-center gap-2 text-xs font-bold text-zinc-500 hover:text-primary transition-colors uppercase tracking-wide px-2 py-2"
+              className="mt-5 flex min-h-11 items-center gap-2 rounded-2xl px-3 py-2 text-sm font-bold uppercase tracking-wide text-text-soft transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-main"
             >
-              <IoMdAdd size={16} /> {workoutLocales.create.addSet}
+              <IoMdAdd size={18} /> {workoutLocales.create.addSet}
             </button>
           </div>
         )}
