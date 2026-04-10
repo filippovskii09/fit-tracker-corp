@@ -30,7 +30,14 @@ const CreateWorkoutPage = () => {
       onSubmit={handleSubmit}
       validateOnMount
     >
-      {({ values, handleChange, isSubmitting, isValid, errors, submitCount }) => (
+      {({
+        values,
+        handleChange,
+        isSubmitting,
+        isValid,
+        errors,
+        submitCount,
+      }) => (
         <Form className="min-h-screen bg-main text-white pb-32">
           <StickyHeader
             name={values.name}
