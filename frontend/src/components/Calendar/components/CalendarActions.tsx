@@ -6,7 +6,7 @@ export const CalendarActions = ({ backToday }: ICalendarActionsProps) => {
     <div className="flex items-center gap-[clamp(8px,2.2vw,12px)]">
       <button
         onClick={backToday}
-        className="w-full rounded-[clamp(10px,2.5vw,14px)] bg-surface px-[clamp(16px,5vw,24px)] py-[clamp(6px,2vw,10px)] text-[clamp(14px,3.2vw,16px)]"
+        className="min-h-control-md w-full rounded-[clamp(13px,3.2vw,16px)] border border-border-subtle bg-surface px-[clamp(18px,5vw,24px)] py-[clamp(10px,2.6vw,12px)] text-[clamp(16px,4vw,17px)] font-semibold text-text-subtle transition-[border-color,color,background-color,transform] duration-200 hover:border-accent-border hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-main active:scale-[0.98]"
       >
         {DICTIONARY.calendar.buttons.today}
       </button>

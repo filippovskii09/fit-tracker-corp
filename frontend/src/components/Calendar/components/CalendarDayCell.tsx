@@ -19,7 +19,7 @@ const colStartClasses: Record<number, string> = {
 
 const CalendarDayCellPoint = ({ pointClasses }: ICalendarDayCellPointProps) => (
   <span
-    className={`w-2 h-2 ${pointClasses} rounded-full absolute left-1/2 -translate-x-1/2 bottom-0.5`}
+    className={`absolute bottom-0.5 left-1/2 h-2 w-2 -translate-x-1/2 rounded-full ${pointClasses}`}
   ></span>
 );
 
@@ -38,9 +38,11 @@ export const CalendarDayCell = memo(
   }: ICalendarDayCellProps) => {
     const navigate = useNavigate();
     const baseClasses =
-      'flex h-[clamp(36px,9vw,44px)] w-[clamp(36px,9vw,44px)] items-center justify-center rounded-[clamp(10px,2.5vw,14px)] text-[clamp(12px,3vw,14px)] font-medium transition-colors relative';
-    const activeClasses = isCurrent ? 'bg-primary text-main font-bold' : '';
-    const pointClasses = isCurrent ? 'bg-main' : 'bg-primary';
+      'relative flex h-[clamp(42px,12vw,50px)] w-full max-w-12.5 justify-self-center items-center justify-center rounded-[clamp(13px,3.2vw,16px)] border border-transparent text-[clamp(15px,3.8vw,17px)] font-semibold text-white transition-[background-color,border-color,color,box-shadow,transform] duration-200 hover:border-border-subtle hover:bg-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-main active:scale-[0.98]';
+    const activeClasses = isCurrent
+      ? 'border-accent-border bg-accent-soft text-primary'
+      : '';
+    const pointClasses = isCurrent ? 'bg-primary' : 'bg-accent-border';
     const gridStyle = isFirstDay ? colStartClasses[colStart] : '';
 
     const handleClick = () => {
@@ -57,6 +59,7 @@ export const CalendarDayCell = memo(
         key={day}
         className={`${baseClasses} ${activeClasses} ${gridStyle}`}
         onClick={handleClick}
+        aria-pressed={isCurrent}
       >
         {day}
 
