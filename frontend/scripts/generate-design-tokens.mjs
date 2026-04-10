@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'node:fs/promises';
+import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -50,5 +50,6 @@ const checkFile = async (path, expected) => {
 if (isCheck) {
   await checkFile(cssPath, cssOutput);
 } else {
+  await mkdir(dirname(cssPath), { recursive: true });
   await writeFile(cssPath, cssOutput);
 }
