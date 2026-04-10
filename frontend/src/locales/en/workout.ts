@@ -11,6 +11,7 @@ export const workoutLocales = {
   view: {
     idAllowed: 'ID undefined',
     notFound: 'Workout not found',
+    error: 'Failed to load workout',
   },
   weight: 'Weight',
   reps: 'Reps',

@@ -14,7 +14,8 @@
     "border-subtle": "#2d3431",
     "focus-ring": "#b7f35d",
     "disabled": "#5f6462",
-    "error": "#ff453a"
+    "error": "#ff453a",
+    "skeleton": "rgba(255, 255, 255, 0.08)"
   },
   "spacing": {
     "control-md": "3rem",
