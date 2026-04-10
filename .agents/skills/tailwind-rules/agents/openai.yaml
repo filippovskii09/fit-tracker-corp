@@ -1,0 +1,4 @@
+interface:
+  display_name: "Tailwind Rules"
+  short_description: "Tailwind token and utility guardrails"
+  default_prompt: "Use $tailwind-rules to keep Tailwind classes tokenized, scale-based, and free of avoidable arbitrary values."
