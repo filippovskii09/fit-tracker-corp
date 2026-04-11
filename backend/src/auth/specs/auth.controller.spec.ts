@@ -4,6 +4,7 @@ import { UnauthorizedException } from '@nestjs/common';
 
 import { createUserDtoStub, verifyUserDtoStub } from '@src/stubs/user.stub';
 import { ResponseMessages } from '@src/common/messages';
+import { JWT_REFRESH_TOKEN_EXPIRATION_TIME } from '@src/config/constants';
 import { AuthController } from '../auth.controller';
 import { AuthService } from '../auth.service';
 import { registerResponse } from '../constants';
@@ -35,6 +36,7 @@ describe('AuthController', () => {
 
     authController = module.get<AuthController>(AuthController);
     authService = module.get<AuthService>(AuthService);
+    mockConfigService.getOrThrow.mockReturnValue(7776000);
   });
 
   afterEach(() => jest.clearAllMocks());
@@ -75,10 +77,14 @@ describe('AuthController', () => {
         'refreshToken',
         tokensStub.refreshToken,
         expect.objectContaining({
+          expires: expect.any(Date),
           httpOnly: true,
         }),
       );
 
+      expect(mockConfigService.getOrThrow).toHaveBeenCalledWith(
+        JWT_REFRESH_TOKEN_EXPIRATION_TIME,
+      );
       expect(authService.signIn).toHaveBeenCalledWith(verifyDto);
     });
   });
@@ -108,7 +114,10 @@ describe('AuthController', () => {
       expect(mockResponse.cookie).toHaveBeenCalledWith(
         'refreshToken',
         refreshRes.refreshToken,
-        expect.objectContaining({ httpOnly: true }),
+        expect.objectContaining({
+          expires: expect.any(Date),
+          httpOnly: true,
+        }),
       );
     });
 

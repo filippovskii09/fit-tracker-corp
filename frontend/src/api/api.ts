@@ -20,6 +20,11 @@ export const api = axios.create({
 let isRefreshing = false;
 let failedQueue: FailedRequest[] = [];
 
+const clearSessionAndRedirect = () => {
+  localStorage.removeItem('accessToken');
+  redirectTo(APP_ROUTES.AUTH.SIGNIN);
+};
+
 const processQueue = (error: Error | null, token: string | null = null) => {
   failedQueue.forEach((prom) => {
     if (error) {
@@ -58,12 +63,12 @@ api.interceptors.response.use(
     if (isRefreshRequest) {
       processQueue(error as Error, null);
       isRefreshing = false;
-      localStorage.removeItem('accessToken');
-      redirectTo(APP_ROUTES.AUTH.SIGNIN);
+      clearSessionAndRedirect();
       return Promise.reject(error);
     }
 
     if (originalReq._retry) {
+      clearSessionAndRedirect();
       return Promise.reject(error);
     }
 
@@ -100,8 +105,7 @@ api.interceptors.response.use(
       return api(originalReq);
     } catch (refreshError) {
       processQueue(refreshError as Error, null);
-      localStorage.removeItem('accessToken');
-      redirectTo(APP_ROUTES.AUTH.SIGNIN);
+      clearSessionAndRedirect();
 
       return Promise.reject(refreshError);
     } finally {

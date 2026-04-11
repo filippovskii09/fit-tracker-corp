@@ -35,7 +35,7 @@ describe('PrivateGuard', () => {
     expect(screen.getByText('Signin Page')).toBeInTheDocument();
   });
 
-  it('should show LOADING spinner if token exists and query is loading', () => {
+  it('should render OUTLET while user query is loading if token exists', () => {
     jest.spyOn(Storage.prototype, 'getItem').mockReturnValue('valid-token');
     mockUseUser.mockReturnValue({ isLoading: true, data: undefined });
 
@@ -48,11 +48,11 @@ describe('PrivateGuard', () => {
       { route: '/protected' },
     );
 
-    expect(screen.getByRole('progressbar')).toBeInTheDocument();
-    expect(screen.queryByText('Protected Content')).not.toBeInTheDocument();
+    expect(screen.getByText('Protected Content')).toBeInTheDocument();
+    expect(screen.queryByRole('progressbar')).not.toBeInTheDocument();
   });
 
-  it('should redirect to SIGNIN if token exists but query returns ERROR', () => {
+  it('should keep rendering OUTLET if token exists but user query returns ERROR', () => {
     jest.spyOn(Storage.prototype, 'getItem').mockReturnValue('valid-token');
     mockUseUser.mockReturnValue({
       isLoading: false,
@@ -71,7 +71,7 @@ describe('PrivateGuard', () => {
       { route: '/protected' },
     );
 
-    expect(screen.getByText('Signin Page')).toBeInTheDocument();
+    expect(screen.getByText('Protected Content')).toBeInTheDocument();
   });
 
   it('should render OUTLET (content) if token exists and user data loaded', () => {
