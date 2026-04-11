@@ -14,7 +14,7 @@ jest.mock('@utils', () => ({
 import type { InternalAxiosRequestConfig } from 'axios';
 
 import { redirectTo } from '@utils';
-import { API_ENDPOINTS, APP_ROUTES } from '@constants';
+import { API_ENDPOINTS, APP_ROUTES, WORKOUTS_CACHE_KEY } from '@constants';
 import { api } from '../api';
 
 const mockedApi = api as unknown as jest.MockedFunction<
@@ -102,6 +102,7 @@ describe('Axios Interceptors', () => {
 
       it('should logout and redirect if refresh request itself fails with 401', async () => {
         localStorage.setItem('accessToken', 'old-token');
+        localStorage.setItem(WORKOUTS_CACHE_KEY, '[]');
 
         const error = {
           response: { status: 401 },
@@ -112,6 +113,7 @@ describe('Axios Interceptors', () => {
 
         expect(mockedApi.post).not.toHaveBeenCalled();
         expect(localStorage.getItem('accessToken')).toBeNull();
+        expect(localStorage.getItem(WORKOUTS_CACHE_KEY)).toBeNull();
         expect(redirectTo).toHaveBeenCalledWith(APP_ROUTES.AUTH.SIGNIN);
       });
 
@@ -190,6 +192,7 @@ describe('Axios Interceptors', () => {
     describe('Edge Cases', () => {
       it('should clear session and reject if request was already retried', async () => {
         localStorage.setItem('accessToken', 'old-token');
+        localStorage.setItem(WORKOUTS_CACHE_KEY, '[]');
         const error = {
           response: { status: 401 },
           config: { _retry: true },
@@ -199,6 +202,7 @@ describe('Axios Interceptors', () => {
 
         expect(mockedApi.post).not.toHaveBeenCalled();
         expect(localStorage.getItem('accessToken')).toBeNull();
+        expect(localStorage.getItem(WORKOUTS_CACHE_KEY)).toBeNull();
         expect(redirectTo).toHaveBeenCalledWith(APP_ROUTES.AUTH.SIGNIN);
       });
 

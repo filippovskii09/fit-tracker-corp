@@ -2,7 +2,7 @@ import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 
 import { config } from '@config';
 import { API_ENDPOINTS, APP_ROUTES } from '@constants';
-import { redirectTo } from '@utils';
+import { clearCachedWorkouts, redirectTo } from '@utils';
 
 interface FailedRequest {
   resolve: (value: string) => void;
@@ -22,6 +22,7 @@ let failedQueue: FailedRequest[] = [];
 
 const clearSessionAndRedirect = () => {
   localStorage.removeItem('accessToken');
+  clearCachedWorkouts();
   redirectTo(APP_ROUTES.AUTH.SIGNIN);
 };
 

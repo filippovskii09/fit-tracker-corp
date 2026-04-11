@@ -36,6 +36,7 @@ describe('AuthController', () => {
 
     authController = module.get<AuthController>(AuthController);
     authService = module.get<AuthService>(AuthService);
+    mockConfigService.get.mockReturnValue('development');
     mockConfigService.getOrThrow.mockReturnValue(7776000);
   });
 
@@ -79,6 +80,8 @@ describe('AuthController', () => {
         expect.objectContaining({
           expires: expect.any(Date),
           httpOnly: true,
+          sameSite: 'lax',
+          secure: false,
         }),
       );
 
@@ -117,6 +120,30 @@ describe('AuthController', () => {
         expect.objectContaining({
           expires: expect.any(Date),
           httpOnly: true,
+          sameSite: 'lax',
+          secure: false,
+        }),
+      );
+    });
+
+    it('should set cross-site refresh cookie options in production', async () => {
+      const refreshToken = tokensStub.refreshToken;
+      const refreshRes = {
+        accessToken: tokensStub.accessToken,
+        refreshToken: tokensStub.refreshToken,
+      };
+
+      mockConfigService.get.mockReturnValue('production');
+      jest.spyOn(authService, 'refreshTokens').mockResolvedValue(refreshRes);
+
+      await authController.refreshToken(refreshToken, mockResponse);
+
+      expect(mockResponse.cookie).toHaveBeenCalledWith(
+        'refreshToken',
+        refreshRes.refreshToken,
+        expect.objectContaining({
+          sameSite: 'none',
+          secure: true,
         }),
       );
     });
