@@ -1,0 +1,4 @@
+interface:
+  display_name: "PR Description"
+  short_description: "Build PR and MR descriptions"
+  default_prompt: "Use $pr-description to generate a reviewer-friendly pull request description from the current branch."

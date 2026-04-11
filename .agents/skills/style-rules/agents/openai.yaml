@@ -1,0 +1,4 @@
+interface:
+  display_name: "Style Rules"
+  short_description: "Repo styling guardrails"
+  default_prompt: "Use $style-rules to keep frontend styling consistent with project tokens and centralized theme rules."
