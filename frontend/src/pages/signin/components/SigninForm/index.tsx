@@ -2,7 +2,7 @@ import { Formik, Form, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-import { getErrorMessage } from '@utils';
+import { clearCachedWorkouts, getErrorMessage } from '@utils';
 import { BaseButton, BaseInput } from '@ui';
 import { APP_ROUTES } from '@constants';
 import { DICTIONARY } from '@locales';
@@ -23,6 +23,7 @@ export const SigninForm = () => {
   const handleSubmit = (values: SigninInitialValuesType) => {
     signin(values, {
       onSuccess: (data) => {
+        clearCachedWorkouts();
         localStorage.setItem('accessToken', data.accessToken);
         toast.success(t.success);
         navigate(APP_ROUTES.DASHBOARD);

@@ -31,11 +31,13 @@ export class AuthController {
     const refreshTokenTtlSeconds = this.configService.getOrThrow<number>(
       JWT_REFRESH_TOKEN_EXPIRATION_TIME,
     );
+    const isProduction =
+      this.configService.get<string>(NODE_ENV) === PRODUCTION;
 
     res.cookie('refreshToken', token, {
       httpOnly: true,
-      secure: this.configService.get<string>(NODE_ENV) === PRODUCTION,
-      sameSite: 'lax',
+      secure: isProduction,
+      sameSite: isProduction ? 'none' : 'lax',
       expires: new Date(Date.now() + refreshTokenTtlSeconds * 1000),
     });
   }
