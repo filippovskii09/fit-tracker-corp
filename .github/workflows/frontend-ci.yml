@@ -45,3 +45,6 @@ jobs:
 
       - name: Build (TypeCheck & Vite)
         run: npm run build
+
+      - name: Test with Coverage
+        run: npm run test:coverage
