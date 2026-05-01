@@ -28,6 +28,7 @@ Enforcement levels:
 
 - MUST test behavior, not implementation details.
 - MUST validate user-visible outcomes.
+- MUST target interactions the way a user perceives the interface: query buttons, inputs, links, and controls by accessible name, visible text, label, placeholder, or role state instead of positional indexes such as `buttons[0]` whenever the UI exposes a meaningful label or icon description.
 - SHOULD prefer integration-style component tests over low-value unit internals when both are possible.
 - MUST use isolated unit tests for complex business logic, pure functions, calculations, and specific edge cases where integration tests would be overly cumbersome or fail to provide sufficient coverage depth.
 - MUST validate initial UI state before user action when the behavior depends on that state.
