@@ -9,6 +9,7 @@ export const workoutLocales = {
     addSet: 'Add another Set',
     removeExercise: 'Remove exercise',
     removeSet: 'Remove set',
+    goBack: 'Go back',
   },
   view: {
     idAllowed: 'ID undefined',
