@@ -69,8 +69,43 @@ jobs:
         run: test -f coverage/coverage-summary.json && test -f coverage/lcov.info
 
       - name: Check diff coverage
+        working-directory: .
         run: |
           echo "Comparing against ${DIFF_COVER_COMPARE_BRANCH}"
-          git config diff.relative true
-          git diff --name-only "${DIFF_COVER_COMPARE_BRANCH}...HEAD" -- src
-          diff-cover coverage/lcov.info --compare-branch="${DIFF_COVER_COMPARE_BRANCH}" --fail-under=80
+          git diff --name-only "${DIFF_COVER_COMPARE_BRANCH}...HEAD" -- frontend/src
+          perl -pe 's#^SF:src/#SF:frontend/src/#' frontend/coverage/lcov.info > frontend/coverage/lcov.diff.info
+          set +e
+          diff-cover frontend/coverage/lcov.diff.info --compare-branch="${DIFF_COVER_COMPARE_BRANCH}" --fail-under=80 | tee frontend/coverage/diff-cover.txt
+          diff_cover_status=${PIPESTATUS[0]}
+          set -e
+
+          node <<'NODE'
+          const fs = require('fs');
+
+          const threshold = 80;
+          const report = fs.readFileSync('frontend/coverage/diff-cover.txt', 'utf8');
+          const fileCoveragePattern = /^(frontend\/src\/.+\.(?:js|jsx|ts|tsx)) \((\d+(?:\.\d+)?)%\)(?:: (.*))?$/gm;
+          const failures = [];
+
+          for (const match of report.matchAll(fileCoveragePattern)) {
+            const [, filePath, percentValue, details = ''] = match;
+            const percent = Number(percentValue);
+
+            if (percent < threshold) {
+              failures.push({ filePath, percent, details });
+            }
+          }
+
+          if (failures.length > 0) {
+            console.error(`Diff coverage per file is below ${threshold}%:`);
+
+            for (const failure of failures) {
+              const suffix = failure.details ? `: ${failure.details}` : '';
+              console.error(`- ${failure.filePath}: ${failure.percent}%${suffix}`);
+            }
+
+            process.exit(1);
+          }
+          NODE
+
+          exit "${diff_cover_status}"
