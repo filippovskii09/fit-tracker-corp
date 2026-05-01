@@ -131,6 +131,31 @@ describe('Axios Interceptors', () => {
         expect(localStorage.getItem('accessToken')).toBeNull();
         expect(redirectTo).toHaveBeenCalledWith(APP_ROUTES.AUTH.SIGNIN);
       });
+
+      it('should reject if retried original request fails after refresh', async () => {
+        const newToken = 'new-access-token';
+        const errorMessage = 'Retry failed';
+        const retryError = new Error(errorMessage);
+        mockedApi.post.mockResolvedValue({ data: { accessToken: newToken } });
+        (mockedApi as unknown as jest.Mock).mockRejectedValue(retryError);
+
+        const originalRequest = {
+          headers: { Authorization: 'old-token' },
+          _retry: false,
+        };
+        const error = {
+          response: { status: 401 },
+          config: originalRequest,
+        };
+
+        await expect(errorInterceptor(error)).rejects.toThrow(errorMessage);
+
+        expect(localStorage.getItem('accessToken')).toBe(newToken);
+        expect(originalRequest.headers.Authorization).toBe(
+          `Bearer ${newToken}`,
+        );
+        expect(redirectTo).not.toHaveBeenCalled();
+      });
     });
 
     describe('Concurrent Requests & Queue', () => {
