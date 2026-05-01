@@ -53,11 +53,14 @@ jobs:
         run: npm run test:cov
 
       - name: Fetch base branch
+        env:
+          BASE_BRANCH: ${{ github.base_ref || 'main' }}
+          BASE_REPOSITORY: ${{ github.event.pull_request.base.repo.full_name || github.repository }}
         run: |
-          git fetch --no-tags --prune origin main:refs/remotes/origin/main || {
-            git remote add upstream "${{ github.event.pull_request.base.repo.clone_url }}"
-            git fetch --no-tags --prune upstream main:refs/remotes/origin/main
-          }
+          git fetch --no-tags --prune origin "+refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}" || \
+            git fetch --no-tags --prune "https://github.com/${BASE_REPOSITORY}.git" "+refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}"
+          git rev-parse --verify "refs/remotes/origin/${BASE_BRANCH}"
+          echo "DIFF_COVER_COMPARE_BRANCH=refs/remotes/origin/${BASE_BRANCH}" >> "$GITHUB_ENV"
 
       - name: Install diff-cover
         run: python3 -m pip install diff-cover
@@ -66,4 +69,4 @@ jobs:
         run: test -f coverage/coverage-summary.json && test -f coverage/lcov.info
 
       - name: Check diff coverage
-        run: diff-cover coverage/lcov.info --compare-branch=origin/main --fail-under=80
+        run: diff-cover coverage/lcov.info --compare-branch="${DIFF_COVER_COMPARE_BRANCH}" --fail-under=80
