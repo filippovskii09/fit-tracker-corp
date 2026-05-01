@@ -10,6 +10,7 @@ on:
     branches: ["**"]
     paths:
       - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
 
 jobs:
   frontend-checks:
@@ -26,6 +27,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -48,3 +51,19 @@ jobs:
 
       - name: Test with Coverage
         run: npm run test:cov
+
+      - name: Fetch base branch
+        run: |
+          git fetch --no-tags --prune origin main:refs/remotes/origin/main || {
+            git remote add upstream "${{ github.event.pull_request.base.repo.clone_url }}"
+            git fetch --no-tags --prune upstream main:refs/remotes/origin/main
+          }
+
+      - name: Install diff-cover
+        run: python3 -m pip install diff-cover
+
+      - name: Check coverage artifacts
+        run: test -f coverage/coverage-summary.json && test -f coverage/lcov.info
+
+      - name: Check diff coverage
+        run: diff-cover coverage/lcov.info --compare-branch=origin/main --fail-under=80

@@ -71,7 +71,7 @@ const config: Config = {
     },
   },
 
-  coverageReporters: ['text', 'json', 'html'],
+  coverageReporters: ['text', 'json-summary', 'lcov', 'html'],
 
   transform: {
     '^.+\\.tsx?$': [
