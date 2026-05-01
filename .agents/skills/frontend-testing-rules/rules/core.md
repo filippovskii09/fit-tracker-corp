@@ -73,6 +73,7 @@ Use queries in this order:
 ## 6. Interaction And Async Rules
 
 - MUST use `@testing-library/user-event` for user interactions.
+- MUST add `@testing-library/user-event` as a dev dependency when a project does not already provide it, instead of falling back to `fireEvent` for realistic clicks, typing, selection, and keyboard behavior.
 - MUST use `findBy*` for async appearance.
 - MUST use `waitFor` only with a concrete assertion inside.
 - MUST keep side effects outside `waitFor`.
@@ -88,6 +89,7 @@ Use queries in this order:
 - MUST keep fixture structure aligned with the real API schema.
 - MUST reuse existing project fixtures, constants, messages, and mocks when equivalent values already exist.
 - SHOULD build scenario-specific fixtures with small factory helpers instead of duplicating ad-hoc object literals.
+- SHOULD name and reuse repeated mock-only labels, numeric values, and scenario values in local fixtures or constants instead of duplicating literals across setup and assertions.
 
 ## 8. Assertions And Readability
 
@@ -190,7 +192,8 @@ Before writing or refactoring assertions, MUST run a constants/messages discover
 
 - MUST NOT inline provider boilerplate directly in individual test files.
 - MUST create or reuse a shared `renderWithProviders` or `customRender` test utility for common providers.
-- SHOULD re-export RTL helpers from that same test utility so tests import from one place.
+- SHOULD add reusable provider-specific helpers, such as `renderWithFormik`, to shared test utilities when the same wrapper is likely to be reused across multiple component or hook tests.
+- SHOULD re-export RTL helpers and `userEvent` from that same test utility so tests import from one place.
 
 ### QueryClient Isolation
 

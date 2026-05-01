@@ -59,6 +59,7 @@ When organizing imports in JavaScript, TypeScript, and React files, follow this 
 Additional import rules:
 - MUST ensure the target component being tested, such as `import { Component } from '.'`, is the absolute last import in the file.
 - MUST use `@` aliases, such as `@src/...`, when relative path nesting is `../../..` or deeper.
+- MUST NOT insert blank lines between internal imports solely because some use aliases and others use relative paths; separate external imports from internal imports, then keep related internal imports together in the project order above.
 
 ## Variable Naming Rules
 
