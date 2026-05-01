@@ -7,6 +7,8 @@ export const workoutLocales = {
     buttonLoading: 'Saving...',
     submitButton: 'Finish Workout',
     addSet: 'Add another Set',
+    removeExercise: 'Remove exercise',
+    removeSet: 'Remove set',
   },
   view: {
     idAllowed: 'ID undefined',

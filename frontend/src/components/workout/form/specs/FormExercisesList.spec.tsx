@@ -93,7 +93,11 @@ describe('FormExercisesList', () => {
       }),
     ).toBeInTheDocument();
 
-    await user.click(screen.getAllByRole('button')[0]);
+    await user.click(
+      screen.getByRole('button', {
+        name: workoutLocales.create.removeExercise,
+      }),
+    );
 
     await waitFor(() => {
       expect(screen.queryByRole('heading')).not.toBeInTheDocument();

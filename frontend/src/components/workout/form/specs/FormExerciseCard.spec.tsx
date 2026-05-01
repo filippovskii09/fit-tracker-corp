@@ -37,7 +37,11 @@ describe('FormExerciseCard', () => {
     expect(screen.getByDisplayValue(completedSet.weight)).toBeInTheDocument();
     expect(screen.getByDisplayValue(completedSet.reps)).toBeInTheDocument();
 
-    await user.click(screen.getAllByRole('button')[0]);
+    await user.click(
+      screen.getByRole('button', {
+        name: workoutLocales.create.removeExercise,
+      }),
+    );
 
     expect(mockRemove).toHaveBeenCalledTimes(1);
   });
@@ -111,9 +115,11 @@ describe('FormExerciseCard', () => {
       },
     );
 
-    const buttons = screen.getAllByRole('button');
-
-    await user.click(buttons[2]);
+    await user.click(
+      screen.getByRole('button', {
+        name: `${workoutLocales.create.removeSet} ${extraSet.order}`,
+      }),
+    );
 
     await waitFor(() => {
       expect(screen.getByText(`1 ${workoutLocales.sets}`)).toBeInTheDocument();
