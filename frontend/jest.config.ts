@@ -42,6 +42,7 @@ const config: Config = {
     '!src/vite-env.d.ts',
     '!src/**/types.ts',
     '!src/**/*.types.ts',
+		"!src/**/constant.ts",
   ],
 
   coveragePathIgnorePatterns: [
