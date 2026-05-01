@@ -6,6 +6,8 @@ import {
   type RenderHookOptions,
   type RenderOptions,
 } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import type { ReactElement, ReactNode } from 'react';
 import { MemoryRouter, Routes } from 'react-router-dom';
 
@@ -66,7 +68,21 @@ export const renderHookWithProviders = <Result, Props>(
   return renderHook(render, { wrapper: Wrapper, ...options });
 };
 
+export const renderWithFormik = <Values extends FormikValues>(
+  ui: ReactNode,
+  formikConfig: Pick<FormikConfig<Values>, 'initialValues'> &
+    Partial<Omit<FormikConfig<Values>, 'initialValues' | 'children'>>,
+  options: ExtendedRenderOptions = {},
+) =>
+  renderWithProviders(
+    <Formik onSubmit={jest.fn()} {...formikConfig}>
+      {ui}
+    </Formik>,
+    options,
+  );
+
 // eslint-disable-next-line react-refresh/only-export-components
 export * from '@testing-library/react';
+export { userEvent };
 export { renderWithProviders as render };
 export { renderHookWithProviders as renderHook };
