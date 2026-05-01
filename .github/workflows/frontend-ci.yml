@@ -69,4 +69,7 @@ jobs:
         run: test -f coverage/coverage-summary.json && test -f coverage/lcov.info
 
       - name: Check diff coverage
-        run: diff-cover coverage/lcov.info --compare-branch="${DIFF_COVER_COMPARE_BRANCH}" --fail-under=80
+        run: |
+          echo "Comparing against ${DIFF_COVER_COMPARE_BRANCH}"
+          git diff --name-only "${DIFF_COVER_COMPARE_BRANCH}...HEAD" -- src || true
+          diff-cover coverage/lcov.info --compare-branch="${DIFF_COVER_COMPARE_BRANCH}" --fail-under=80
