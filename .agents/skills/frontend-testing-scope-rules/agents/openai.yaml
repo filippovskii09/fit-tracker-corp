@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Testing Scope Rules"
+  short_description: "Scoped RTL queries, filter integrity, and realistic interactions"
+  default_prompt: "Use $frontend-testing-scope-rules with $frontend-testing-rules for dropdown, modal, table, card, filter, and route-driven frontend tests."

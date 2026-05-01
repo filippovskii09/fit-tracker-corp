@@ -1,0 +1,4 @@
+interface:
+  display_name: "Common Agent Rules"
+  short_description: "Shared git safety, minimal diffs, reporting, imports, naming, and readability"
+  default_prompt: "Use $common-agent-rules for any repo task to apply shared safety, quality, import ordering, naming, and reporting rules."

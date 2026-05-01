@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Testing Rules"
+  short_description: "Behavior-first RTL/Jest frontend testing guardrails"
+  default_prompt: "Use $frontend-testing-rules when writing or refactoring frontend tests, hooks tests, fixtures, mocks, or test utilities."
