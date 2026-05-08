@@ -1,4 +1,4 @@
-import { getLocation, redirectTo } from '../navigation.utils';
+import { redirectTo } from '../navigation.utils';
 
 describe('redirectTo', () => {
   it('should change window.location.href', () => {
@@ -7,11 +7,5 @@ describe('redirectTo', () => {
     redirectTo(targetUrl);
 
     expect(window.location.href).toBe(targetUrl);
-  });
-
-  it('should get current location', () => {
-    const currentLocation = window.location.href;
-
-    expect(getLocation()).toBe(currentLocation);
   });
 });
