@@ -118,7 +118,7 @@ function handleResults(failures) {
 
     failures.forEach(f => {
       if (process.env.GITHUB_ACTIONS) {
-        console.log(`::error file=${f.file},title=Low Coverage::Coverage is only ${f.percent}%`);
+        console.log(`::error file=${f.file},line=1,title=Low Coverage::Coverage is only ${f.percent}%`);
       }
       console.error(`- ${f.file}: ${f.percent}%`);
     });
