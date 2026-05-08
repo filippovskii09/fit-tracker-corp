@@ -63,4 +63,5 @@ jobs:
           echo "DIFF_COVER_COMPARE_BRANCH=refs/remotes/origin/${BASE_BRANCH}" >> "$GITHUB_ENV"
 
       - name: Check diff coverage
+        working-directory: .
         run: node scripts/check-diff-coverage.mjs
