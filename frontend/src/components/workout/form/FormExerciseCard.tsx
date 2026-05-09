@@ -27,6 +27,7 @@ export const FormExerciseCard = ({
           </span>
         </div>
         <IconButton
+          aria-label={workoutLocales.create.removeExercise}
           onClick={onRemove}
           size="medium"
           sx={{ color: 'text.secondary' }}
@@ -88,6 +89,7 @@ export const FormExerciseCard = ({
                     {sets.length > 1 && (
                       <button
                         type="button"
+                        aria-label={`${workoutLocales.create.removeSet} ${setIndex + 1}`}
                         onClick={() => remove(setIndex)}
                         className="flex h-10 w-10 items-center justify-center rounded-xl p-2 text-disabled transition-colors hover:text-red-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-main"
                       >

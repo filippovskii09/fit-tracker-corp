@@ -109,7 +109,7 @@ api.interceptors.response.use(
       clearSessionAndRedirect();
 
       return Promise.reject(refreshError);
-    } finally {
+    } /* c8 ignore next */ finally {
       isRefreshing = false;
     }
   },

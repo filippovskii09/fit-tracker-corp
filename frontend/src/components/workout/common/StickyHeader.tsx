@@ -18,6 +18,7 @@ export const StickyHeader = ({
     <div className="sticky top-0 z-20 flex items-center gap-4 border-b border-white/5 bg-main/80 px-5 py-5 backdrop-blur-md">
       <button
         type="button"
+        aria-label={create.goBack}
         onClick={() => navigate(-1)}
         className="flex h-11 w-11 items-center justify-center rounded-2xl text-white transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2 focus-visible:ring-offset-main"
       >

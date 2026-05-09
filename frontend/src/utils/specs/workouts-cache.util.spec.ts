@@ -1,4 +1,5 @@
 import { WORKOUTS_CACHE_KEY } from '@constants';
+import { mockWorkoutResponse } from '@mocks';
 import {
   clearCachedWorkouts,
   readCachedWorkouts,
@@ -10,19 +11,25 @@ describe('workouts cache utils', () => {
     localStorage.clear();
   });
 
-  it('should read and write cached workouts', () => {
-    const workouts = [
-      {
-        id: 'workout-1',
-        name: 'Push day',
-        date: '2026-04-11',
-        status: 'COMPLETED',
-      },
-    ];
+  it('should read and write cached workouts if workouts is array', () => {
+    writeCachedWorkouts(mockWorkoutResponse);
 
-    writeCachedWorkouts(workouts);
+    expect(Array.isArray(mockWorkoutResponse)).toBe(true);
 
-    expect(readCachedWorkouts()).toEqual(workouts);
+    expect(readCachedWorkouts()).toEqual(mockWorkoutResponse);
+  });
+
+  it('should read undefined if cached data is valid JSON but not array', () => {
+    localStorage.setItem(
+      WORKOUTS_CACHE_KEY,
+      JSON.stringify({ data: 'valid json' }),
+    );
+
+    expect(readCachedWorkouts()).toEqual(undefined);
+  });
+
+  it('should read undefined if workouts not cached', () => {
+    expect(readCachedWorkouts()).toEqual(undefined);
   });
 
   it('should ignore invalid cached workouts', () => {

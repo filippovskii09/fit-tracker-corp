@@ -1,4 +1,4 @@
-import { redirectTo } from '../navigation.util';
+import { redirectTo } from '../navigation.utils';
 
 describe('redirectTo', () => {
   it('should change window.location.href', () => {

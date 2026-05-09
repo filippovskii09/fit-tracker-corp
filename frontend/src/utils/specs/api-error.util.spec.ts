@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 import { DICTIONARY } from '@locales';
-import { getErrorMessage } from '../api-error.util';
+import { getErrorMessage } from '../api-error.utils';
 
 const mockedAxios = axios as jest.Mocked<typeof axios>;
 
