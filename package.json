@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test:coverage": "npx diff-cov-guard@1.0.0 --threshold 90 --lcov ./frontend/coverage/lcov.info --root-dir frontend"
   },
   "repository": {
     "type": "git",
@@ -23,7 +24,7 @@
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7"
   },
-	"lint-staged": {
+  "lint-staged": {
     "backend/src/**/*.{ts,js}": [
       "npm run lint --prefix backend",
       "npm run format --prefix backend",
