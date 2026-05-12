@@ -53,4 +53,5 @@ jobs:
         run: npm run test:cov
 
       - name: Diff Coverage Check
-        run: npx diff-cov-guard --threshold 90 --lcov ./frontend/coverage/lcov.info
+        working-directory: .
+        run: npm run test:coverage
