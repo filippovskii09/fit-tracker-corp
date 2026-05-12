@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky",
-    "test:coverage": "diff-cov-guard --threshold 90 --lcov ./frontend/coverage/lcov.info --root-dir frontend"
+    "test:coverage": "npx diff-cov-guard@1.0.0 --threshold 90 --lcov ./frontend/coverage/lcov.info --root-dir frontend"
   },
   "repository": {
     "type": "git",
@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/filippovskii09/fit-tracker-corp#readme",
   "devDependencies": {
-    "diff-cov-guard": "1.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7"
   },
