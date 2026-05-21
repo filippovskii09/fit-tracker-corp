@@ -1,0 +1,14 @@
+{
+  "$schema": "https://raw.githubusercontent.com/filippovskii09/diff-cov-guard/main/diff-cov-guard.schema.json",
+  "threshold": 90,
+  "lcovPath": "frontend/coverage/lcov.info",
+  "rootDir": "frontend",
+  "failOnEmpty": true,
+  "gitTimeoutMs": 30000,
+  "apiTimeoutMs": 10000,
+  "comment": {
+    "maxFiles": 10,
+    "maxLinesPerFile": 20,
+    "failOnError": false
+  }
+}
