@@ -16,6 +16,10 @@ jobs:
   frontend-checks:
     name: React/Vite Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
     
     defaults:
       run:
@@ -64,4 +68,4 @@ jobs:
 
       - name: Check diff coverage
         working-directory: .
-        run: npx diff-cov-guard --threshold 90 --lcov coverage/lcov.info --root-dir . --fail-on-empty --no-comment
+        run: npx diff-cov-guard --threshold 90 --lcov coverage/lcov.info --root-dir . --fail-on-empty
