@@ -4,29 +4,19 @@ on:
   push:
     branches: ["**"]
     paths:
-      - "frontend/**"
-      - "package.json"
-      - "package-lock.json"
-      - ".diffcovguardrc"
-      - ".github/workflows/frontend-ci.yml"
+      - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
   pull_request:
     branches: ["**"]
     paths:
-      - "frontend/**"
-      - "package.json"
-      - "package-lock.json"
-      - ".diffcovguardrc"
-      - ".github/workflows/frontend-ci.yml"
+      - 'frontend/**'
+      - '.github/workflows/frontend-ci.yml'
 
 jobs:
   frontend-checks:
     name: React/Vite Check
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      issues: write
-      pull-requests: read
-
+    
     defaults:
       run:
         working-directory: ./frontend
@@ -44,14 +34,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
-          cache: "npm"
-          cache-dependency-path: |
-            package-lock.json
-            frontend/package-lock.json
-
-      - name: Install Root Tools
-        working-directory: .
-        run: npm ci --ignore-scripts
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
 
       - name: Install Dependencies
         run: npm ci
@@ -68,11 +52,16 @@ jobs:
       - name: Test with Coverage
         run: npm run test:cov
 
+      - name: Fetch base branch
+        env:
+          BASE_BRANCH: ${{ github.base_ref || 'main' }}
+          BASE_REPOSITORY: ${{ github.event.pull_request.base.repo.full_name || github.repository }}
+        run: |
+          git fetch --no-tags --prune origin "+refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}" || \
+            git fetch --no-tags --prune "https://github.com/${BASE_REPOSITORY}.git" "+refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}"
+          git rev-parse --verify "refs/remotes/origin/${BASE_BRANCH}"
+          echo "DIFF_COVER_COMPARE_BRANCH=refs/remotes/origin/${BASE_BRANCH}" >> "$GITHUB_ENV"
+
       - name: Check diff coverage
         working-directory: .
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            npm run diff:cov
-          else
-            npm run diff:cov -- --no-comment
-          fi
+        run: npx diff-cov-guard --threshold 90 --lcov coverage/lcov.info --root-dir . --fail-on-empty --no-comment
