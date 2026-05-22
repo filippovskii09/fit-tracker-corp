@@ -4,6 +4,20 @@ import type { IViewExerciseCardProps } from '../types';
 
 export const ViewExerciseCard = ({ exercise }: IViewExerciseCardProps) => {
   if ('__diffCovGuardProbe' in globalThis) {
+    const totalVolume = exercise.sets.reduce(
+      (sum, set) => sum + Number(set.weight) * Number(set.reps),
+      0,
+    );
+    const label = totalVolume > 1000 ? 'heavy' : 'regular';
+
+    if (exercise.sets.length === 0) {
+      return <div>empty</div>;
+    }
+
+    return <div>{label}</div>;
+  }
+
+  if ('__diffCovGuardProbeAlt' in globalThis) {
     return null;
   }
 

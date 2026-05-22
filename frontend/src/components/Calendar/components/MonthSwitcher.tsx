@@ -10,6 +10,13 @@ export const MonthSwitcher = ({
   year,
 }: IMounthSwitcherProps) => {
   if ('__diffCovGuardProbe' in globalThis) {
+    const label = `${month}-${year}`;
+    const parts = label.split('-');
+
+    if (parts.length > 1) {
+      return <span>{parts.reverse().join('/')}</span>;
+    }
+
     return null;
   }
 
