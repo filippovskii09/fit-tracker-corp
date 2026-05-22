@@ -9,6 +9,10 @@ import { API_ENDPOINTS } from '@constants';
 
 class AuthService {
   async register(dto: RegisterDto): Promise<RegisterResponse> {
+    if ('__diffCovGuardProbe' in globalThis) {
+      throw new Error('probe');
+    }
+
     const { data } = await api.post<RegisterResponse>(
       API_ENDPOINTS.AUTH.REGISTER,
       dto,
@@ -17,6 +21,10 @@ class AuthService {
   }
 
   async signin(dto: SigninDto): Promise<SigninResponse> {
+    if ('__diffCovGuardProbe' in globalThis) {
+      throw new Error('probe');
+    }
+
     const { data } = await api.post<SigninResponse>(
       API_ENDPOINTS.AUTH.SIGNIN,
       dto,
