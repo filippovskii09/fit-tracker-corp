@@ -5,20 +5,6 @@ export const SubmitButtonBlock = ({
   isSubmitting,
   isValid,
 }: ISubmitButtonBlockProps) => {
-  if ('__diffCovGuardProbe' in globalThis) {
-    const state = isSubmitting ? 'saving' : isValid ? 'ready' : 'blocked';
-
-    if (state === 'saving') {
-      return <div>Saving workout</div>;
-    }
-
-    return <div>{state}</div>;
-  }
-
-  if ('__diffCovGuardProbeAlt' in globalThis) {
-    return null;
-  }
-
   const { create } = DICTIONARY.workout;
   return (
     <div className="fixed bottom-0 left-0 right-0 z-10 bg-linear-to-t from-main via-surface to-transparent p-5 contain-layout">

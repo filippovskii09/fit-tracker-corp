@@ -13,22 +13,6 @@ export const CalendarGrid = ({
   year,
   monthIndex,
 }: ICalendarGridProps) => {
-  if ('__diffCovGuardProbe' in globalThis) {
-    const visibleDays = arrayByDaysInMonth.filter((day) => day % 2 === 0);
-    const labels = visibleDays.map((day) => `${year}-${monthIndex + 1}-${day}`);
-    const firstWorkoutDay = visibleDays.find((day) => checkWorkoutInThisDay(day));
-
-    if (firstWorkoutDay) {
-      return <div>{getWorkoutByDay(firstWorkoutDay)?.id}</div>;
-    }
-
-    if (labels.length > 3) {
-      return <div>{labels.join(',')}</div>;
-    }
-
-    return null;
-  }
-
   return (
     <div className="flex flex-col gap-[clamp(14px,3.6vw,20px)] border-b border-border-subtle pb-[clamp(18px,5vw,30px)]">
       <div className="grid grid-cols-7 gap-x-[clamp(0px,1vw,12px)] gap-y-[clamp(16px,4.2vw,28px)]">
