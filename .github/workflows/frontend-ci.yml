@@ -67,4 +67,6 @@ jobs:
           echo "DIFF_COVER_COMPARE_BRANCH=refs/remotes/origin/${BASE_BRANCH}" >> "$GITHUB_ENV"
 
       - name: Check diff coverage
-        run: npm exec -- diff-cov-guard --threshold 90 --lcov coverage/lcov.info --root-dir . --fail-on-empty --base ${{ github.base_ref || 'main' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm exec -- diff-cov-guard --threshold 90 --lcov coverage/lcov.info --root-dir . --fail-on-empty
