@@ -1,0 +1,17 @@
+{
+  "$schema": "https://raw.githubusercontent.com/filippovskii09/diff-cov-guard/main/diff-cov-guard.schema.json",
+  "exclude": [
+    "**/__test__/**",
+    "**/__tests__/**",
+    "**/*.test.js",
+    "**/*.test.jsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.spec.js",
+    "**/*.spec.jsx",
+    "**/*.spec.ts",
+    "**/*.spec.tsx",
+    "jest.config.js",
+    "frontend/jest.config.ts"
+  ]
+}
