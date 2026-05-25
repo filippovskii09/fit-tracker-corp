@@ -1,0 +1,7 @@
+{
+  "$schema": "https://raw.githubusercontent.com/filippovskii09/diff-cov-guard/main/diff-cov-guard.schema.json",
+  "extendDefaultExclude": true,
+  "exclude": [
+    "frontend/jest.config.ts"
+  ]
+}

@@ -2,7 +2,7 @@ name: Frontend CI
 
 on:
   push:
-    branches: ["**"]
+    branches: ["main"]
     paths:
       - 'frontend/**'
       - '.github/workflows/frontend-ci.yml'
@@ -16,6 +16,10 @@ jobs:
   frontend-checks:
     name: React/Vite Check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     
     defaults:
       run:
@@ -50,7 +54,7 @@ jobs:
         run: npm run build
 
       - name: Test with Coverage
-        run: npm run test:cov
+        run: npm run test:cov:ci
 
       - name: Fetch base branch
         env:
@@ -64,4 +68,6 @@ jobs:
 
       - name: Check diff coverage
         working-directory: .
-        run: node scripts/check-diff-coverage.mjs
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm exec --prefix frontend -- diff-cov-guard --threshold 90 --lcov frontend/coverage/lcov.info --root-dir frontend --fail-on-empty
