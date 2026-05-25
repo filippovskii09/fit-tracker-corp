@@ -54,7 +54,7 @@ jobs:
         run: npm run build
 
       - name: Test with Coverage
-        run: npm run test:cov
+        run: npm run test:cov:ci
 
       - name: Fetch base branch
         env:
