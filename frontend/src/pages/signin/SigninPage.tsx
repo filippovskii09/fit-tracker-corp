@@ -7,7 +7,7 @@ const SigninPage = () => {
   const t = DICTIONARY.auth.login;
 
   return (
-    <>
+    <main>
       <AuthPageHeader
         title={t.title}
         linkText={t.noAccount}
@@ -15,7 +15,7 @@ const SigninPage = () => {
         linkTo={APP_ROUTES.AUTH.REGISTER}
       />
       <SigninForm />
-    </>
+    </main>
   );
 };
 

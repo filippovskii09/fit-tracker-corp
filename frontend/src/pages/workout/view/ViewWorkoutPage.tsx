@@ -38,10 +38,10 @@ const ViewWorkoutPage = () => {
   }
 
   return (
-    <>
+    <main>
       <StickyHeader name={data.name} date={data.date} readOnly />
       <ViewExercisesList exercises={data.exercises} />
-    </>
+    </main>
   );
 };
 

@@ -14,22 +14,24 @@ const DashboardPage = () => {
   } = useDashboardPage();
 
   return (
-    <div className="flex justify-center mt-6">
-      <Calendar
-        workouts={data || []}
-        openModalByClickOnDayCell={openModalByClickOnDayCell}
-        onSelectDate={onSelectDate}
-      />
-      <BaseModal
-        open={isCreateWorkoutModalOpen}
-        onClose={closeCreateWorkoutModalOpenModal}
-        onConfirm={confirmWorkoutCreating}
-        title={WORKOUT_CREATE.TITLE}
-        text={WORKOUT_CREATE.TEXT}
-        cancelButtonText={WORKOUT_CREATE.CANCEL_BUTTON_TEXT}
-        confirmButtonText={WORKOUT_CREATE.CONFIRM_BUTTON_TEXT}
-      />
-    </div>
+    <main>
+      <div className="flex justify-center mt-6">
+        <Calendar
+          workouts={data || []}
+          openModalByClickOnDayCell={openModalByClickOnDayCell}
+          onSelectDate={onSelectDate}
+        />
+        <BaseModal
+          open={isCreateWorkoutModalOpen}
+          onClose={closeCreateWorkoutModalOpenModal}
+          onConfirm={confirmWorkoutCreating}
+          title={WORKOUT_CREATE.TITLE}
+          text={WORKOUT_CREATE.TEXT}
+          cancelButtonText={WORKOUT_CREATE.CANCEL_BUTTON_TEXT}
+          confirmButtonText={WORKOUT_CREATE.CONFIRM_BUTTON_TEXT}
+        />
+      </div>
+    </main>
   );
 };
 
