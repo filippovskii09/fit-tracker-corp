@@ -16,8 +16,11 @@ export const useCreateWorkoutQ = () => {
   const queryClient = useQueryClient();
   return useMutation<WorkoutPreview, Error, CreateWorkoutDto>({
     mutationFn: (data) => workoutService.create(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.WORKOUTS] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.WORKOUTS],
+        refetchType: 'all',
+      });
     },
   });
 };
