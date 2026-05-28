@@ -24,37 +24,39 @@ const CreateWorkoutPage = () => {
 
   const initialValues = createWorkoutInitialValues(date);
   return (
-    <Formik<CreateWorkoutFormValues>
-      initialValues={initialValues}
-      validationSchema={createWorkoutSchema}
-      onSubmit={handleSubmit}
-      validateOnMount
-    >
-      {({
-        values,
-        handleChange,
-        isSubmitting,
-        isValid,
-        errors,
-        submitCount,
-      }) => (
-        <Form className="min-h-screen bg-main text-white pb-32">
-          <StickyHeader
-            name={values.name}
-            date={date}
-            handleChange={handleChange}
-            nameError={submitCount > 0 ? errors.name : undefined}
-          />
+    <main>
+      <Formik<CreateWorkoutFormValues>
+        initialValues={initialValues}
+        validationSchema={createWorkoutSchema}
+        onSubmit={handleSubmit}
+        validateOnMount
+      >
+        {({
+          values,
+          handleChange,
+          isSubmitting,
+          isValid,
+          errors,
+          submitCount,
+        }) => (
+          <Form className="min-h-screen bg-main text-white pb-32">
+            <StickyHeader
+              name={values.name}
+              date={date}
+              handleChange={handleChange}
+              nameError={submitCount > 0 ? errors.name : undefined}
+            />
 
-          <FormExercisesList />
+            <FormExercisesList />
 
-          <SubmitButtonBlock
-            isSubmitting={isSubmitting}
-            isValid={isValid && values.exercises.length > 0}
-          />
-        </Form>
-      )}
-    </Formik>
+            <SubmitButtonBlock
+              isSubmitting={isSubmitting}
+              isValid={isValid && values.exercises.length > 0}
+            />
+          </Form>
+        )}
+      </Formik>
+    </main>
   );
 };
 

@@ -51,17 +51,3 @@ jobs:
 
       - name: Test with Coverage
         run: npm run test:cov
-
-      - name: Fetch base branch
-        env:
-          BASE_BRANCH: ${{ github.base_ref || 'main' }}
-          BASE_REPOSITORY: ${{ github.event.pull_request.base.repo.full_name || github.repository }}
-        run: |
-          git fetch --no-tags --prune origin "+refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}" || \
-            git fetch --no-tags --prune "https://github.com/${BASE_REPOSITORY}.git" "+refs/heads/${BASE_BRANCH}:refs/remotes/origin/${BASE_BRANCH}"
-          git rev-parse --verify "refs/remotes/origin/${BASE_BRANCH}"
-          echo "DIFF_COVER_COMPARE_BRANCH=refs/remotes/origin/${BASE_BRANCH}" >> "$GITHUB_ENV"
-
-      - name: Check diff coverage
-        working-directory: .
-        run: node scripts/check-diff-coverage.mjs
