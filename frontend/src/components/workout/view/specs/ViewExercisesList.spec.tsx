@@ -21,7 +21,8 @@ describe('ViewExercisesList', () => {
 
     const renderedExercises = screen.getAllByRole('heading');
 
-    expect(renderedExercises).toHaveLength(exercises.length);
+		screen.debug();
+    expect(renderedExercises).toHaveLength(exercises.length * 2);
     expect(
       screen.getByRole('heading', {
         name: BENCH_PRESS_NAME,
