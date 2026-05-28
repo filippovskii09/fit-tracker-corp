@@ -21,7 +21,6 @@ describe('ViewExercisesList', () => {
 
     const renderedExercises = screen.getAllByRole('heading');
 
-    screen.debug();
     expect(renderedExercises).toHaveLength(exercises.length * 2);
     expect(
       screen.getByRole('heading', {
