@@ -45,7 +45,7 @@ export const FormExercisesList = () => {
 
             {/* Adding new exercise from **ExerciseSelect** component */}
             <div className="mt-8">
-              <p className="text-sm text-zinc-500 mb-3 font-medium uppercase tracking-wider pl-1">
+              <p className="text-sm text-white mb-3 font-medium uppercase tracking-wider pl-1">
                 {create.addExercise}
               </p>
 
