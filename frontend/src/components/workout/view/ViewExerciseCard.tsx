@@ -1,24 +1,55 @@
+import { Accordion, AccordionDetails, AccordionSummary } from '@mui/material';
+import { IoIosArrowUp } from 'react-icons/io';
+
 import type { ISet } from '@types';
 import { DICTIONARY } from '@locales';
 import type { IViewExerciseCardProps } from '../types';
 
+import './accardion.css';
+
 export const ViewExerciseCard = ({ exercise }: IViewExerciseCardProps) => {
   const workoutLocales = DICTIONARY.workout;
   const exerciseName = exercise.exercise?.name || exercise.name;
+
+  // TODO: refactor accordion to custom component, it's too long with all the sx styles
   return (
-    <div className="mb-5 rounded-3xl border border-white/5 bg-secondary p-5">
+    <Accordion
+      sx={{
+        display: 'flex',
+        flexDirection: 'column',
+        marginBottom: '20px',
+        backgroundColor: 'var(--secondary)',
+        borderRadius: '20px',
+        border: '1px solid rgba(255, 255, 255, 0.05)',
+        padding: '20px',
+      }}
+    >
       {/* Exercise name */}
-      <div className="mb-5 flex items-center justify-between">
+      <AccordionSummary
+        aria-controls={`panel${exercise.id}-content`}
+        expandIcon={<IoIosArrowUp />}
+        id={`panel${exercise.id}-header`}
+        sx={{
+          minHeight: 0,
+          p: 0,
+          '& .MuiAccordionSummary-content': {
+            m: 0,
+          },
+          '& .MuiAccordionSummary-content.Mui-expanded': {
+            m: 0,
+          },
+        }}
+      >
         <div>
           <h3 className="text-xl font-bold text-white">{exerciseName}</h3>
           <span className="text-sm text-text-soft">
             {exercise.sets.length || 0} {workoutLocales.sets}
           </span>
         </div>
-      </div>
+      </AccordionSummary>
 
       {/* Exercise sets */}
-      <div className="space-y-4">
+      <AccordionDetails className="space-y-4">
         {exercise?.sets &&
           exercise.sets?.map((set: ISet, index: number) => (
             <div key={index} className="flex items-center gap-3">
@@ -50,7 +81,7 @@ export const ViewExerciseCard = ({ exercise }: IViewExerciseCardProps) => {
               </div>
             </div>
           ))}
-      </div>
-    </div>
+      </AccordionDetails>
+    </Accordion>
   );
 };
