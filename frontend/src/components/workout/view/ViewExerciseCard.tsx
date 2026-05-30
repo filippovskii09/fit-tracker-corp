@@ -19,9 +19,12 @@ export const ViewExerciseCard = ({ exercise }: IViewExerciseCardProps) => {
         flexDirection: 'column',
         marginBottom: '20px',
         backgroundColor: 'var(--secondary)',
-        borderRadius: '20px',
+        borderRadius: 'var(--border-radius-3xl, 1.5rem) !important',
         border: '1px solid rgba(255, 255, 255, 0.05)',
         padding: '20px',
+        '&::before': {
+          content: 'none',
+        },
       }}
     >
       {/* Exercise name */}
