@@ -5,8 +5,6 @@ import type { ISet } from '@types';
 import { DICTIONARY } from '@locales';
 import type { IViewExerciseCardProps } from '../types';
 
-import './accardion.css';
-
 export const ViewExerciseCard = ({ exercise }: IViewExerciseCardProps) => {
   const workoutLocales = DICTIONARY.workout;
   const exerciseName = exercise.exercise?.name || exercise.name;
