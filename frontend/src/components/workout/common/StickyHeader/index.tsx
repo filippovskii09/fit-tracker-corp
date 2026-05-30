@@ -2,7 +2,7 @@ import { IoMdArrowBack } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 
 import { DICTIONARY } from '@locales';
-import type { IStickyHeaderProps } from '../../types';
+import type { IStickyHeaderProps } from './types';
 
 export const StickyHeader = ({
   name,
@@ -44,7 +44,7 @@ export const StickyHeader = ({
           <div className="mt-1 text-sm text-red-400">{nameError}</div>
         ) : null}
       </div>
-      {actions && <div className="flex items-center gap-4">{actions}</div>}
+      {actions && <div className="flex items-center gap-3">{actions}</div>}
     </div>
   );
 };
