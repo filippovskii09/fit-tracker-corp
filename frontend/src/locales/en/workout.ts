@@ -16,6 +16,12 @@ export const workoutLocales = {
     notFound: 'Workout not found',
     error: 'Failed to load workout',
   },
+  remove: {
+    ariaLabel: 'Open delete workout modal',
+    success: 'Workout deleted successfully',
+    error: 'Failed to delete workout',
+    removing: 'Removing workout...',
+  },
   weight: 'Weight',
   reps: 'Reps',
   kg: 'kg',

@@ -1,5 +1,3 @@
-import type { ChangeEvent } from 'react';
-
 import type { IExercise } from '@types';
 
 export interface IExerciseCardProps {
@@ -9,14 +7,6 @@ export interface IExerciseCardProps {
 
 export interface IViewExerciseCardProps {
   exercise: IExercise;
-}
-
-export interface IStickyHeaderProps {
-  name: string;
-  date: string;
-  handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
-  readOnly?: boolean;
-  nameError?: string;
 }
 
 export interface IExericesBlockProps {

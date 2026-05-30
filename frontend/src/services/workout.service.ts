@@ -1,6 +1,11 @@
 import { api } from '@api';
 import { API_ENDPOINTS } from '@constants';
-import type { CreateWorkoutDto, IWorkout, WorkoutPreview } from '@types';
+import type {
+  CreateWorkoutDto,
+  IWorkout,
+  RemoveWorkoutResponse,
+  WorkoutPreview,
+} from '@types';
 
 class WorkoutService {
   async getAllWorkouts(): Promise<WorkoutPreview[]> {
@@ -17,6 +22,11 @@ class WorkoutService {
     const { data } = await api.get<IWorkout>(
       `${API_ENDPOINTS.WORKOUTS.ROOT}/${id}`,
     );
+    return data;
+  }
+
+  async removeWorkout(id: string): Promise<RemoveWorkoutResponse> {
+    const { data } = await api.delete(`${API_ENDPOINTS.WORKOUTS.ROOT}/${id}`);
     return data;
   }
 }

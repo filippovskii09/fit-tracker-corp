@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 
 import { DICTIONARY } from '@locales';
 import {
+  DeleteWorkoutAction,
   StickyHeader,
   ViewExercisesList,
   WorkoutDetailsSkeleton,
@@ -39,7 +40,12 @@ const ViewWorkoutPage = () => {
 
   return (
     <main>
-      <StickyHeader name={data.name} date={data.date} readOnly />
+      <StickyHeader
+        name={data.name}
+        date={data.date}
+        readOnly
+        actions={<DeleteWorkoutAction />}
+      />
       <ViewExercisesList exercises={data.exercises} />
     </main>
   );
