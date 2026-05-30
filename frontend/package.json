@@ -13,7 +13,8 @@
     "preview": "vite preview",
     "test": "npm run tokens && jest",
     "test:watch": "npm run tokens && jest --watch",
-    "test:cov": "npm run tokens && jest --coverage"
+    "test:cov": "npm run tokens && jest --coverage",
+    "ts": "tsc -b --noEmit"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
