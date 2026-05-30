@@ -6,6 +6,7 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { Throttle } from '@nestjs/throttler';
 
 import { Response } from 'express';
 
@@ -42,11 +43,13 @@ export class AuthController {
     });
   }
 
+  @Throttle({ default: { limit: 15, ttl: 60000 } })
   @Post('register')
   async register(@Body() dto: CreateUserDto): Promise<IAuthResponse> {
     return await this.authService.register(dto);
   }
 
+  @Throttle({ default: { limit: 15, ttl: 60000 } })
   @Post('signin')
   async signIn(
     @Body() dto: VerifyUserDto,
@@ -60,6 +63,7 @@ export class AuthController {
     return { accessToken, message };
   }
 
+  @Throttle({ default: { limit: 20, ttl: 60000 } })
   @Post('refresh')
   async refreshToken(
     @Cookies('refreshToken') refreshToken: string | null,
