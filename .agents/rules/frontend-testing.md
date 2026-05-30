@@ -74,6 +74,8 @@ Use queries in **strict priority order**:
 
 - **MUST NOT** use `container.querySelector` for primary assertions.
 - **SHOULD** prefer `within(container)` when multiple similar elements exist to ensure the test targets the correct instance.
+- **MUST** treat `data-testid` as an explicit fallback for UI that has no stable accessible surface, such as skeletons, decorative loaders, virtualized placeholders, or third-party markup where the accessible contract is intentionally absent.
+- **MUST** keep `data-testid` names domain-specific and stable when they are necessary. Prefer `workout-details-skeleton` over generic names like `loader` or `box-1`.
 
 ### 5.3 Accessibility attributes
 
@@ -95,10 +97,40 @@ Use queries in **strict priority order**:
 ## 6. Interaction & Async Rules
 
 - **MUST** use `@testing-library/user-event` for user interactions.
+- **MUST** prefer `userEvent` for real user flows: clicking buttons/links, typing, clearing inputs, tabbing, keyboard shortcuts, selecting options, uploading files, and opening menus/dialogs.
+- **MAY** use `fireEvent` only for low-level browser events that `userEvent` cannot express well, such as manually dispatching `scroll`, `resize`, `animationEnd`, `transitionEnd`, or custom events. Document why `fireEvent` is needed when the reason is not obvious.
 - **MUST** use `findBy*` for async appearance.
 - **MUST** use `waitFor` only with a concrete assertion inside.
 - **MUST** keep side effects **outside** `waitFor`.
 - **MUST** use `queryBy*` only for non-existence assertions.
+- **MUST NOT** put `user.click`, `user.type`, mock setup, route changes, or any other side effect inside `waitFor`.
+
+### 6.1 Network-driven UI states
+
+For React Query or request-driven screens, tests should assert the state transition that a user sees:
+
+1. Arrange the boundary mock/hook response.
+2. Assert the initial loading, empty, error, or disabled state when that state matters.
+3. Use `findBy*` for data that appears after the request settles.
+4. Use `waitFor` for non-DOM async state, such as `result.current.isSuccess`, or disappearance assertions that cannot be expressed with `findBy*`.
+5. Assert stale/absent UI with `queryBy*` after the concrete loaded/error state is visible.
+
+```ts
+render(<WorkoutPage />, { route: '/workouts/1' });
+
+expect(screen.getByTestId('workout-details-skeleton')).toBeInTheDocument();
+expect(await screen.findByRole('heading', { name: workoutName })).toBeVisible();
+expect(screen.queryByTestId('workout-details-skeleton')).not.toBeInTheDocument();
+```
+
+For hook tests, `waitFor` is acceptable when the observable contract is hook state:
+
+```ts
+const { result } = renderHook(() => useWorkoutQuery(id));
+
+await waitFor(() => expect(result.current.isSuccess).toBe(true));
+expect(result.current.data).toEqual(workout);
+```
 
 ---
 
@@ -181,6 +213,20 @@ act(() => {
 - **MUST** avoid flaky assertions and race-prone timing assumptions.
 - **SHOULD** keep tests small and parallelizable.
 - **SHOULD** avoid heavy setup per test when shared setup is possible.
+
+### 10.1 Flaky-pattern checklist
+
+Before finishing a frontend test change, verify:
+
+- No fixed sleeps, manual promises, or arbitrary timer advancement unless testing timer behavior directly.
+- No side effects inside `waitFor`.
+- `waitFor` always contains a concrete assertion.
+- Async UI appearance uses `findBy*` instead of `waitFor(() => getBy*)`.
+- Disappearance/absence uses `queryBy*` after a positive condition proves the UI reached the expected state.
+- Each render gets isolated providers and a fresh React Query client.
+- Mocks are reset in `beforeEach` and do not rely on test order.
+- Dropdowns, dialogs, popovers, and accordions are opened by the user flow before querying their contents.
+- Repeated regions use `within` so a test cannot pass against the wrong card, row, dialog, or list.
 
 ---
 
@@ -388,3 +434,30 @@ Include in the shared `Wrapper` only providers that are **required by the majori
 | Redux `<Provider store>` | project uses Redux; pass `store` as an option |
 
 Providers needed by only one or two tests **MUST NOT** be added to the global wrapper — use the `wrapper` option directly in that test instead.
+
+---
+
+## 15. MUI Component Testing
+
+The project uses MUI for form controls, dialogs, and selected UI primitives. MUI often renders through portals, applies transitions, and exposes accessible roles through composed components.
+
+- **MUST** query MUI controls by accessible role/name first: `button`, `textbox`, `combobox`, `dialog`, `option`, `menuitem`, `checkbox`, `tab`, `tabpanel`.
+- **MUST** open MUI menus, selects, autocomplete poppers, dialogs, and accordions through `userEvent` before querying their contents.
+- **MUST** use `findByRole` for portal or transition-rendered content that appears after an interaction.
+- **SHOULD** scope dialog assertions with `within(screen.getByRole('dialog'))` when the same labels also exist behind the modal.
+- **SHOULD** assert the visible behavior of MUI state instead of internal classes such as `.Mui-expanded`, `.Mui-selected`, or `.Mui-disabled`.
+- **MAY** use `fireEvent.mouseDown` only when a MUI primitive cannot be opened by `userEvent.click` because the component listens to a lower-level event. Prefer `userEvent` first and leave a short comment for the exception.
+- **MUST NOT** assert on portal container structure, transition wrapper nodes, generated ids, or MUI class names.
+
+Example:
+
+```ts
+const user = userEvent.setup();
+
+await user.click(screen.getByRole('button', { name: /delete workout/i }));
+
+const dialog = await screen.findByRole('dialog', { name: /delete workout/i });
+await user.click(within(dialog).getByRole('button', { name: /confirm/i }));
+
+expect(onConfirm).toHaveBeenCalledTimes(1);
+```

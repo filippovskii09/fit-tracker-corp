@@ -103,6 +103,12 @@ Prefer Tailwind token utilities over arbitrary values. For example, use `min-h-c
 
 If a reusable value is needed in both Tailwind and MUI, add it to `tokens/design-tokens.json`, run `npm run tokens`, and consume it from Tailwind utilities or `PALETTE`.
 
+## Testing
+
+Frontend tests use Jest, React Testing Library, and `@testing-library/user-event` through `src/utils/testUtils.tsx`.
+
+Before adding or refactoring frontend tests, follow the repository testing standard in `../.agents/rules/frontend-testing.md`. The short update note in `../docs/frontend-testing-standards-update.md` summarizes the current conventions for `userEvent` vs `fireEvent`, async UI assertions, flaky-pattern checks, and MUI-specific pitfalls.
+
 ## References
 
 - Tailwind theme variables: https://tailwindcss.com/docs/theme
