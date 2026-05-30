@@ -38,9 +38,7 @@ export const renderWithProviders = (
     return (
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={appTheme}>
-          <MemoryRouter initialEntries={[route]}>
-            {children}
-          </MemoryRouter>
+          <MemoryRouter initialEntries={[route]}>{children}</MemoryRouter>
         </ThemeProvider>
       </QueryClientProvider>
     );
