@@ -1,7 +1,0 @@
-.css-abkhxf-MuiPaper-root-MuiAccordion-root {
-  border-radius: var(--border-radius-3xl, 1.5rem) !important;
-}
-
-.css-abkhxf-MuiPaper-root-MuiAccordion-root::before {
-  content: none !important;
-}
