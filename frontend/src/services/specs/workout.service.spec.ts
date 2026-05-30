@@ -7,6 +7,7 @@ jest.mock('@api', () => ({
   api: {
     get: jest.fn(),
     post: jest.fn(),
+    delete: jest.fn(),
   },
 }));
 
@@ -14,6 +15,7 @@ describe('WorkoutService', () => {
   const mockedApi = api as jest.Mocked<typeof api>;
   const mockedGet = mockedApi.get as jest.Mock;
   const mockedPost = mockedApi.post as jest.Mock;
+  const mockedDelete = mockedApi.delete as jest.Mock;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -60,6 +62,21 @@ describe('WorkoutService', () => {
       );
 
       expect(result).toEqual(mockWorkout);
+    });
+  });
+
+  describe('remove workout by id', () => {
+    it('should call api.delete with correct url', async () => {
+      mockedDelete.mockResolvedValue({ data: { deleted: true } });
+
+      const workoutId = mockWorkout.id;
+
+      const result = await workoutService.removeWorkout(workoutId);
+
+      expect(mockedDelete).toHaveBeenCalledWith(
+        `${API_ENDPOINTS.WORKOUTS.ROOT}/${workoutId}`,
+      );
+      expect(result).toEqual({ deleted: true });
     });
   });
 });

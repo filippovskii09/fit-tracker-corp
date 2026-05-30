@@ -27,3 +27,7 @@ export interface CreateWorkoutFormValues {
   date: string;
   exercises: IExercise[];
 }
+
+export interface RemoveWorkoutResponse {
+  deleted: boolean;
+}

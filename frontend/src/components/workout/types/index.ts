@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 
 import type { IExercise } from '@types';
 
@@ -17,6 +17,7 @@ export interface IStickyHeaderProps {
   handleChange?: (e: ChangeEvent<HTMLInputElement>) => void;
   readOnly?: boolean;
   nameError?: string;
+  actions?: ReactNode;
 }
 
 export interface IExericesBlockProps {
