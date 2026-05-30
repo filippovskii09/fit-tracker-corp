@@ -14,7 +14,8 @@
     "test": "npm run tokens && jest",
     "test:watch": "npm run tokens && jest --watch",
     "test:cov": "npm run tokens && jest --coverage",
-    "ts": "tsc -b --noEmit"
+    "ts": "tsc -b --noEmit",
+    "check": "npm run format && npm run lint && npm run ts && npm run tokens:check && npm run test && npm run build"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
