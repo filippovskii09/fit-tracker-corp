@@ -1,7 +1,8 @@
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { APP_ROUTES } from '@constants';
-import { render, screen } from '@testUtils';
+import { DICTIONARY } from '@locales';
+import { render, screen, waitFor } from '@testUtils';
 import CreateWorkoutPage from '../create/CreateWorkoutPage';
 import { useCreateWorkout } from '../create/hooks';
 
@@ -25,6 +26,7 @@ describe('CreateWorkoutPage', () => {
 
   const mockDate = '2023-10-27';
   const basePath = '/workout/create';
+  const workoutCreateLocales = DICTIONARY.workout.create;
 
   beforeEach(() => {
     jest.clearAllMocks();
@@ -40,15 +42,19 @@ describe('CreateWorkoutPage', () => {
     expect(mockNavigate).toHaveBeenCalledWith(APP_ROUTES.DASHBOARD);
   });
 
-  it('should render Formik and submit correctly when button clicked', async () => {
+  it('should render disabled submit button until an exercise is selected', async () => {
     mockedUseSearchParams.mockReturnValue([
       new URLSearchParams(`?date=${mockDate}`),
     ]);
 
     render(<CreateWorkoutPage />, { route: `${basePath}?date=${mockDate}` });
 
-    expect(
-      screen.getByRole('button', { name: /Finish Workout/i }),
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(
+        screen.getByRole('button', {
+          name: workoutCreateLocales.submitButton,
+        }),
+      ).toBeDisabled();
+    });
   });
 });

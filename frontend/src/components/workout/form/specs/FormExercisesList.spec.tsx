@@ -1,4 +1,4 @@
-import { renderWithFormik, screen, userEvent, waitFor } from '@testUtils';
+import { renderWithFormik, screen, userEvent } from '@testUtils';
 import { DICTIONARY } from '@locales';
 import {
   BENCH_PRESS_NAME,
@@ -26,20 +26,22 @@ const workoutLocales = DICTIONARY.workout;
 
 describe('FormExercisesList', () => {
   it('should render form exercise cards for current exercises', () => {
+    const exercises = [
+      createExercise({
+        name: BENCH_PRESS_NAME,
+      }),
+      createExercise({
+        id: 'exercise-2',
+        exerciseId: 'pull-up',
+        name: PULL_UP_NAME,
+      }),
+    ];
+
     renderWithFormik(<FormExercisesList />, {
-      initialValues: createWorkoutValues([
-        createExercise({
-          name: BENCH_PRESS_NAME,
-        }),
-        createExercise({
-          id: 'exercise-2',
-          exerciseId: 'pull-up',
-          name: PULL_UP_NAME,
-        }),
-      ]),
+      initialValues: createWorkoutValues(exercises),
     });
 
-    expect(screen.getAllByRole('heading')).toHaveLength(2);
+    expect(screen.getAllByRole('heading')).toHaveLength(exercises.length);
     expect(
       screen.getByRole('heading', {
         name: BENCH_PRESS_NAME,
@@ -75,6 +77,7 @@ describe('FormExercisesList', () => {
         name: selectedExercise.name,
       }),
     ).toBeInTheDocument();
+    expect(screen.getAllByRole('heading')).toHaveLength(1);
     expect(screen.getByText(`1 ${workoutLocales.sets}`)).toBeInTheDocument();
     expect(screen.getByDisplayValue(0)).toBeInTheDocument();
     expect(screen.getByDisplayValue(1)).toBeInTheDocument();
@@ -99,8 +102,6 @@ describe('FormExercisesList', () => {
       }),
     );
 
-    await waitFor(() => {
-      expect(screen.queryByRole('heading')).not.toBeInTheDocument();
-    });
+    expect(screen.queryByRole('heading')).not.toBeInTheDocument();
   });
 });
