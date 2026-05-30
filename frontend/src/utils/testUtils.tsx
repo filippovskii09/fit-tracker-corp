@@ -9,7 +9,7 @@ import {
 import userEvent from '@testing-library/user-event';
 import { Formik, type FormikConfig, type FormikValues } from 'formik';
 import type { ReactElement, ReactNode } from 'react';
-import { MemoryRouter, Routes } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 
 import { appTheme } from '@theme';
 
@@ -39,7 +39,6 @@ export const renderWithProviders = (
       <QueryClientProvider client={queryClient}>
         <ThemeProvider theme={appTheme}>
           <MemoryRouter initialEntries={[route]}>
-            <Routes></Routes>
             {children}
           </MemoryRouter>
         </ThemeProvider>

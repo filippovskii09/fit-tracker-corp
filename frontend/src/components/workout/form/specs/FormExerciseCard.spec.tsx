@@ -1,4 +1,4 @@
-import { renderWithFormik, screen, userEvent, waitFor } from '@testUtils';
+import { renderWithFormik, screen, userEvent } from '@testUtils';
 import { DICTIONARY } from '@locales';
 import {
   BENCH_PRESS_NAME,
@@ -62,9 +62,9 @@ describe('FormExerciseCard', () => {
       }),
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(`2 ${workoutLocales.sets}`)).toBeInTheDocument();
-    });
+    expect(
+      await screen.findByText(`2 ${workoutLocales.sets}`),
+    ).toBeInTheDocument();
 
     expect(screen.getAllByDisplayValue(completedSet.weight)).toHaveLength(2);
     expect(screen.getAllByDisplayValue(completedSet.reps)).toHaveLength(2);
@@ -93,9 +93,9 @@ describe('FormExerciseCard', () => {
       }),
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(`1 ${workoutLocales.sets}`)).toBeInTheDocument();
-    });
+    expect(
+      await screen.findByText(`1 ${workoutLocales.sets}`),
+    ).toBeInTheDocument();
 
     expect(screen.getByDisplayValue(0)).toBeInTheDocument();
     expect(screen.getByDisplayValue(1)).toBeInTheDocument();
@@ -121,9 +121,9 @@ describe('FormExerciseCard', () => {
       }),
     );
 
-    await waitFor(() => {
-      expect(screen.getByText(`1 ${workoutLocales.sets}`)).toBeInTheDocument();
-    });
+    expect(
+      await screen.findByText(`1 ${workoutLocales.sets}`),
+    ).toBeInTheDocument();
 
     expect(screen.queryByDisplayValue(extraSet.weight)).not.toBeInTheDocument();
     expect(screen.queryByDisplayValue(extraSet.reps)).not.toBeInTheDocument();
