@@ -7,7 +7,7 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app/app.module';
-import { PORT } from './config/constants';
+import { FRONTEND_URL, PORT } from './config/constants';
 import { DEFAULT_PORT } from './constants';
 
 async function bootstrap() {
@@ -21,20 +21,28 @@ async function bootstrap() {
 
   app.use(cookieParser());
   app.use(helmet());
+
+  const configuredOrigins =
+    configService
+      .get<string>(FRONTEND_URL)
+      ?.split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean) ?? [];
+  const allowedOrigins = new Set([
+    'http://localhost:5173',
+    'http://localhost:4173',
+    'http://localhost:3001',
+    'https://fit-tracker-corp.netlify.app',
+    ...configuredOrigins,
+  ]);
+
   app.enableCors({
     origin: (origin, callback) => {
       if (!origin) {
         return callback(null, true);
       }
 
-      const allowedOrigins = [
-        'http://localhost:5173',
-        'http://localhost:4173',
-        'http://localhost:3001',
-        'https://fit-tracker-corp.netlify.app',
-      ];
-
-      if (allowedOrigins.includes(origin)) {
+      if (allowedOrigins.has(origin)) {
         return callback(null, true);
       }
 
