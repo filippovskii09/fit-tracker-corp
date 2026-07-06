@@ -7,6 +7,7 @@
     "tokens": "node scripts/generate-design-tokens.mjs",
     "tokens:check": "node scripts/generate-design-tokens.mjs --check",
     "dev": "npm run tokens && vite",
+    "dev:host": "npm run tokens && vite --host 0.0.0.0",
     "build": "npm run tokens && tsc -b && vite build",
     "lint": "npm run tokens && eslint .",
     "format": "prettier --write .",
