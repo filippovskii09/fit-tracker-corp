@@ -37,7 +37,7 @@ async function bootstrap() {
     ...configuredOrigins,
   ]);
 
-  const corsOptions: CorsOptions = {
+  app.enableCors({
     origin: (origin, callback) => {
       if (!origin) {
         return callback(null, true);
@@ -59,9 +59,7 @@ async function bootstrap() {
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
-  };
-
-  app.enableCors(corsOptions);
+  } satisfies CorsOptions);
 
   app.use(compression());
 
