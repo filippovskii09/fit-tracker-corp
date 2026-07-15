@@ -1,5 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
+import type { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 import { ConfigService } from '@nestjs/config';
 
 import helmet from 'helmet';
@@ -36,7 +37,7 @@ async function bootstrap() {
     ...configuredOrigins,
   ]);
 
-  app.enableCors({
+  const corsOptions: CorsOptions = {
     origin: (origin, callback) => {
       if (!origin) {
         return callback(null, true);
@@ -58,7 +59,9 @@ async function bootstrap() {
     },
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
-  });
+  };
+
+  app.enableCors(corsOptions);
 
   app.use(compression());
 
