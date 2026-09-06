@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "scrollbar-repro",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["/private/tmp/claude-501/-Users-arturfilippovskij-Desktop-code-rg-jigsaw/9f1cc6e6-2d03-4f83-b75d-2e176fdfdfe9/scratchpad/scrollbar-repro/server.js"],
+      "port": 4173
+    }
+  ]
+}
