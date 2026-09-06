@@ -26,4 +26,7 @@ export const workoutLocales = {
   reps: 'Reps',
   kg: 'kg',
   sets: 'sets',
+  placeholder: {
+    soon: 'Soon',
+  },
 } as const;

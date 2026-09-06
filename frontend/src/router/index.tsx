@@ -1,7 +1,11 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
+import {
+  createBrowserRouter,
+  Navigate,
+  type RouteObject,
+} from 'react-router-dom';
 import { lazy } from 'react';
 
-import { AuthLayout } from '@layouts';
+import { AppLayout, AuthLayout } from '@layouts';
 import { APP_ROUTES } from '@constants';
 import { GuestGuard, PrivateGuard } from './guards';
 import { LazyRoute } from './LazyRoute';
@@ -16,8 +20,13 @@ const SigninPage = lazy(() => import('../pages/signin/SigninPage'));
 const ViewWorkoutPage = lazy(
   () => import('../pages/workout/view/ViewWorkoutPage'),
 );
+const WorkoutsPlaceholderPage = lazy(
+  () => import('../pages/workout/placeholder/WorkoutsPlaceholderPage'),
+);
 
-export const router = createBrowserRouter([
+// Exported separately from `router` so tests can mount the exact same route
+// configuration with `createMemoryRouter` instead of `createBrowserRouter`.
+export const routes: RouteObject[] = [
   // PUBLIC ROUTES
   {
     element: <GuestGuard />,
@@ -55,15 +64,31 @@ export const router = createBrowserRouter([
     element: <PrivateGuard />,
     children: [
       {
-        path: APP_ROUTES.DASHBOARD,
-        element: (
-          <LazyRoute
-            component={DashboardPage}
-            path={APP_ROUTES.DASHBOARD}
-            noIndex
-            {...SEO.dashboard}
-          />
-        ),
+        element: <AppLayout />,
+        children: [
+          {
+            path: APP_ROUTES.DASHBOARD,
+            element: (
+              <LazyRoute
+                component={DashboardPage}
+                path={APP_ROUTES.DASHBOARD}
+                noIndex
+                {...SEO.dashboard}
+              />
+            ),
+          },
+          {
+            path: APP_ROUTES.WORKOUTS.ROOT,
+            element: (
+              <LazyRoute
+                component={WorkoutsPlaceholderPage}
+                path={APP_ROUTES.WORKOUTS.ROOT}
+                noIndex
+                {...SEO.workouts}
+              />
+            ),
+          },
+        ],
       },
       {
         path: APP_ROUTES.WORKOUTS.CREATE,
@@ -90,4 +115,6 @@ export const router = createBrowserRouter([
     path: '*',
     element: <Navigate to={APP_ROUTES.AUTH.SIGNIN} replace />,
   },
-]);
+];
+
+export const router = createBrowserRouter(routes);

@@ -19,6 +19,11 @@ export const SEO = {
     description:
       'Build a workout with exercises, sets, reps, and weights before saving it to your training history.',
   },
+  workouts: {
+    title: 'Workouts | Fit Tracker Corp',
+    description:
+      'The workouts listing is on its way — check back soon to browse your training history here.',
+  },
   viewWorkout: {
     title: 'Workout details | Fit Tracker Corp',
     description:

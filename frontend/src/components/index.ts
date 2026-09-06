@@ -1,4 +1,5 @@
 export * from './AuthPageHeader';
+export * from './BottomNavigation';
 export * from './Calendar';
 export * from './ExerciseSelect';
 export * from './workout';
