@@ -10,7 +10,7 @@ import { run as backlog, STAGES } from './backlog.mjs';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const REQUIRED_FILES = [
   'CLAUDE.md', '.claude/settings.json', '.claude/rules/autonomous-git.md',
-  '.claude/skills/feature-runner/SKILL.md', '.claude/agents/feature-runner.md',
+  '.claude/skills/feature-runner/SKILL.md',
   '.claude/agents/proposal-reviewer.md', '.claude/skills/proposal-review/SKILL.md',
   '.claude/skills/proposal-review/references/output-contract.md',
   '.claude/skills/proposal-review/references/review-checklist.md',

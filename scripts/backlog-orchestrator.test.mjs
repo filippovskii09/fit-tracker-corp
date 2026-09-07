@@ -23,10 +23,7 @@ function fixture(context, tasks = [{ id: 'first' }], options = {}) {
   for (const name of [...REQUIRED_FILES, 'package.json']) {
     const target = path.join(root, name);
     fs.mkdirSync(path.dirname(target), { recursive: true });
-    // The pipeline agent is an external prerequisite, not part of this test's behavior.
-    if (name === '.claude/agents/feature-runner.md') {
-      fs.writeFileSync(target, '---\nname: feature-runner\n---\nFixture pipeline agent.');
-    } else fs.copyFileSync(path.join(SOURCE, name), target);
+    fs.copyFileSync(path.join(SOURCE, name), target);
   }
   for (const name of REQUIRED_TOOLS) {
     const target = path.join(root, name);
@@ -386,11 +383,16 @@ for (const response of [
   });
 }
 
-test('missing pipeline agent fails even before Claude invocation', async (context) => {
+test('feature-runner skill is sufficient without a separate runner agent', async (context) => {
   const setup = fixture(context);
-  fs.unlinkSync(path.join(setup.root, '.claude/agents/feature-runner.md'));
-  assert.equal((await setup.run()).result, 'STOPPED');
-  assert.equal(setup.calls.some(({ name }) => name === 'claude'), false);
+  assert.equal(fs.existsSync(path.join(setup.root, '.claude/agents/feature-runner.md')), false);
+  assert.equal(REQUIRED_FILES.includes('.claude/agents/feature-runner.md'), false);
+  const source = fs.readFileSync(path.join(setup.root, '.claude/skills/feature-runner/SKILL.md'), 'utf8');
+  assert.equal(source.includes('.claude/agents/feature-runner.md'), false);
+  const result = await setup.run({ maxTasks: 0 });
+  assert.equal(result.result, 'PARTIAL', result.stop_reason);
+  assert.equal(result.started, 0);
+  assert.ok(setup.calls.some(({ name, args }) => name === 'claude' && args[1] === '/feature-runner --preflight'));
 });
 
 test('project permits the exact backend command and retains destructive-command denials', () => {
