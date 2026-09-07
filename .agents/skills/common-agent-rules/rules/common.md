@@ -15,6 +15,12 @@ Enforcement levels:
 - MUST stop and report unexpected repository changes before continuing.
 - MUST report any command that can modify remote state and ask approval first.
 
+For an explicitly started `npm run backlog:run` invocation, the user's launch
+authorizes scoped feature commits, pushes and PR creation under
+`.claude/rules/autonomous-git.md`. The two remote-operation rules above do not
+require another prompt in that workflow. This exception does not authorize
+merging, force pushes, unrelated branches, or destructive recovery.
+
 ## Change Policy
 
 - MUST keep changes minimal and task-focused.

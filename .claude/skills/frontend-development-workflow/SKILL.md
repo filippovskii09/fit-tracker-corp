@@ -189,7 +189,6 @@ Examples:
 
 ```text
 testing       → test-reviewer
-accessibility → a11y-reviewer
 ```
 
 Do not invent or substitute a specialist that does not exist.
@@ -260,7 +259,7 @@ If a blocking finding requires human judgment, stop automatic execution.
 Invoke the original `fe-implementer` in bounded fix mode when practical.
 
 If continuation of the original implementer context is unavailable, invoke a
-fresh `frontend-implementer` in fix mode.
+fresh `fe-implementer` in fix mode.
 
 Pass only:
 

@@ -4,6 +4,10 @@
   "description": "Fitness tracker for track your workout and check your progress and previous workouts",
   "main": "index.js",
   "scripts": {
+    "backlog": "node scripts/backlog.mjs",
+    "test:backlog": "node --test scripts/backlog.test.mjs",
+    "backlog:run": "node scripts/backlog-orchestrator.mjs",
+    "test:backlog-orchestrator": "node --test scripts/backlog-orchestrator.test.mjs",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky"
   },
@@ -21,7 +25,8 @@
   "homepage": "https://github.com/filippovskii09/fit-tracker-corp#readme",
   "devDependencies": {
     "husky": "^9.1.7",
-    "lint-staged": "^16.2.7"
+    "lint-staged": "^16.2.7",
+    "yaml": "2.8.2"
   },
 	"lint-staged": {
     "backend/src/**/*.{ts,js}": [
