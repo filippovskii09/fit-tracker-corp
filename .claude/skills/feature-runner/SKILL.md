@@ -35,20 +35,14 @@ Do not execute the normal pipeline, even if a dependency is missing.
    reference paths; verify those files are readable and the skills discoverable.
    Missing, malformed, inaccessible, or undiscoverable dependencies fail this check.
 
-On success return exactly, with no prose:
+The orchestrator supplies `--json-schema`. On success submit the structured
+output object `{"status":"PRECHECK_OK","skill":"feature-runner"}` through
+Claude's structured output mechanism. Do not serialize it as YAML, a markdown
+fence, or a text-only completion. The caller reads only `structured_output`.
 
-```yaml
-status: PRECHECK_OK
-skill: feature-runner
-```
-
-On any failure return exactly this shape, with a concrete single-line reason:
-
-```yaml
-status: PRECHECK_FAILED
-skill: feature-runner
-reason: <missing dependency, invalid configuration, or unavailable invocation>
-```
+On any failed check, stop and report the concrete failure. Never submit
+`PRECHECK_OK` to satisfy the schema when a dependency or check failed. An absent
+structured contract or unsuccessful Claude envelope makes the caller stop.
 
 ## Normal execution
 
@@ -108,8 +102,11 @@ that stage and a concrete reason; do not claim success or hide dirty work.
 
 ### Completion contract
 
-Return only YAML or JSON with exactly these fields, matching
-`scripts/backlog-orchestrator.mjs`'s `parseResult` contract:
+Submit a structured output object with exactly these fields, matching
+`scripts/backlog-orchestrator.mjs`'s `featureSchema` and `parseResult` contract.
+The orchestrator passes this schema via `--json-schema` and reads only
+`structured_output`; do not return a serialized contract in prose or a fence.
+The following YAML describes the fields, not the output transport:
 
 ```yaml
 status: PR_CREATED # or BLOCKED or FAILED

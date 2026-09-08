@@ -124,11 +124,16 @@ Bash. See the [Claude permission reference](https://code.claude.com/docs/en/perm
 The installed Claude 2.1.263 flags and actual JSON result envelope were verified
 with a read-only smoke. Output must be a successful `type: result` envelope with
 `subtype: success`, `is_error: false`, an empty `permission_denials` array, and a
-`result` string containing exactly the documented YAML/JSON contract. Fenced
-YAML/JSON is accepted; prose, missing fields, mismatched task/base, or errors stop.
-The preflight parser also accepts unlabelled and `yml` fences with LF or CRLF
-line endings, only when the fence contains the entire result. Its contract
-requires exactly `status: PRECHECK_OK` and `skill: feature-runner`.
+`structured_output` object matching the supplied `--json-schema`. Both the
+preflight and production feature invocation use structured output; the runner
+never parses their `result` text, YAML, or markdown fences. Missing or malformed
+structured output, schema retry exhaustion, and unsuccessful envelopes stop the
+run. Preflight requires exactly `status: PRECHECK_OK` and
+`skill: feature-runner`. Production still validates task/base identity, all
+completion fields, status/stage consistency, and PR/failure requirements locally.
+See [Claude structured output](https://code.claude.com/docs/en/headless#get-structured-output).
+The separate backend command smoke continues to require `BACKEND_TEST_OK` in
+its text result.
 On preflight or feature contract parse failure, the runner logs the rejected
 Claude envelope with common credential patterns and known secret environment
 values redacted, control characters escaped, and output limited to 8192

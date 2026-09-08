@@ -129,24 +129,19 @@ export function execute(command, args, { root, signal, onSpawn, timeout = 30000 
   });
 }
 
-export function unwrapClaude(output) {
+function readClaudeEnvelope(output) {
   let envelope;
   try { envelope = JSON.parse(output); } catch { throw new Error('Malformed Claude JSON envelope'); }
   ensure(object(envelope) && envelope.type === 'result' && envelope.subtype === 'success' &&
-    envelope.is_error === false && typeof envelope.result === 'string', 'Claude did not return a successful result envelope');
+    envelope.is_error === false, 'Claude did not return a successful result envelope');
   ensure(Array.isArray(envelope.permission_denials) && envelope.permission_denials.length === 0,
     'Claude permission denied; configure the specific required project permission');
-  return envelope.result;
+  return envelope;
 }
 
 export function parseResult(output, taskId, baseBranch) {
-  let result;
-  const body = unwrapClaude(output).trim();
-  try {
-    const fenced = /^```(?:yaml|json)\n([\s\S]*?)\n```$/.exec(body);
-    result = parse(fenced ? fenced[1] : body);
-  } catch { throw new Error('Invalid feature contract YAML/JSON'); }
-  const keys = ['status', 'task_id', 'change', 'stage', 'branch', 'base_branch', 'pr_number', 'pr_url', 'reason'];
+  const result = readClaudeEnvelope(output).structured_output;
+  const keys = Object.keys(featureSchema(taskId, baseBranch).properties);
   ensure(object(result) && Object.keys(result).length === keys.length && keys.every((key) => Object.hasOwn(result, key)),
     'Missing or unexpected feature contract fields');
   ensure(['PR_CREATED', 'BLOCKED', 'FAILED'].includes(result.status) && STAGES.includes(result.stage), 'Invalid feature status/stage');
@@ -161,22 +156,39 @@ export function parseResult(output, taskId, baseBranch) {
   return result;
 }
 
-function skillArgs(argumentsText) {
-  return ['-p', `/feature-runner ${argumentsText}`, ...CLAUDE_FLAGS];
+const PREFLIGHT_SCHEMA = {
+  type: 'object',
+  properties: { status: { const: 'PRECHECK_OK' }, skill: { const: 'feature-runner' } },
+  required: ['status', 'skill'],
+  additionalProperties: false
+};
+
+function featureSchema(taskId, baseBranch) {
+  const nonempty = { type: 'string', pattern: '\\S' };
+  const nullable = { anyOf: [nonempty, { type: 'null' }] };
+  const prNumber = { type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER };
+  const properties = {
+    status: { enum: ['PR_CREATED', 'BLOCKED', 'FAILED'] },
+    task_id: { const: taskId }, change: nullable,
+    stage: { enum: STAGES }, branch: nullable, base_branch: { const: baseBranch },
+    pr_number: { anyOf: [prNumber, { type: 'null' }] }, pr_url: nullable, reason: nullable
+  };
+  return {
+    // Claude tool schemas forbid top-level unions; parseResult enforces status-dependent fields.
+    type: 'object', properties, required: Object.keys(properties), additionalProperties: false
+  };
+}
+
+function skillArgs(argumentsText, schema) {
+  return ['-p', `/feature-runner ${argumentsText}`, ...CLAUDE_FLAGS, '--json-schema', JSON.stringify(schema)];
 }
 
 export function preflightArgs() {
-  return [...skillArgs('--preflight'), '--tools', 'Read,Glob,Grep,Skill'];
+  return [...skillArgs('--preflight', PREFLIGHT_SCHEMA), '--tools', 'Read,Glob,Grep,Skill'];
 }
 
 export function parsePreflight(output) {
-  const body = unwrapClaude(output).trim();
-  let result;
-  try {
-    // Unwrap only a complete fenced document; never extract YAML from prose.
-    const fenced = /^```(?:yaml|yml|json)?[ \t]*\r?\n([\s\S]*?)\r?\n```$/.exec(body);
-    result = parse(fenced ? fenced[1] : body);
-  } catch { throw new Error('Malformed feature-runner preflight contract'); }
+  const result = readClaudeEnvelope(output).structured_output;
   ensure(object(result) && Object.keys(result).length === 2 &&
     result.status === 'PRECHECK_OK' && result.skill === 'feature-runner',
   'Invalid feature-runner preflight contract');
@@ -212,7 +224,7 @@ export function backendSmokeArgs() {
 }
 
 export function featureArgs(taskId, baseBranch) {
-  return skillArgs(`\ntask_id: ${JSON.stringify(taskId)}\nbase_branch: ${JSON.stringify(baseBranch)}\nExecute exactly this feature and return only its completion contract. Read authoritative repository context yourself.`);
+  return skillArgs(`\ntask_id: ${JSON.stringify(taskId)}\nbase_branch: ${JSON.stringify(baseBranch)}\nExecute exactly this feature and return only its completion contract. Read authoritative repository context yourself. Submit the completion contract through structured output.`, featureSchema(taskId, baseBranch));
 }
 
 export async function runOrchestrator({ root = ROOT, command = execute, cli = backlog,
@@ -232,6 +244,9 @@ export async function runOrchestrator({ root = ROOT, command = execute, cli = ba
     checkSignal();
     const result = await command(name, args, { root, signal, ...options });
     checkSignal();
+    if (result.code !== 0 && name === 'claude' && args.includes('--json-schema')) {
+      progress(`[claude] Failed structured output (sanitized): ${sanitizedClaudeResult(result.stdout)}`);
+    }
     ensure(result.code === 0, `${name} ${args[0]} exited ${result.code}`);
     return result.stdout.trim();
   };
@@ -296,14 +311,14 @@ export async function runOrchestrator({ root = ROOT, command = execute, cli = ba
     await call('openspec', ['--version']);
     await call('claude', ['--version']);
     const help = await call('claude', ['--help']);
-    for (const flag of ['--print', ...CLAUDE_FLAGS.filter((arg) => arg.startsWith('--'))]) {
+    for (const flag of ['--print', '--json-schema', ...CLAUDE_FLAGS.filter((arg) => arg.startsWith('--'))]) {
       ensure(help.includes(flag), `Installed Claude lacks ${flag}`);
     }
     if (!dryRun) {
       const output = await call('claude', preflightArgs(), { timeout: 120000 });
       parseContract('preflight', output, parsePreflight);
       const backendOutput = await call('claude', backendSmokeArgs(), { timeout: 300000 });
-      ensure(unwrapClaude(backendOutput).trim() === 'BACKEND_TEST_OK', 'Claude backend test smoke failed');
+      ensure(readClaudeEnvelope(backendOutput).result?.trim() === 'BACKEND_TEST_OK', 'Claude backend test smoke failed');
       await safeRepository();
     }
     progress('[preflight] OK');

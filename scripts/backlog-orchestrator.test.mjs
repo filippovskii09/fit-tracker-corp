@@ -12,7 +12,9 @@ import { acquireLock, execute, featureArgs, preflightArgs, backendSmokeArgs, par
 const SOURCE = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const REPOSITORY = 'https://github.com/filippovskii09/fit-tracker-corp';
 const envelope = (result, changes = {}) => JSON.stringify({ type: 'result', subtype: 'success',
-  is_error: false, result, permission_denials: [], ...changes });
+  is_error: false, ...(typeof result === 'string' ? { result } : { structured_output: result }),
+  permission_denials: [], ...changes });
+const preflight = { status: 'PRECHECK_OK', skill: 'feature-runner' };
 const contract = (id, base = 'main', overrides = {}) => ({ status: 'PR_CREATED', task_id: id,
   change: id, stage: 'pr_created', branch: `feat/${id}`, base_branch: base, pr_number: 42,
   pr_url: `${REPOSITORY}/pull/42`, reason: null, ...overrides });
@@ -69,8 +71,8 @@ function fixture(context, tasks = [{ id: 'first' }], options = {}) {
     if (name === 'openspec') return success('1.8.0');
     if (name === 'claude') {
       if (args[0] === '--version') return success('2.1.263');
-      if (args[0] === '--help') return success('--print --output-format --permission-mode --permission-prompts --setting-sources --no-session-persistence');
-      if (args[1] === '/feature-runner --preflight') return success(envelope('status: PRECHECK_OK\nskill: feature-runner'));
+      if (args[0] === '--help') return success('--print --json-schema --output-format --permission-mode --permission-prompts --setting-sources --no-session-persistence');
+      if (args[1] === '/feature-runner --preflight') return success(envelope(preflight));
       if (args[1] === backendSmokeArgs()[1]) return success(envelope('BACKEND_TEST_OK'));
       const id = JSON.parse(/task_id: (.*)/.exec(args[1])[1]);
       const base = JSON.parse(/base_branch: (.*)/.exec(args[1])[1]);
@@ -82,7 +84,7 @@ function fixture(context, tasks = [{ id: 'first' }], options = {}) {
           '--base', base, '--pr', '42', '--pr-url', current.pr_url);
       }
       dirty = options.dirtyAfter;
-      return success(options.malformed ? envelope('I finished it!') : envelope(stringify(current)));
+      return success(options.malformed ? envelope('I finished it!') : envelope(current));
     }
     throw new Error(`Unexpected command ${name}`);
   }
@@ -169,7 +171,7 @@ for (const [name, options] of [
   ['read-only repository access', { command: (name, args) => name === 'gh' && args[0] === 'repo' ? {
     code: 0, stdout: JSON.stringify({ url: REPOSITORY, viewerPermission: 'READ' }) } : null }],
   ['permission denied smoke', { command: (name, args) => name === 'claude' && args.includes('--tools') ? {
-    code: 0, stdout: envelope('status: PRECHECK_OK\nskill: feature-runner', { permission_denials: [{ tool_name: 'Read' }] }) } : null }]
+    code: 0, stdout: envelope(preflight, { permission_denials: [{ tool_name: 'Read' }] }) } : null }]
 ]) {
   test(`preflight rejects ${name}`, async (context) => {
     const setup = fixture(context, undefined, options);
@@ -246,13 +248,99 @@ test('execute launches separate OS processes and reports missing executable', as
 
 test('strict result parsing rejects prose, wrong identity, missing fields and permission denials', () => {
   const valid = contract('first');
-  assert.deepEqual(parseResult(envelope(stringify(valid)), 'first', 'main'), valid);
+  assert.deepEqual(parseResult(envelope(valid), 'first', 'main'), valid);
   for (const value of [{ ...valid, task_id: 'other' }, { ...valid, base_branch: 'other' },
     { ...valid, pr_number: '42' }, { ...valid, reason: 'unexpected' }, { status: 'PR_CREATED' }]) {
-    assert.throws(() => parseResult(envelope(stringify(value)), 'first', 'main'));
+    assert.throws(() => parseResult(envelope(value), 'first', 'main'));
   }
-  assert.throws(() => parseResult(envelope(stringify(valid), { permission_denials: [{}] }), 'first', 'main'), /permission/);
+  assert.throws(() => parseResult(envelope(valid, { permission_denials: [{}] }), 'first', 'main'), /permission/);
   assert.throws(() => parseResult('PR_CREATED', 'first', 'main'), /envelope/);
+});
+
+test('contracts consume structured_output only, independently of result text', () => {
+  const valid = contract('first');
+  for (const result of [undefined, '', 'Explanation before ```yaml\nstatus: FAILED\n```']) {
+    assert.deepEqual(parsePreflight(envelope(preflight, { result })), preflight);
+    assert.deepEqual(parseResult(envelope(valid, { result }), 'first', 'main'), valid);
+  }
+  for (const structured_output of [undefined, null, [], 'status: PRECHECK_OK', {}]) {
+    assert.throws(() => parsePreflight(envelope(JSON.stringify(preflight), { structured_output })), /preflight contract/);
+    assert.throws(() => parseResult(envelope(JSON.stringify(valid), { structured_output }), 'first', 'main'), /feature contract fields/);
+  }
+});
+
+test('production structured contracts preserve status, field and metadata validation', () => {
+  for (const status of ['BLOCKED', 'FAILED']) {
+    const value = contract('first', 'main', { status, stage: 'implementing', reason: 'Missing dependency',
+      change: null, branch: null, pr_number: null, pr_url: null });
+    assert.deepEqual(parseResult(envelope(value), 'first', 'main'), value);
+    assert.throws(() => parseResult(envelope({ ...value, reason: '  ' }), 'first', 'main'), /reason/);
+  }
+  for (const overrides of [
+    { status: 'DONE' }, { stage: 'unknown' }, { stage: 'implementing' },
+    { branch: null }, { branch: '  ' }, { change: null }, { pr_url: null },
+    { pr_number: null }, { pr_number: 0 }, { pr_number: 1.5 }, { pr_number: Number.MAX_SAFE_INTEGER + 1 },
+    { reason: 'Unexpected' }, { extra: true }
+  ]) {
+    assert.throws(() => parseResult(envelope(contract('first', 'main', overrides)), 'first', 'main'));
+  }
+});
+
+for (const changes of [
+  { subtype: 'error_max_structured_output_retries', is_error: true },
+  { subtype: 'error_max_structured_output_retries', is_error: false },
+  { is_error: true }, { permission_denials: [{}] }, { permission_denials: undefined }
+]) {
+  test(`unsuccessful envelope rejects structured contracts: ${JSON.stringify(changes)}`, () => {
+    assert.throws(() => parsePreflight(envelope(preflight, changes)));
+    assert.throws(() => parseResult(envelope(contract('first'), changes), 'first', 'main'));
+  });
+}
+
+test('both skill invocations supply object schemas with production identity and field constraints', () => {
+  const schemaFrom = (args) => JSON.parse(args[args.indexOf('--json-schema') + 1]);
+  assert.deepEqual(schemaFrom(preflightArgs()), {
+    type: 'object', properties: { status: { const: 'PRECHECK_OK' }, skill: { const: 'feature-runner' } },
+    required: ['status', 'skill'], additionalProperties: false
+  });
+  const schema = schemaFrom(featureArgs('first', 'feature/base'));
+  assert.equal(schema.type, 'object');
+  assert.equal(schema.additionalProperties, false);
+  assert.deepEqual(schema.required.sort(), Object.keys(contract('first')).sort());
+  assert.deepEqual(schema.properties.task_id, { const: 'first' });
+  assert.deepEqual(schema.properties.base_branch, { const: 'feature/base' });
+  assert.deepEqual(schema.properties.status.enum, ['PR_CREATED', 'BLOCKED', 'FAILED']);
+  assert.equal(Object.hasOwn(schema, 'anyOf'), false);
+  for (const key of ['change', 'branch', 'pr_url', 'reason']) {
+    assert.deepEqual(schema.properties[key], { anyOf: [{ type: 'string', pattern: '\\S' }, { type: 'null' }] });
+  }
+  assert.deepEqual(schema.properties.pr_number, {
+    anyOf: [{ type: 'integer', minimum: 1, maximum: Number.MAX_SAFE_INTEGER }, { type: 'null' }]
+  });
+});
+
+test('unsupported json-schema flag stops before inference', async (context) => {
+  const setup = fixture(context, undefined, {
+    command: (name, args) => name === 'claude' && args[0] === '--help'
+      ? { code: 0, stdout: '--print --output-format' } : null
+  });
+  const result = await setup.run();
+  assert.match(result.stop_reason, /Installed Claude lacks --json-schema/);
+  assert.equal(setup.calls.some(({ name, args }) => name === 'claude' && args[0] === '-p'), false);
+});
+
+test('schema retry exhaustion logs diagnostics and stops before checkpointing', async (context) => {
+  const messages = [];
+  const setup = fixture(context, undefined, {
+    command: (name, args) => name === 'claude' && args[1] === '/feature-runner --preflight'
+      ? { code: 1, stdout: envelope('', { subtype: 'error_max_structured_output_retries', is_error: true }) } : null
+  });
+  const result = await setup.run({ progress: (message) => messages.push(message) });
+  assert.equal(result.result, 'STOPPED');
+  assert.equal(result.started, 0);
+  assert.deepEqual(setup.features, []);
+  assert.equal(fs.existsSync(path.join(setup.root, '.orchestrator/state.json')), false);
+  assert.ok(messages.some((message) => message.includes('error_max_structured_output_retries')));
 });
 
 test('arguments keep backlog strings as data and reject unsupported CLI options', () => {
@@ -326,10 +414,10 @@ for (const [name, response, pattern] of [
   ['file existence alone', { code: 0, stdout: envelope('CONFIG_OK') }, /preflight contract/],
   ['unavailable skill', { code: 0, stdout: envelope('Unknown skill: feature-runner') }, /preflight contract/],
   ['malformed contract', { code: 0, stdout: envelope('status: [') }, /preflight contract/],
-  ['wrong skill', { code: 0, stdout: envelope('status: PRECHECK_OK\nskill: other') }, /preflight contract/],
-  ['missing dependency', { code: 0, stdout: envelope('status: PRECHECK_FAILED\nskill: feature-runner\nreason: Missing agent') }, /preflight contract/],
-  ['permission denial', { code: 0, stdout: envelope('status: PRECHECK_OK\nskill: feature-runner', { permission_denials: [{ tool_name: 'Skill' }] }) }, /permission denied/],
-  ['nonzero Claude exit', { code: 7, stdout: envelope('status: PRECHECK_OK\nskill: feature-runner') }, /exited 7/]
+  ['wrong skill', { code: 0, stdout: envelope({ ...preflight, skill: 'other' }) }, /preflight contract/],
+  ['missing dependency', { code: 0, stdout: envelope({ ...preflight, status: 'PRECHECK_FAILED', reason: 'Missing agent' }) }, /preflight contract/],
+  ['permission denial', { code: 0, stdout: envelope(preflight, { permission_denials: [{ tool_name: 'Skill' }] }) }, /permission denied/],
+  ['nonzero Claude exit', { code: 7, stdout: envelope(preflight) }, /exited 7/]
 ]) {
   test(`real skill preflight rejects ${name} before checkpoint or feature`, async (context) => {
     const setup = fixture(context, undefined, {
@@ -353,7 +441,7 @@ test('preflight uses the production skill entry point and only read tools withou
   assert.deepEqual(smoke.args, preflightArgs());
   assert.equal(smoke.args[1], '/feature-runner --preflight');
   assert.ok(featureArgs('first', 'main')[1].startsWith('/feature-runner '));
-  assert.deepEqual(smoke.args.slice(2, -2), featureArgs('first', 'main').slice(2));
+  assert.deepEqual(smoke.args.slice(2, -4), featureArgs('first', 'main').slice(2, -2));
   assert.equal(smoke.args.at(-1), 'Read,Glob,Grep,Skill');
   assert.equal(fs.existsSync(path.join(setup.root, '.orchestrator/state.json')), false);
   assert.deepEqual(setup.features, []);
@@ -361,8 +449,8 @@ test('preflight uses the production skill entry point and only read tools withou
 });
 
 test('preflight contract rejects extra fields and missing success envelope', () => {
-  assert.deepEqual(parsePreflight(envelope('status: PRECHECK_OK\nskill: feature-runner')), { status: 'PRECHECK_OK', skill: 'feature-runner' });
-  assert.throws(() => parsePreflight(envelope('status: PRECHECK_OK\nskill: feature-runner\nreason: null')), /preflight contract/);
+  assert.deepEqual(parsePreflight(envelope(preflight)), { status: 'PRECHECK_OK', skill: 'feature-runner' });
+  assert.throws(() => parsePreflight(envelope({ ...preflight, reason: null })), /preflight contract/);
   assert.throws(() => parsePreflight('status: PRECHECK_OK\nskill: feature-runner'), /envelope/);
 });
 
@@ -373,8 +461,8 @@ for (const [name, body] of [
   ['CRLF yml fence', '```yml\r\nstatus: PRECHECK_OK\r\nskill: feature-runner\r\n```'],
   ['fenced JSON', '```json\n{"status":"PRECHECK_OK","skill":"feature-runner"}\n```']
 ]) {
-  test(`preflight unwraps outer Claude JSON containing ${name}`, () => {
-    assert.deepEqual(parsePreflight(envelope(body)), { status: 'PRECHECK_OK', skill: 'feature-runner' });
+  test(`preflight rejects legacy result containing ${name}`, () => {
+    assert.throws(() => parsePreflight(envelope(body)), /preflight contract/);
   });
 }
 
@@ -392,8 +480,8 @@ for (const body of [
   });
 }
 
-test('preflight rejects permission denials even with a valid fenced contract', () => {
-  assert.throws(() => parsePreflight(envelope('```yaml\nstatus: PRECHECK_OK\nskill: feature-runner\n```',
+test('preflight rejects permission denials even with a valid structured contract', () => {
+  assert.throws(() => parsePreflight(envelope(preflight,
     { permission_denials: [{ tool_name: 'Read' }] })), /permission denied/);
 });
 
