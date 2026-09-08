@@ -123,7 +123,9 @@ export const FilterControl = ({
                   selected={isSelected}
                   onClick={() => onSelect(filter.id, option.value)}
                   className={`flex items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-[15px] text-text-subtle ${
-                    isSelected ? 'bg-white/5 font-semibold text-text-primary' : ''
+                    isSelected
+                      ? 'bg-white/5 font-semibold text-text-primary'
+                      : ''
                   }`}
                 >
                   {option.label}

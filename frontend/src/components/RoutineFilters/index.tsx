@@ -62,10 +62,7 @@ export const RoutineFilters = () => {
     <div className="flex flex-wrap items-center gap-2">
       {selectedFilters.map(renderControl)}
       {showDivider ? (
-        <span
-          aria-hidden="true"
-          className="h-5 w-px bg-border-subtle"
-        />
+        <span aria-hidden="true" className="h-5 w-px bg-border-subtle" />
       ) : null}
       {unselectedFilters.map(renderControl)}
     </div>
