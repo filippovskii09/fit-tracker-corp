@@ -366,6 +366,74 @@ test('preflight contract rejects extra fields and missing success envelope', () 
   assert.throws(() => parsePreflight('status: PRECHECK_OK\nskill: feature-runner'), /envelope/);
 });
 
+for (const [name, body] of [
+  ['plain YAML', 'status: PRECHECK_OK\nskill: feature-runner'],
+  ['fenced YAML', '```yaml\nstatus: PRECHECK_OK\nskill: feature-runner\n```'],
+  ['unlabelled fence', '```\nstatus: PRECHECK_OK\nskill: feature-runner\n```'],
+  ['CRLF yml fence', '```yml\r\nstatus: PRECHECK_OK\r\nskill: feature-runner\r\n```'],
+  ['fenced JSON', '```json\n{"status":"PRECHECK_OK","skill":"feature-runner"}\n```']
+]) {
+  test(`preflight unwraps outer Claude JSON containing ${name}`, () => {
+    assert.deepEqual(parsePreflight(envelope(body)), { status: 'PRECHECK_OK', skill: 'feature-runner' });
+  });
+}
+
+for (const body of [
+  'Everything passed!\nstatus: PRECHECK_OK\nskill: feature-runner',
+  'Here is the result:\n```yaml\nstatus: PRECHECK_OK\nskill: feature-runner\n```',
+  '```yaml\nstatus: PRECHECK_OK\nskill: feature-runner\n```\nEverything passed!',
+  'status: PRECHECK_OK\nskill: feature-runner\nEverything passed!',
+  'status: [',
+  '```yaml\nstatus: PRECHECK_OK\nskill: feature-runner',
+  'status: PRECHECK_OK\nstatus: PRECHECK_OK\nskill: feature-runner'
+]) {
+  test(`preflight rejects prose or malformed result: ${JSON.stringify(body)}`, () => {
+    assert.throws(() => parsePreflight(envelope(body)), /preflight contract/);
+  });
+}
+
+test('preflight rejects permission denials even with a valid fenced contract', () => {
+  assert.throws(() => parsePreflight(envelope('```yaml\nstatus: PRECHECK_OK\nskill: feature-runner\n```',
+    { permission_denials: [{ tool_name: 'Read' }] })), /permission denied/);
+});
+
+test('preflight parse failure logs sanitized raw envelope before stopping', async (context) => {
+  const messages = [];
+  const body = 'Unexpected prose\nstatus: PRECHECK_OK\nskill: feature-runner\napi_key: "private-value"\nBearer private-bearer\nsk-ant-private-key\n\u001b[31m';
+  const setup = fixture(context, undefined, {
+    command: (name, args) => name === 'claude' && args[1] === '/feature-runner --preflight'
+      ? { code: 0, stdout: envelope(body, { access_token: 'private-token' }) } : null
+  });
+  const result = await setup.run({ progress: (message) => messages.push(message) });
+  assert.equal(result.result, 'STOPPED');
+  assert.match(result.stop_reason, /preflight contract/);
+  assert.equal(result.started, 0);
+  assert.deepEqual(setup.features, []);
+  const diagnostic = messages.find((message) => message.includes('Rejected Claude result'));
+  assert.ok(diagnostic);
+  assert.match(diagnostic, /Unexpected prose/);
+  assert.match(diagnostic, /PRECHECK_OK/);
+  assert.match(diagnostic, /"type":"result"/);
+  assert.match(diagnostic, /\[REDACTED\]/);
+  for (const secret of ['private-value', 'private-bearer', 'sk-ant-private-key', 'private-token', '\u001b']) {
+    assert.equal(diagnostic.includes(secret), false);
+  }
+});
+
+test('malformed outer JSON is logged with a bounded sanitized diagnostic', async (context) => {
+  const messages = [];
+  const setup = fixture(context, undefined, {
+    command: (name, args) => name === 'claude' && args[1] === '/feature-runner --preflight'
+      ? { code: 0, stdout: `api_key=private-value ${'x'.repeat(10000)}` } : null
+  });
+  const result = await setup.run({ progress: (message) => messages.push(message) });
+  assert.match(result.stop_reason, /Malformed Claude JSON envelope/);
+  const diagnostic = messages.find((message) => message.includes('Rejected Claude result'));
+  assert.equal(diagnostic.includes('private-value'), false);
+  assert.match(diagnostic, /\[truncated\]$/);
+  assert.ok(diagnostic.length < 8400);
+});
+
 for (const response of [
   { code: 1, stdout: '' },
   { code: 0, stdout: envelope('BACKEND_TEST_FAILED') },

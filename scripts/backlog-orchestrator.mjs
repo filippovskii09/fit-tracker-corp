@@ -173,13 +173,37 @@ export function parsePreflight(output) {
   const body = unwrapClaude(output).trim();
   let result;
   try {
-    const fenced = /^```(?:yaml|json)\n([\s\S]*?)\n```$/.exec(body);
+    // Unwrap only a complete fenced document; never extract YAML from prose.
+    const fenced = /^```(?:yaml|yml|json)?[ \t]*\r?\n([\s\S]*?)\r?\n```$/.exec(body);
     result = parse(fenced ? fenced[1] : body);
   } catch { throw new Error('Malformed feature-runner preflight contract'); }
   ensure(object(result) && Object.keys(result).length === 2 &&
     result.status === 'PRECHECK_OK' && result.skill === 'feature-runner',
   'Invalid feature-runner preflight contract');
   return result;
+}
+
+function sanitizedClaudeResult(output) {
+  const secretKey = /token|secret|password|authorization|api[_-]?key|cookie/i;
+  const secrets = Object.entries(process.env)
+    .filter(([key, value]) => secretKey.test(key) && value.length >= 8)
+    .map(([, value]) => value);
+  function sanitize(value) {
+    if (Array.isArray(value)) return value.map(sanitize);
+    if (object(value)) return Object.fromEntries(Object.entries(value)
+      .map(([key, entry]) => [key, secretKey.test(key) ? '[REDACTED]' : sanitize(entry)]));
+    if (typeof value !== 'string') return value;
+    for (const secret of secrets) value = value.split(secret).join('[REDACTED]');
+    return value
+      .replace(/\b(?:sk-[\w-]+|gh[pousr]_[\w]+|github_pat_[\w]+)\b/g, '[REDACTED]')
+      .replace(/\bBearer\s+[^\s"'\\]+/gi, 'Bearer [REDACTED]')
+      .replace(/((?:token|secret|password|authorization|api[_-]?key|cookie)["']?\s*[:=]\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;}]+)/gi, '$1[REDACTED]');
+  }
+  let raw;
+  try { raw = JSON.parse(output); } catch { raw = output; }
+  // JSON encoding escapes newlines and terminal controls; bound diagnostic size.
+  const diagnostic = JSON.stringify(sanitize(raw));
+  return diagnostic.length > 8192 ? `${diagnostic.slice(0, 8192)}…[truncated]` : diagnostic;
 }
 
 export function backendSmokeArgs() {
@@ -197,6 +221,13 @@ export async function runOrchestrator({ root = ROOT, command = execute, cli = ba
   let lock;
   let heartbeat;
   const checkSignal = () => ensure(!signal?.aborted, 'Interrupted');
+  const parseContract = (phase, output, parser) => {
+    try { return parser(output); }
+    catch (error) {
+      progress(`[${phase}] Rejected Claude result (sanitized): ${sanitizedClaudeResult(output)}`);
+      throw error;
+    }
+  };
   const call = async (name, args, options = {}) => {
     checkSignal();
     const result = await command(name, args, { root, signal, ...options });
@@ -270,7 +301,7 @@ export async function runOrchestrator({ root = ROOT, command = execute, cli = ba
     }
     if (!dryRun) {
       const output = await call('claude', preflightArgs(), { timeout: 120000 });
-      parsePreflight(output);
+      parseContract('preflight', output, parsePreflight);
       const backendOutput = await call('claude', backendSmokeArgs(), { timeout: 300000 });
       ensure(unwrapClaude(backendOutput).trim() === 'BACKEND_TEST_OK', 'Claude backend test smoke failed');
       await safeRepository();
@@ -319,7 +350,7 @@ export async function runOrchestrator({ root = ROOT, command = execute, cli = ba
       }
       lock.update({ childPid: null });
       state('validate');
-      const result = parseResult(output, taskId, baseBranch);
+      const result = parseContract('feature', output, (raw) => parseResult(raw, taskId, baseBranch));
       ensure(result.status !== 'FAILED', 'Feature returned FAILED; inspect checkpoint and repository');
       if (result.status === 'PR_CREATED') {
         const saved = state('status').tasks.find((task) => task.taskId === taskId);

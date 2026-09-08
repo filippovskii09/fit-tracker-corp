@@ -126,6 +126,13 @@ with a read-only smoke. Output must be a successful `type: result` envelope with
 `subtype: success`, `is_error: false`, an empty `permission_denials` array, and a
 `result` string containing exactly the documented YAML/JSON contract. Fenced
 YAML/JSON is accepted; prose, missing fields, mismatched task/base, or errors stop.
+The preflight parser also accepts unlabelled and `yml` fences with LF or CRLF
+line endings, only when the fence contains the entire result. Its contract
+requires exactly `status: PRECHECK_OK` and `skill: feature-runner`.
+On preflight or feature contract parse failure, the runner logs the rejected
+Claude envelope with common credential patterns and known secret environment
+values redacted, control characters escaped, and output limited to 8192
+characters plus a truncation marker. This diagnostic does not relax validation.
 
 PR_CREATED requires a matching durable checkpoint, a clean feature branch,
 valid base ancestry, and an open same-repository PR with the exact pushed local
