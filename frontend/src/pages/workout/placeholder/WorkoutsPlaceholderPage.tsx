@@ -1,8 +1,10 @@
 import { DICTIONARY } from '@locales';
+import { RoutineFilters } from '@components';
 
 const WorkoutsPlaceholderPage = () => (
-  <main className="flex h-full items-center justify-center text-center text-xl text-text-subtle">
-    {DICTIONARY.workout.placeholder.soon}
+  <main className="flex h-full flex-col items-center justify-center gap-6 text-center text-xl text-text-subtle">
+    <RoutineFilters />
+    <p>{DICTIONARY.workout.placeholder.soon}</p>
   </main>
 );
 
