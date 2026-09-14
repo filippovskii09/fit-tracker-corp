@@ -59,7 +59,7 @@ export const RoutineFilters = () => {
   );
 
   return (
-    <div className="flex flex-wrap items-center gap-2">
+    <div className="flex max-w-full flex-nowrap items-center gap-2 overflow-scroll p-1.5 pb-2.5">
       {selectedFilters.map(renderControl)}
       {showDivider ? (
         <span aria-hidden="true" className="h-5 w-px bg-border-subtle" />
