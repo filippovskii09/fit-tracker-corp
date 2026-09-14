@@ -2,6 +2,7 @@ export * from './AuthPageHeader';
 export * from './BottomNavigation';
 export * from './Calendar';
 export * from './ExerciseSelect';
+export * from './LibraryTabs';
 export * from './RoutineFilters';
 export * from './workout';
 export * from './loader';
