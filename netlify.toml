@@ -3,6 +3,32 @@
   publish = "dist"
   command = "npm run build"
 
+# First-party API proxy (design.md D1): browser-visible API host becomes the
+# Netlify origin so the refresh cookie is host-only/first-party instead of
+# third-party. Must be declared before the SPA fallback below so it wins.
+# Railway production host taken from docker-compose.yml / docs/mobile-testing.md.
+[[redirects]]
+  from = "/api/*"
+  to = "https://fit-tracker-corp-production.up.railway.app/api/:splat"
+  status = 200
+  force = true
+
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Cache-Control = "no-store, no-cache, must-revalidate"
+
+# Report-only CSP (auth-contract.md amendments, external review round):
+# tuned to what the app actually loads today — same-origin scripts/styles,
+# no external fonts or CDNs (index.html/tokens.css confirm this), same-origin
+# `/api/*` for all XHR/fetch. Report-only so it can never break production;
+# enforcement (dropping "-Report-Only") is a tracked follow-up once a
+# reporting endpoint/violation review process is in place.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Content-Security-Policy-Report-Only = "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
