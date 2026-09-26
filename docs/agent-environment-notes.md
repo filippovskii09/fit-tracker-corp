@@ -11,6 +11,7 @@ Known problems that AI agent sessions hit in this repository, and how to avoid t
 - `git branch --show-current` is not supported by the installed git (2.15). Use `git rev-parse --abbrev-ref HEAD`.
 - Local port binding varies between sessions. Check it with `node -e "require('net').createServer().listen(0)"` instead of assuming it is blocked.
 - The backend crashes on start with `EPERM: operation not permitted, open '.env'`, because `ConfigModule` reads `.env` relative to the working directory. Start it from a directory that has no `.env` (for example a scratch directory) with all variables exported in the shell: `node -r <repo>/backend/node_modules/module-alias/register <repo>/backend/dist/main`. The same works for `dist/db/migrate.js` and `dist/seed.js`.
+- `git commit` fails inside the sandbox: the husky pre-commit hook runs lint-staged, which cannot back up the tree (`lstat("backend/.env.example"): Operation not permitted`). On that failure it also dropped the unstaged part of a partially staged file from the working tree; it left the lost hunk in `.git/lint-staged_unstaged.patch`. Never use `--no-verify`. Prepare the commits as a script that stages explicit paths, and let the human run it with `! sh <script>`. Check that each intermediate commit builds by replaying the plan into a temporary `GIT_INDEX_FILE` and type-checking `git archive` of each tree.
 - `pkill` fails (`Cannot get process list`). Start servers as background tasks and stop them through the task, not by process name.
 
 ## Tooling
