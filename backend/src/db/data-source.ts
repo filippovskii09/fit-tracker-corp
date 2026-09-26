@@ -16,9 +16,16 @@ export default new DataSource({
   database: process.env.DB_NAME,
   entities: [entitiesPath],
   migrations: [migrationsPath],
+  // Explicit (rather than relying on the TypeORM default) so this stays the
+  // single source of truth for the migrations-history table name. This is
+  // the DataSource every `migration:*` CLI command and the release migrate
+  // step (src/db/migrate.ts) use, and must match typeorm-config.service.ts.
+  migrationsTableName: 'migrations',
   synchronize: false,
   ssl:
     process.env.NODE_ENV === 'production'
-      ? { rejectUnauthorized: false }
+      ? process.env.DB_SSL_CA
+        ? { rejectUnauthorized: true, ca: process.env.DB_SSL_CA }
+        : { rejectUnauthorized: false }
       : false,
 });

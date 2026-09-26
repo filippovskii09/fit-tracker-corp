@@ -38,10 +38,65 @@ jobs:
         run: npm ci
 
       - name: Lint
-        run: npm run lint
+        run: npm run lint:check
 
       - name: Test & Coverage
         run: npm run test:cov
 
       - name: Build Check
         run: npm run build
+
+  backend-integration:
+    name: 🐘 PostgreSQL Integration
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: fit_tracker_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      NODE_ENV: test
+      DB_HOST: localhost
+      DB_PORT: 5432
+      DB_USER: postgres
+      DB_PASSWORD: postgres
+      DB_NAME: fit_tracker_test
+      FRONTEND_URL: http://localhost:5173
+      JWT_ACCESS_TOKEN_SECRET: ci-access-secret-please-32-characters-min
+      JWT_ACCESS_TOKEN_EXPIRATION_TIME: 900
+      JWT_REFRESH_TOKEN_SECRET: ci-refresh-secret-please-32-characters-min
+      JWT_REFRESH_TOKEN_EXPIRATION_TIME: 604800
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24.x
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Run migrations
+        run: npm run migration:run
+
+      - name: Run PostgreSQL integration suite
+        run: npm run test:integration

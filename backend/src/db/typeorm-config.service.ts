@@ -9,6 +9,7 @@ import {
   DB_NAME,
   DB_PASSWORD,
   DB_PORT,
+  DB_SSL_CA,
   DB_USER,
   NODE_ENV,
 } from '@src/config/constants';
@@ -32,16 +33,24 @@ export class TypeOrmConfigService implements TypeOrmOptionsFactory {
       password: this.configService.get<string>(DB_PASSWORD),
       database: this.configService.get<string>(DB_NAME),
       entities: [join(__dirname, '/../**/*.entity{.ts,.js}')],
-      migrationsTableName: 'migration',
+      // Must match the table name used by src/db/data-source.ts (the CLI
+      // DataSource that has actually run every migration to date). Do not
+      // change without confirming which table the target database has.
+      migrationsTableName: 'migrations',
       migrations: [join(__dirname, '/../migrations/*{.ts,.js}')],
 
       ssl: isProd || isNeon,
       extra:
         isProd || isNeon
           ? {
-              ssl: {
-                rejectUnauthorized: false,
-              },
+              ssl: this.configService.get<string>(DB_SSL_CA)
+                ? {
+                    rejectUnauthorized: true,
+                    ca: this.configService.get<string>(DB_SSL_CA),
+                  }
+                : {
+                    rejectUnauthorized: false,
+                  },
             }
           : undefined,
       autoLoadEntities: true,
