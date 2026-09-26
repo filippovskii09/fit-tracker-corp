@@ -15,4 +15,5 @@ export interface ICreateWorkout {
   name: string;
   date: string;
   exercises: ICreateWorkoutExercise[];
+  clientRequestId?: string;
 }
