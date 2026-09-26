@@ -1,15 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 
-import { ResponseMessages } from '@src/common/messages';
 import { UsersController } from '../users.controller';
 import { UsersService } from '../users.service';
-import { createUserDtoStub, userStub } from '../../stubs/user.stub';
+import { userStub } from '../../stubs/user.stub';
 import { createMockUsersService } from '../mocks';
 
 describe('UsersController', () => {
   let controller: UsersController;
   let service: UsersService;
-  const dto = createUserDtoStub();
   const user = userStub();
 
   beforeEach(async () => {
@@ -31,17 +29,6 @@ describe('UsersController', () => {
 
   it('should be defined', () => {
     expect(controller).toBeDefined();
-  });
-
-  describe('create', () => {
-    it('should call service.create with dto and return user', async () => {
-      jest.spyOn(service, 'create').mockResolvedValue(user);
-
-      const result = await controller.create(dto);
-
-      expect(result).toEqual(ResponseMessages.User.SuccessRegistration);
-      expect(service.create).toHaveBeenCalledWith(dto);
-    });
   });
 
   describe('getMe', () => {

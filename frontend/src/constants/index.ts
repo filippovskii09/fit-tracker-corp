@@ -3,3 +3,4 @@ export * from './endpoints';
 export * from './query-keys';
 export * from './times';
 export * from './workout';
+export * from './auth';

@@ -2,11 +2,13 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { NotFoundException } from '@nestjs/common';
 
-import { ObjectLiteral, Repository } from 'typeorm';
+import { ObjectLiteral, QueryFailedError, Repository } from 'typeorm';
 
 import { WorkoutsService } from '../workouts.service';
 import { WorkoutEntity } from '../entities';
 import { CreateWorkoutDto } from '../dto';
+import { IdempotencyKeyReusedException } from '../exceptions/idempotency-key-reused.exception';
+import { hashWorkoutPayload } from '../utils/canonicalize-payload';
 
 type MockRepository<T extends ObjectLiteral = WorkoutEntity> = Partial<
   Record<keyof Repository<T>, jest.Mock>
@@ -72,12 +74,136 @@ describe('WorkoutsService', () => {
 
       repository.create!.mockReturnValue(expectedWorkout);
       repository.save!.mockResolvedValue(expectedWorkout);
+      repository.findOne!.mockResolvedValue(null);
 
       const result = await service.create(dto, userId);
 
       expect(repository.create).toHaveBeenCalled();
       expect(repository.save).toHaveBeenCalledWith(expectedWorkout);
       expect(result).toEqual(expectedWorkout);
+    });
+
+    it('creates a workout and stores the clientRequestId when none exists yet', async () => {
+      const userId = 'user-uuid';
+      const dto: CreateWorkoutDto = {
+        name: 'Leg Day',
+        date: '2024-01-01',
+        clientRequestId: '11111111-1111-4111-8111-111111111111',
+        exercises: [],
+      };
+      const saved = { id: 'new-id', ...dto, userId, status: 'COMPLETED' };
+
+      repository.findOne!.mockResolvedValue(null);
+      repository.create!.mockReturnValue(saved);
+      repository.save!.mockResolvedValue(saved);
+
+      const result = await service.create(dto, userId);
+
+      expect(repository.findOne).toHaveBeenCalledWith(
+        expect.objectContaining({
+          where: { userId, clientRequestId: dto.clientRequestId },
+        }),
+      );
+      expect(repository.create).toHaveBeenCalledWith(
+        expect.objectContaining({ clientRequestId: dto.clientRequestId }),
+      );
+      expect(result).toEqual(saved);
+    });
+
+    it('returns the existing workout for a duplicate clientRequestId without creating a new one', async () => {
+      const userId = 'user-uuid';
+      const clientRequestId = '11111111-1111-4111-8111-111111111111';
+      const dto: CreateWorkoutDto = {
+        name: 'Leg Day',
+        date: '2024-01-01',
+        clientRequestId,
+        exercises: [],
+      };
+      const existing = {
+        id: 'existing-id',
+        userId,
+        clientRequestId,
+        payloadHash: hashWorkoutPayload(dto),
+      };
+
+      repository.findOne!.mockResolvedValue(existing);
+
+      const result = await service.create(dto, userId);
+
+      expect(result).toEqual(existing);
+      expect(repository.save).not.toHaveBeenCalled();
+    });
+
+    it('rejects a duplicate clientRequestId submitted with a different payload', async () => {
+      const userId = 'user-uuid';
+      const clientRequestId = '11111111-1111-4111-8111-111111111111';
+      const dto: CreateWorkoutDto = {
+        name: 'Leg Day',
+        date: '2024-01-01',
+        clientRequestId,
+        exercises: [],
+      };
+      const existing = {
+        id: 'existing-id',
+        userId,
+        clientRequestId,
+        payloadHash: 'a-different-hash',
+      };
+
+      repository.findOne!.mockResolvedValue(existing);
+
+      await expect(service.create(dto, userId)).rejects.toThrow(
+        IdempotencyKeyReusedException,
+      );
+      expect(repository.save).not.toHaveBeenCalled();
+    });
+
+    it('returns the winning row when a concurrent duplicate submission hits the unique constraint', async () => {
+      const userId = 'user-uuid';
+      const clientRequestId = '11111111-1111-4111-8111-111111111111';
+      const dto: CreateWorkoutDto = {
+        name: 'Leg Day',
+        date: '2024-01-01',
+        clientRequestId,
+        exercises: [],
+      };
+      const existing = {
+        id: 'existing-id',
+        userId,
+        clientRequestId,
+        payloadHash: hashWorkoutPayload(dto),
+      };
+
+      const uniqueViolation = Object.assign(
+        Object.create(QueryFailedError.prototype),
+        { code: '23505', message: 'duplicate key value' },
+      );
+
+      repository
+        .findOne!.mockResolvedValueOnce(null) // no existing row before insert
+        .mockResolvedValueOnce(existing); // the other request's row, after conflict
+      repository.create!.mockReturnValue({ ...dto, userId });
+      repository.save!.mockRejectedValue(uniqueViolation);
+
+      const result = await service.create(dto, userId);
+
+      expect(result).toEqual(existing);
+    });
+
+    it('rethrows an unrelated database error', async () => {
+      const userId = 'user-uuid';
+      const dto: CreateWorkoutDto = {
+        name: 'Leg Day',
+        date: '2024-01-01',
+        exercises: [],
+      };
+
+      repository.create!.mockReturnValue({ ...dto, userId });
+      repository.save!.mockRejectedValue(new Error('connection lost'));
+
+      await expect(service.create(dto, userId)).rejects.toThrow(
+        'connection lost',
+      );
     });
   });
 

@@ -11,6 +11,7 @@ export const StickyHeader = ({
   readOnly = false,
   nameError,
   actions,
+  nameInputRef,
 }: IStickyHeaderProps) => {
   const navigate = useNavigate();
 
@@ -28,6 +29,7 @@ export const StickyHeader = ({
       </button>
       <div className="flex-1">
         <input
+          ref={nameInputRef}
           name="name"
           value={name}
           onChange={handleChange}

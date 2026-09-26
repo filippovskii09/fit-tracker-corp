@@ -8,8 +8,10 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 
 import { AppModule } from './app/app.module';
-import { FRONTEND_URL, PORT } from './config/constants';
+import { FRONTEND_URL, PORT, TRUST_PROXY } from './config/constants';
 import { DEFAULT_PORT } from './constants';
+import { requestIdMiddleware } from './common/middleware/request-id.middleware';
+import { noStoreCacheMiddleware } from './common/middleware/no-store-cache.middleware';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -17,9 +19,16 @@ async function bootstrap() {
   });
   const configService = app.get(ConfigService);
 
+  const trustProxyHops = configService.get<number>(TRUST_PROXY);
+  if (trustProxyHops !== undefined) {
+    app.getHttpAdapter().getInstance().set('trust proxy', trustProxyHops);
+  }
+
   const globalPrefix = 'api/v1';
   app.setGlobalPrefix(globalPrefix);
 
+  app.use(requestIdMiddleware);
+  app.use(noStoreCacheMiddleware);
   app.use(cookieParser());
   app.use(helmet());
 

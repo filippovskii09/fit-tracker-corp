@@ -2,6 +2,10 @@ export const workoutLocales = {
   create: {
     success: 'Workout saved!',
     error: 'Failed to save workout',
+    retryableError:
+      'Connection issue — your draft is safe, please try saving again.',
+    idempotencyConflict:
+      'An earlier version of this workout was already saved. Opening it now.',
     titlePlaceholder: 'Workout Name...',
     addExercise: 'Add Exercise',
     buttonLoading: 'Saving...',
@@ -10,6 +14,13 @@ export const workoutLocales = {
     removeExercise: 'Remove exercise',
     removeSet: 'Remove set',
     goBack: 'Go back',
+    draft: {
+      recoveredMessage:
+        'We found a saved draft of this workout. Restore it or start fresh.',
+      restore: 'Restore',
+      discard: 'Discard',
+      recoveredIndicator: 'Draft restored',
+    },
   },
   view: {
     idAllowed: 'ID undefined',

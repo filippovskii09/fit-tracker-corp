@@ -1,3 +1,5 @@
+import { QueryClient } from '@tanstack/react-query';
+
 import { renderHook, waitFor } from '@testUtils';
 import { workoutService } from '@services';
 import { mockWorkoutResponse } from '@mocks';
@@ -52,6 +54,29 @@ describe('Workout Queries', () => {
       await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
       expect(mockedWorkoutService.create).toHaveBeenCalledWith(mockDto);
+    });
+
+    it('should still resolve as a success when post-create cache invalidation fails', async () => {
+      const mockDto = { name: 'New Workout', date: 'some-date', exercises: [] };
+      mockedWorkoutService.create.mockResolvedValue({
+        id: 'new-id',
+        ...mockDto,
+        status: WORKOUT_STATUS.PENDING,
+      });
+
+      const invalidateSpy = jest
+        .spyOn(QueryClient.prototype, 'invalidateQueries')
+        .mockRejectedValueOnce(new Error('refetch failed'));
+
+      const { result } = renderHook(() => useCreateWorkoutQ());
+
+      result.current.mutate(mockDto);
+
+      await waitFor(() => expect(result.current.isSuccess).toBe(true));
+
+      expect(invalidateSpy).toHaveBeenCalled();
+
+      invalidateSpy.mockRestore();
     });
   });
 });

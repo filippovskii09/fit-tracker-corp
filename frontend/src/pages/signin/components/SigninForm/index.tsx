@@ -2,7 +2,12 @@ import { Formik, Form, Field } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
-import { clearCachedWorkouts, getErrorMessage } from '@utils';
+import {
+  clearCachedWorkouts,
+  consumeReturnTo,
+  getAccessTokenUserId,
+  getErrorMessage,
+} from '@utils';
 import { BaseButton, BaseInput } from '@ui';
 import { APP_ROUTES } from '@constants';
 import { DICTIONARY } from '@locales';
@@ -26,7 +31,11 @@ export const SigninForm = () => {
         clearCachedWorkouts();
         localStorage.setItem('accessToken', data.accessToken);
         toast.success(t.success);
-        navigate(APP_ROUTES.DASHBOARD);
+        // Restores the workout route (with its recoverable draft) only for
+        // the same user whose session expired (design.md D6, task 6.6).
+        const signedInUserId = getAccessTokenUserId(data.accessToken);
+        const returnTo = consumeReturnTo(signedInUserId);
+        navigate(returnTo ?? APP_ROUTES.DASHBOARD);
       },
       onError: (error) => {
         toast.error(getErrorMessage(error));

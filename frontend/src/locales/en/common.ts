@@ -7,4 +7,11 @@ export const commonLocale = {
   errors: {
     unknown: 'An unknown error occurred',
   },
+  session: {
+    retryTitle: "We couldn't reach the server",
+    retryMessage:
+      'Your session is still safe. Check your connection and try again.',
+    retryButton: 'Try again',
+    retryAvailableIn: (seconds: number) => `Retry available in ${seconds}s`,
+  },
 } as const;
