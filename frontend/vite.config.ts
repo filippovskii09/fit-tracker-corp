@@ -41,6 +41,7 @@ export default defineConfig({
       '@constants': path.resolve(__dirname, './src/constants'),
       '@locales': path.resolve(__dirname, './src/locales'),
       '@pages': path.resolve(__dirname, './src/pages'),
+      '@services/session': path.resolve(__dirname, './src/services/session'),
       '@services': path.resolve(__dirname, './src/services'),
       '@hooks': path.resolve(__dirname, './src/hooks'),
       '@types': path.resolve(__dirname, './src/types'),

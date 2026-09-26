@@ -42,6 +42,7 @@
       "@locales": ["./src/locales"],
       "@pages": ["./src/pages"],
       "@services": ["./src/services"],
+      "@services/session": ["./src/services/session"],
       "@hooks": ["./src/hooks"],
       "@types": ["./src/types"],
       "@components": ["./src/components"],

@@ -1,13 +1,14 @@
 import axios, { AxiosError, type InternalAxiosRequestConfig } from 'axios';
 
 import { config } from '@config';
-import { API_ENDPOINTS, APP_ROUTES } from '@constants';
-import { clearCachedWorkouts, redirectTo } from '@utils';
-
-interface FailedRequest {
-  resolve: (value: string) => void;
-  reject: (reason?: unknown) => void;
-}
+import { API_ENDPOINTS } from '@constants';
+// Imported from the `session` subpath (not the `@services` barrel) to avoid
+// a module cycle: the barrel also re-exports services that import `@api`.
+import {
+  coordinateRefresh,
+  getAccessToken,
+  handleTerminalSessionFailure,
+} from '@services/session';
 
 export const api = axios.create({
   baseURL: config.api.baseURL,
@@ -17,35 +18,18 @@ export const api = axios.create({
   },
 });
 
-let isRefreshing = false;
-let failedQueue: FailedRequest[] = [];
-
-const clearSessionAndRedirect = () => {
-  localStorage.removeItem('accessToken');
-  clearCachedWorkouts();
-  redirectTo(APP_ROUTES.AUTH.SIGNIN);
-};
-
-const processQueue = (error: Error | null, token: string | null = null) => {
-  failedQueue.forEach((prom) => {
-    if (error) {
-      prom.reject(error);
-    } else if (token) {
-      prom.resolve(token);
-    }
-  });
-
-  failedQueue = [];
-};
-
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('accessToken');
-  if (token && config.headers) {
-    config.headers.Authorization = `Bearer ${token}`;
+api.interceptors.request.use((requestConfig) => {
+  const token = getAccessToken();
+  if (token && requestConfig.headers) {
+    requestConfig.headers.Authorization = `Bearer ${token}`;
   }
-  return config;
+  return requestConfig;
 });
 
+// Response-interceptor fallback for an unexpected 401 (design.md D4/D5). The
+// coordinator itself performs the network refresh and cross-tab
+// coordination (task 6.1); this interceptor only classifies the outcome for
+// exactly one retry (task 6.5) and never replays the request more than once.
 api.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -57,60 +41,42 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    const isRefreshRequest = originalReq.url?.includes(
-      API_ENDPOINTS.AUTH.REFRESH,
-    );
+    // A 401 on a public credential-submission route (wrong password, bad
+    // registration credentials) is a normal form-validation outcome, not an
+    // expired session — never try to refresh/retry it.
+    const isCredentialSubmissionRequest =
+      originalReq.url?.includes(API_ENDPOINTS.AUTH.SIGNIN) ||
+      originalReq.url?.includes(API_ENDPOINTS.AUTH.REGISTER);
 
-    if (isRefreshRequest) {
-      processQueue(error as Error, null);
-      isRefreshing = false;
-      clearSessionAndRedirect();
+    const isRefreshOrLogoutRequest =
+      originalReq.url?.includes(API_ENDPOINTS.AUTH.REFRESH) ||
+      originalReq.url?.includes(API_ENDPOINTS.AUTH.LOGOUT);
+
+    if (
+      isRefreshOrLogoutRequest ||
+      isCredentialSubmissionRequest ||
+      originalReq._retry
+    ) {
       return Promise.reject(error);
-    }
-
-    if (originalReq._retry) {
-      clearSessionAndRedirect();
-      return Promise.reject(error);
-    }
-
-    if (isRefreshing) {
-      return new Promise<string>((resolve, reject) => {
-        failedQueue.push({ resolve, reject });
-      })
-        .then((token) => {
-          if (originalReq.headers) {
-            originalReq.headers.Authorization = `Bearer ${token}`;
-          }
-          return api(originalReq);
-        })
-        .catch((err) => {
-          return Promise.reject(err);
-        });
     }
 
     originalReq._retry = true;
-    isRefreshing = true;
 
-    try {
-      const { data } = await api.post(API_ENDPOINTS.AUTH.REFRESH);
+    const outcome = await coordinateRefresh();
 
-      const newToken = data.accessToken;
-      localStorage.setItem('accessToken', newToken);
-
+    if (outcome.status === 'success') {
       if (originalReq.headers) {
-        originalReq.headers.Authorization = `Bearer ${newToken}`;
+        originalReq.headers.Authorization = `Bearer ${outcome.accessToken}`;
       }
-
-      processQueue(null, newToken);
-
       return api(originalReq);
-    } catch (refreshError) {
-      processQueue(refreshError as Error, null);
-      clearSessionAndRedirect();
-
-      return Promise.reject(refreshError);
-    } /* c8 ignore next */ finally {
-      isRefreshing = false;
     }
+
+    if (outcome.status === 'terminal') {
+      handleTerminalSessionFailure();
+    }
+
+    // Transient (network/429/5xx): keep session state and route intact and
+    // let the caller decide whether/how to retry the original operation.
+    return Promise.reject(error);
   },
 );
