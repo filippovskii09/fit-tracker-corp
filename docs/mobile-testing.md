@@ -60,7 +60,11 @@ Use the private IPv4 address from the same network as the phone, commonly
 
 ## API URL options
 
-The frontend uses `VITE_API_URL` from `frontend/.env`.
+The frontend uses `VITE_API_URL` from `frontend/.env` **in development only**.
+A production build (`npm run build`) always talks to the relative,
+same-origin `/api/v1` path through the Netlify `/api/*` proxy and ignores
+`VITE_API_URL` even if it's set — this only affects `npm run dev` /
+`npm run dev:host`.
 
 For the deployed Railway backend:
 
