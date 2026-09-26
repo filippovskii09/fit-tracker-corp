@@ -1,7 +1,7 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable } from '@nestjs/common';
 
-import { Repository } from 'typeorm';
+import { EntityManager, Repository } from 'typeorm';
 import { uuidv7 } from 'uuidv7';
 
 import { CreateUserDto } from './dto';
@@ -42,7 +42,7 @@ export class UsersService {
 
   async updateRefreshToken(
     userId: string,
-    refreshTokenHash: string,
+    refreshTokenHash: string | null,
   ): Promise<void> {
     await this.userRepository.update(
       { id: userId },
@@ -59,5 +59,33 @@ export class UsersService {
 
   async findById(id: string): Promise<UserEntity | null> {
     return this.userRepository.findOne({ where: { id } });
+  }
+
+  /**
+   * Locks the user row (`FOR UPDATE`) within the caller's transaction and
+   * returns it with `hashedRefreshToken` selected, so a legacy refresh
+   * upgrade can validate-then-clear the credential atomically without a
+   * concurrent request observing the same still-valid hash.
+   */
+  async lockForLegacyRefreshUpgrade(
+    manager: EntityManager,
+    userId: string,
+  ): Promise<UserEntity | null> {
+    return manager
+      .getRepository(UserEntity)
+      .createQueryBuilder('user')
+      .addSelect(['user.hashedRefreshToken'])
+      .where('user.id = :userId', { userId })
+      .setLock('pessimistic_write')
+      .getOne();
+  }
+
+  async clearRefreshTokenWithManager(
+    manager: EntityManager,
+    userId: string,
+  ): Promise<void> {
+    await manager
+      .getRepository(UserEntity)
+      .update({ id: userId }, { hashedRefreshToken: null });
   }
 }

@@ -1,5 +1,5 @@
 import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -15,10 +15,18 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
       secretOrKey: secret,
+      algorithms: ['HS256'],
     });
   }
 
   async validate(payload: JwtPayload) {
+    // Reject a refresh token presented as a bearer access token. Tokens
+    // issued before this claim existed (no `tokenUse`) remain accepted
+    // during the compatibility window.
+    if (payload.tokenUse && payload.tokenUse !== 'access') {
+      throw new UnauthorizedException();
+    }
+
     return { id: payload.sub, email: payload.email };
   }
 }

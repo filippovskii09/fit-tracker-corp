@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
-import { JwtService } from '@nestjs/jwt';
-import { ForbiddenException } from '@nestjs/common';
+import { JwtService, TokenExpiredError } from '@nestjs/jwt';
 
 import { IUser } from '@src/users/types';
 import {
@@ -25,102 +24,166 @@ describe('TokenService', () => {
     updatedAt: new Date(),
   };
 
+  const secrets: Record<string, unknown> = {
+    [JWT_ACCESS_TOKEN_SECRET]: 'access-secret',
+    [JWT_ACCESS_TOKEN_EXPIRATION_TIME]: 900,
+    [JWT_REFRESH_TOKEN_SECRET]: 'refresh-secret',
+    [JWT_REFRESH_TOKEN_EXPIRATION_TIME]: 604800,
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         TokenService,
-        {
-          provide: ConfigService,
-          useValue: mockConfigService,
-        },
-        {
-          provide: JwtService,
-          useValue: mockJwtService,
-        },
+        { provide: ConfigService, useValue: mockConfigService },
+        { provide: JwtService, useValue: mockJwtService },
       ],
     }).compile();
 
     service = module.get<TokenService>(TokenService);
     jwtService = module.get<JwtService>(JwtService);
+
+    mockConfigService.getOrThrow.mockImplementation(
+      (key: string) => secrets[key],
+    );
   });
 
-  afterEach(() => {
-    jest.clearAllMocks();
-  });
+  afterEach(() => jest.clearAllMocks());
 
   it('should be defined', () => {
     expect(service).toBeDefined();
   });
 
-  describe('generateAuthTokens', () => {
-    it('should generate access and refresh tokens', async () => {
-      const accessTokenSecret = 'access-secret';
-      const accessTokenExp = 900;
-      const refreshTokenSecret = 'refresh-secret';
-      const refreshTokenExp = 604800;
-      const mockToken = 'generated.jwt.token';
+  describe('generateAccessToken', () => {
+    it('signs only sub/email with the access secret and lifetime', async () => {
+      mockJwtService.signAsync.mockResolvedValue('access.jwt');
 
-      mockConfigService.getOrThrow.mockImplementation((key: string) => {
-        switch (key) {
-          case JWT_ACCESS_TOKEN_SECRET:
-            return accessTokenSecret;
-          case JWT_ACCESS_TOKEN_EXPIRATION_TIME:
-            return accessTokenExp;
-          case JWT_REFRESH_TOKEN_SECRET:
-            return refreshTokenSecret;
-          case JWT_REFRESH_TOKEN_EXPIRATION_TIME:
-            return refreshTokenExp;
-          default:
-            return null;
-        }
-      });
+      const token = await service.generateAccessToken(user);
 
-      mockJwtService.signAsync.mockResolvedValue(mockToken);
-
-      const result = await service.generateAuthTokens(user);
-
-      expect(result).toEqual({
-        accessToken: mockToken,
-        refreshToken: mockToken,
-      });
-
-      expect(jwtService.signAsync).toHaveBeenCalledTimes(2);
-      expect(jwtService.signAsync).toHaveBeenCalledTimes(2);
-
+      expect(token).toBe('access.jwt');
       expect(jwtService.signAsync).toHaveBeenCalledWith(
-        { sub: user.id, email: user.email },
-        { secret: accessTokenSecret, expiresIn: accessTokenExp },
-      );
-
-      expect(jwtService.signAsync).toHaveBeenCalledWith(
-        { sub: user.id, email: user.email },
-        { secret: refreshTokenSecret, expiresIn: refreshTokenExp },
+        { sub: user.id, email: user.email, tokenUse: 'access' },
+        { secret: 'access-secret', expiresIn: 900, algorithm: 'HS256' },
       );
     });
   });
 
-  describe('verifyRefreshToken', () => {
-    const token = 'valid.refresh.token';
-    const secret = 'refresh-secret';
+  describe('generateSessionRefreshToken', () => {
+    it('embeds sid and a jti in the refresh payload', async () => {
+      mockJwtService.signAsync.mockResolvedValue('refresh.jwt');
 
-    it('should return user id if token is valid', async () => {
-      mockConfigService.get.mockReturnValue(secret);
-      mockJwtService.verifyAsync.mockResolvedValue({ sub: user.id });
+      const token = await service.generateSessionRefreshToken(
+        user,
+        'session-id',
+      );
 
-      const result = await service.verifyRefreshToken(token);
-
-      expect(result).toBe(user.id);
-      expect(jwtService.verifyAsync).toHaveBeenCalledWith(token, { secret });
+      expect(token).toBe('refresh.jwt');
+      expect(jwtService.signAsync).toHaveBeenCalledWith(
+        expect.objectContaining({
+          sub: user.id,
+          email: user.email,
+          sid: 'session-id',
+          jti: expect.any(String),
+          tokenUse: 'refresh',
+        }),
+        { secret: 'refresh-secret', expiresIn: 604800, algorithm: 'HS256' },
+      );
     });
 
-    it('should throw ForbiddenException if token is invalid', async () => {
-      mockConfigService.get.mockReturnValue(secret);
+    it('caps exp to the session absolute expiresAt on rotation instead of the full lifetime', async () => {
+      mockJwtService.signAsync.mockResolvedValue('refresh.jwt');
+      const expiresAt = new Date(Date.now() + 60_000); // 60s left, well under 604800
+
+      await service.generateSessionRefreshToken(user, 'session-id', expiresAt);
+
+      expect(jwtService.signAsync).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({
+          expiresIn: expect.any(Number),
+        }),
+      );
+      const [, options] = mockJwtService.signAsync.mock.calls[0];
+      expect(options.expiresIn).toBeLessThanOrEqual(60);
+      expect(options.expiresIn).toBeGreaterThan(0);
+    });
+  });
+
+  describe('verifyRefreshToken', () => {
+    it('returns the payload when the token is valid', async () => {
+      const payload = {
+        sub: user.id,
+        email: user.email,
+        sid: 'sid',
+        jti: 'jti',
+      };
+      mockJwtService.verifyAsync.mockResolvedValue(payload);
+
+      const result = await service.verifyRefreshToken('valid.token');
+
+      expect(result).toEqual({ status: 'valid', payload });
+    });
+
+    it('classifies an expired token distinctly from an invalid one', async () => {
       mockJwtService.verifyAsync.mockRejectedValue(
-        new Error('Invalid signature'),
+        new TokenExpiredError('jwt expired', new Date()),
       );
-      await expect(service.verifyRefreshToken(token)).rejects.toThrow(
-        ForbiddenException,
-      );
+
+      const result = await service.verifyRefreshToken('expired.token');
+
+      expect(result).toEqual({ status: 'expired' });
+    });
+
+    it('classifies a bad signature as invalid', async () => {
+      mockJwtService.verifyAsync.mockRejectedValue(new Error('bad sig'));
+
+      const result = await service.verifyRefreshToken('bad.token');
+
+      expect(result).toEqual({ status: 'invalid' });
+    });
+
+    it('rejects an access token presented as a refresh token', async () => {
+      mockJwtService.verifyAsync.mockResolvedValue({
+        sub: user.id,
+        email: user.email,
+        tokenUse: 'access',
+      });
+
+      const result = await service.verifyRefreshToken('access.jwt');
+
+      expect(result).toEqual({ status: 'invalid' });
+    });
+
+    it('accepts a legacy token with no tokenUse claim', async () => {
+      const payload = { sub: user.id, email: user.email };
+      mockJwtService.verifyAsync.mockResolvedValue(payload);
+
+      const result = await service.verifyRefreshToken('legacy.token');
+
+      expect(result).toEqual({ status: 'valid', payload });
+    });
+  });
+
+  describe('decodeForLogout', () => {
+    it('returns the payload while ignoring expiration', async () => {
+      const payload = { sub: user.id, email: user.email, sid: 'sid' };
+      mockJwtService.verifyAsync.mockResolvedValue(payload);
+
+      const result = await service.decodeForLogout('some.token');
+
+      expect(result).toEqual(payload);
+      expect(jwtService.verifyAsync).toHaveBeenCalledWith('some.token', {
+        secret: 'refresh-secret',
+        ignoreExpiration: true,
+        algorithms: ['HS256'],
+      });
+    });
+
+    it('returns null when the token cannot be verified at all', async () => {
+      mockJwtService.verifyAsync.mockRejectedValue(new Error('bad sig'));
+
+      const result = await service.decodeForLogout('garbage');
+
+      expect(result).toBeNull();
     });
   });
 });

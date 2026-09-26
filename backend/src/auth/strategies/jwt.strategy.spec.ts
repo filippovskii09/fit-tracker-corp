@@ -49,5 +49,27 @@ describe('JwtStrategy', () => {
         email: payload.email,
       });
     });
+
+    it('accepts a payload explicitly marked as an access token', async () => {
+      const payload = {
+        sub: 'user-uuid-123',
+        email: 'test@example.com',
+        tokenUse: 'access' as const,
+      };
+
+      const result = await strategy.validate(payload);
+
+      expect(result).toEqual({ id: payload.sub, email: payload.email });
+    });
+
+    it('rejects a refresh token presented as a bearer access token', async () => {
+      const payload = {
+        sub: 'user-uuid-123',
+        email: 'test@example.com',
+        tokenUse: 'refresh' as never,
+      };
+
+      await expect(strategy.validate(payload)).rejects.toThrow();
+    });
   });
 });
