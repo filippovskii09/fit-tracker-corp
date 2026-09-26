@@ -3,6 +3,7 @@ export const DB_PORT = 'DB_PORT';
 export const DB_USER = 'DB_USER';
 export const DB_PASSWORD = 'DB_PASSWORD';
 export const DB_NAME = 'DB_NAME';
+export const DB_SSL_CA = 'DB_SSL_CA';
 export const NODE_ENV = 'NODE_ENV';
 export const PORT = 'PORT';
 export const FRONTEND_URL = 'FRONTEND_URL';
@@ -13,3 +14,7 @@ export const JWT_ACCESS_TOKEN_EXPIRATION_TIME =
 export const JWT_REFRESH_TOKEN_SECRET = 'JWT_REFRESH_TOKEN_SECRET';
 export const JWT_REFRESH_TOKEN_EXPIRATION_TIME =
   'JWT_REFRESH_TOKEN_EXPIRATION_TIME';
+
+export const AUTH_COOKIE_SAME_SITE = 'AUTH_COOKIE_SAME_SITE';
+
+export const TRUST_PROXY = 'TRUST_PROXY';
